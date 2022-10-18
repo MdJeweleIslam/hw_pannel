@@ -6,6 +6,7 @@ import 'package:hw_pannel/exam_page.dart';
 
 import 'Colors.dart';
 import 'background/background.dart';
+import 'exam_start_page.dart';
 import 'fotget_password_page.dart';
 
 import 'log_in_page.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
           children: [
 
            // Background(),
-            ExamPageScreen(),
+            ExamStartPageScreen(),
           ],
         ),
       ),

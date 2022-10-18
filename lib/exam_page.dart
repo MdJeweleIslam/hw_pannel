@@ -36,8 +36,6 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
   int otp_coundown_second=0;
 
 
-
-
   //
 
   diffSecond1() {
@@ -84,7 +82,6 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
       },
     );
   }
-
 
   String _printDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2,"0");
