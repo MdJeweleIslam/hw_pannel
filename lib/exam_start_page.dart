@@ -38,7 +38,7 @@ class _ExamPageScreenState extends State<ExamStartPageScreen> {
   int selectedValue = -1;
 
   TextEditingController? _shortQuestionNameController = TextEditingController();
-  String questionType = "2";
+  String questionType = "1";
 
   diffSecond1(){
     DateTime dt1 = DateTime.parse("2021-12-23 11:50:30");
@@ -67,7 +67,7 @@ class _ExamPageScreenState extends State<ExamStartPageScreen> {
 
     //controller = CountdownTimerController(endTime: endTime, onEnd: onEnd);
   }
-
+String _message="If you click 'Skip' or 'Submit' button, You will can not go back previous page.";
 
   @override
   Widget build(BuildContext context) {
@@ -89,12 +89,12 @@ class _ExamPageScreenState extends State<ExamStartPageScreen> {
                           children: [
                             Expanded(
                                 child: Marquee(
-                                  text: 'Working for Application upgrade. Sorry for the inconvenience!',
-                                  style: TextStyle(fontWeight: FontWeight.w400, fontSize:20,color: awsEndColor),
+                                  text:_message ,
+                                  style: TextStyle(fontWeight: FontWeight.w500, fontSize:18,color: awsEndColor),
                                   scrollAxis: Axis.horizontal, //scroll direction
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   blankSpace: MediaQuery.of(context).size.width,
-                                  velocity: 70.0, //speed
+                                  velocity: 50.0, //speed
                                   pauseAfterRound: Duration(seconds: 1),
                                   startPadding: 10.0,
                                   accelerationDuration: Duration(seconds: 1),
@@ -176,13 +176,13 @@ class _ExamPageScreenState extends State<ExamStartPageScreen> {
                               children: [
 
                                 Padding(
-                                  padding: EdgeInsets.only(left: 10,right: 10,top: 10,bottom: 00),
+                                  padding: EdgeInsets.only(left: 10,right: 10,top: 20,bottom: 00),
                                   child: Flex(direction: Axis.horizontal,
                                     children: [
-                                      Text(("Q: "+"question_name"),
+                                      Text(("Q: "+"What is your hobby?"),
                                           style: TextStyle(
                                               color: Colors.black87,
-                                              fontSize: 20,
+                                              fontSize: 18,
                                               fontWeight: FontWeight.w500)),
                                     ],
                                   ),
@@ -196,7 +196,7 @@ class _ExamPageScreenState extends State<ExamStartPageScreen> {
                                     ),
                                     child: ListView.builder(
                                       // itemCount: optionList == null ? 0 : optionList.length,
-                                      itemCount: 6,
+                                      itemCount: 4,
                                       shrinkWrap: false,
                                       physics: const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
@@ -252,7 +252,7 @@ class _ExamPageScreenState extends State<ExamStartPageScreen> {
                               Text(("Q: "+"What is cyber security?"),
                                   style: TextStyle(
                                       color: Colors.black87,
-                                      fontSize: 20,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w500)),
                             ],
                           ),
