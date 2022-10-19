@@ -53,6 +53,7 @@ dependencies:
   hexcolor: ^2.0.5
   marquee: ^2.2.3
   url_launcher: ^6.1.6
+  ntp: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -9,6 +9,7 @@ import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'Colors.dart';
+import 'exam_page.dart';
 import 'gradiant_icon.dart';
 
 
@@ -22,17 +23,12 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
-  TextEditingController? phoneNumberController = TextEditingController();
+  TextEditingController? userNameController = TextEditingController();
   TextEditingController? passwordController = TextEditingController();
   bool _isObscure = true;
 
-
-
-  TextEditingController? otpEditTextController = new TextEditingController();
-  String _otpTxt = "";
-
   late FocusNode phoneFocusNode;
-  Color _levelTextColor = hint_color;
+  Color _userNameLevelTextColor = hint_color;
   Color _passwordLevelTextColor = hint_color;
   @override
   Widget build(BuildContext context) {
@@ -183,12 +179,7 @@ class _LogInScreenState extends State<LogInScreen> {
     phoneFocusNode.dispose();
     super.dispose();
   }
-  // @override
-  // @mustCallSuper
-  // void initState() {
-  //   super.initState();
-  //
-  // }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     print("AppLifecycleState changed: $state");
@@ -197,14 +188,6 @@ class _LogInScreenState extends State<LogInScreen> {
     }
   }
 
-  // if (phoneFocusNode.hasFocus) {
-  // setState(() {
-  // startPosition = details.result;
-  // // startSearchFrildController.text = details.result!.description!;
-  // startSearchFrildController.text = predictins[index].description.toString();
-  // predictins = [];
-  // });
-  // }
 
   Widget _buildTextFieldUserName({
     required bool obscureText,
@@ -216,7 +199,7 @@ class _LogInScreenState extends State<LogInScreen> {
       color:transparent,
       child: Focus(
         onFocusChange: (hasFocus) {
-          setState(() => _levelTextColor = hasFocus ? hint_color : hint_color);
+          setState(() => _userNameLevelTextColor = hasFocus ? hint_color : hint_color);
         },
         child: TextFormField(
           cursorColor: awsCursorColor,
@@ -225,7 +208,7 @@ class _LogInScreenState extends State<LogInScreen> {
           // autofocus: false,
 
           //focusNode: phoneFocusNode,
-          controller: phoneNumberController,
+          controller: userNameController,
         //  textInputAction: TextInputAction.next,
           style: const TextStyle(color: Colors.black, fontSize: 18),
           decoration: InputDecoration(
@@ -242,10 +225,10 @@ class _LogInScreenState extends State<LogInScreen> {
               borderSide: BorderSide(color:awsStartColor, width: .2),
             ),
             labelStyle: TextStyle(
-              color:_levelTextColor,
+              color:_userNameLevelTextColor,
             ),
             hintText: hintText,
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
               color: hint_color,
               fontWeight: FontWeight.normal,
               fontFamily: 'PTSans',
@@ -353,10 +336,12 @@ class _LogInScreenState extends State<LogInScreen> {
     return ElevatedButton(
         onPressed: () {
 
-          String phoneTxt = phoneNumberController!.text;
+          String userNameTxt = userNameController!.text;
           String passwordTxt = passwordController!.text;
-          if (_inputValid(phoneTxt, passwordTxt) == false) {
-           _logInUser(phoneTxt, passwordTxt);
+          if (_inputValid(userNameTxt, passwordTxt) == false) {
+           _logInUser(userNameTxt, passwordTxt);
+           Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const ExamPageScreen()));
+
 
           }else {
 
@@ -369,7 +354,7 @@ class _LogInScreenState extends State<LogInScreen> {
               borderRadius: BorderRadius.circular(7))),
       child: Ink(
         decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [awsStartColor,awsEndColor],
+            gradient: const LinearGradient(colors: [awsStartColor,awsEndColor],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
@@ -379,7 +364,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
           height: 50,
           alignment: Alignment.center,
-          child:  Text(
+          child:  const Text(
             "Login",
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -439,55 +424,13 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-
-  Widget _buildSignUpQuestion1() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text(
-          "Don't have an Account? ",
-          style: TextStyle(
-            fontFamily: 'PT-Sans',
-            fontSize: 16,
-            color: Colors.black,
-          ),
-        ),
-        InkWell(
-          child: const Text(
-            'Sing Up',
-            style: TextStyle(
-              fontFamily: 'PT-Sans',
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color:awsColor,
-            ),
-          ),
-          onTap: () {
-            // Navigator.push(context,
-            //     MaterialPageRoute(builder: (context) => ChooseRoleScreen()));
-          },
-        ),
-      ],
-    );
-  }
-
-
-  _inputValid(String phone, String password) {
-    if (phone.isEmpty) {
+  _inputValid(String userName, String password) {
+    if (userName.isEmpty) {
       Fluttertoast.cancel();
-      _showToast("Phone can't empty");
+      _showToast("User name can't empty");
       return;
     }
-    if (phone.length < 8) {
-      Fluttertoast.cancel();
-      _showToast("Phone can't smaller than 8 digit");
-      return;
-    }
-    if (phone.length > 13) {
-      Fluttertoast.cancel();
-      _showToast("Phone can't bigger than 13 digit");
-      return;
-    }
+
     if (password.isEmpty) {
       Fluttertoast.cancel();
       _showToast("Password can't empty");

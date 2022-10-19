@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hw_pannel/exam_page.dart';
+import 'package:hw_pannel/time_over.dart';
 
 import 'Colors.dart';
 import 'background/background.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
           children: [
 
            // Background(),
-            ExamStartPageScreen(),
+            ExamPageScreen(),
           ],
         ),
       ),

@@ -1,13 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart';
+import 'package:hw_pannel/time_over.dart';
+
 import 'package:marquee/marquee.dart';
 
-import '../gradiant_icon.dart';
 import 'Colors.dart';
 import 'NoDataFound.dart';
 import 'background/background.dart';
@@ -49,11 +47,9 @@ class _ExamPageScreenState extends State<ExamStartPageScreen> {
     if(diff.inSeconds>0 ){
       otp_coundown_second=diff.inSeconds;
     }
-
   }
 
   var abcd=["(a)","(b)","(c)","(d)","(e)","(f)","(g)","(h)"];
-
 
   @override
   @mustCallSuper
@@ -166,7 +162,6 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
                           ],
                         ),
                       ),
-
 
 
                       if(questionType=="1")...{
@@ -309,7 +304,6 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
 
 
   }
-
   Widget _buildShortQuestionAnswerTextField({
     String? hintText,
     String? labelText,
@@ -377,6 +371,7 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
 
 
   }
+
   Widget _buildNextButton_mcq_question(String questionId) {
     return ElevatedButton(
       onPressed: () {
@@ -424,7 +419,6 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
     );
   }
 
-
   Widget _buildSkipButton(String questionId) {
     return ElevatedButton(
       onPressed: () {
@@ -460,7 +454,6 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
     );
   }
 
-
   _showToast(String message) {
     Fluttertoast.showToast(
         msg: message,
@@ -490,10 +483,12 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
           (Timer timer) {
         if (second == 0) {
           setState(() {
+
             _upcomingExamText="Start Exam";
             _isCountingStatus=true;
             _startTxt="Exam Time Finished";
             timer.cancel();
+            Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const TimeOverScreen()));
           });
         } else {
           setState(() {
@@ -504,7 +499,6 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
       },
     );
   }
-
 
   String _printDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2,"0");
