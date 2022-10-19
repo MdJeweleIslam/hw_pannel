@@ -1,19 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart';
 import 'package:marquee/marquee.dart';
 import 'package:ntp/ntp.dart';
 
-import '../gradiant_icon.dart';
 import 'Colors.dart';
 import 'background/background.dart';
 import 'exam_start_page.dart';
-import 'package:ntp/ntp.dart';
 
 class ExamPageScreen extends StatefulWidget {
   const ExamPageScreen({Key? key}) : super(key: key);
@@ -40,8 +34,8 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
   //
 
   diffSecond1() {
-    DateTime dt1 = DateTime.parse("2021-12-23 11:50:00");
-    DateTime dt2 = DateTime.parse("2021-12-23 11:20:00");
+    DateTime dt1 = DateTime.parse("2021-12-23 11:50:50");
+    DateTime dt2 = DateTime.parse("2021-12-23 11:50:40");
     Duration diff = dt1.difference(dt2);
 
     // otp_coundown_second=40;
@@ -51,8 +45,8 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
   }
 
   diffSecond() {
-    DateTime dt1 = DateTime.parse("2021-12-23 11:50:00");
-    DateTime dt2 = DateTime.parse("2021-12-23 11:20:00");
+    DateTime dt1 = DateTime.parse("2021-12-23 11:50:40");
+    DateTime dt2 = DateTime.parse("2021-12-23 11:50:30");
     Duration diff = dt1.difference(dt2);
 
     // otp_coundown_second=40;
@@ -65,7 +59,7 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        if (second == 0) {
+        if (second <= 0) {
           setState(() {
             _upcomingExamText = "Start Exam";
             _isCountingStatus = true;
@@ -114,6 +108,7 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
               child: Stack(
                 children: [
                   Background(),
+
                   Column(
                     children: [
                       Container(
@@ -146,682 +141,473 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
                           ],
                         ),
                       ),
+
                       Expanded(
-                          child: CustomScrollView(
-                        slivers: [
-                          SliverFillRemaining(
-                            hasScrollBody: false,
+                          child: SingleChildScrollView(
                             child: Column(
-                              children: <Widget>[
-                                Expanded(
+                              children: [
+                                Image.asset(
+                                  "assets/images/aws.png",
+                                  width: 180,
+                                  height: 90,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topRight:
+                                        Radius.circular(10.0),
+                                        bottomRight:
+                                        Radius.circular(10.0),
+                                        topLeft:
+                                        Radius.circular(10.0),
+                                        bottomLeft:
+                                        Radius.circular(10.0)),
+                                    color:
+                                    Colors.black.withOpacity(.1),
+                                  ),
+                                  padding: EdgeInsets.only(
+                                      left: 20,
+                                      right: 20,
+                                      top: 20,
+                                      bottom: 00),
+                                  margin: EdgeInsets.only(
+                                      left: 20,
+                                      right: 20,
+                                      top: 20,
+                                      bottom: 00),
                                   child: Column(
                                     children: [
-                                      Expanded(
-                                          child: Column(
+                                      Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                        MainAxisAlignment.center,
                                         children: [
-                                          Image.asset(
-                                            "assets/images/aws.png",
-                                            width: 180,
-                                            height: 90,
-                                          ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                  topRight:
-                                                      Radius.circular(10.0),
-                                                  bottomRight:
-                                                      Radius.circular(10.0),
-                                                  topLeft:
-                                                      Radius.circular(10.0),
-                                                  bottomLeft:
-                                                      Radius.circular(10.0)),
-                                              color:
-                                                  Colors.black.withOpacity(.1),
-                                            ),
-                                            padding: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                                top: 20,
-                                                bottom: 00),
-                                            margin: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                                top: 20,
-                                                bottom: 00),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "User Name: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontSize: 18,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "Sabbir001",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Batch : ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "Test",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Start Time: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "17:40:00",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "End Time: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "18:40:00",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Duration: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "60 Minutes",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Exam Date: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "2022-10-11",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                //int otp_coundown_second=300;
-                                                //int otp_coundown_second=300;
-                                                Container(
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        20, 30, 20, 00),
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        // diffSecond();
-                                                        // _showToast( "click");
-                                                        // _showToast( diffSecond(dt1,dt2).toString());
-                                                        //  Duration duration=diffSecond(dt1,dt2);
-
-                                                        // _showToast( '$duration.inMinutes.remainder(60)');
-                                                        // _showToast(duration.inDays.toString());
-
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        const ExamStartPageScreen()));
-                                                      },
-                                                      child: _buildButtonDesign(
-                                                          endColor: awsEndColor,
-                                                          startColor:
-                                                              awsStartColor,
-                                                          textValue: "Running"),
-                                                    )),
-                                              ],
+                                          Text(
+                                            "User Name: ",
+                                            style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.w500,
+                                              fontSize: 18,
+                                              color: Colors.black,
                                             ),
                                           ),
-                                          Text(getTime),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                  topRight:
-                                                      Radius.circular(10.0),
-                                                  bottomRight:
-                                                      Radius.circular(10.0),
-                                                  topLeft:
-                                                      Radius.circular(10.0),
-                                                  bottomLeft:
-                                                      Radius.circular(10.0)),
-                                              color:
-                                                  Colors.black.withOpacity(.1),
+                                          Text(
+                                            "Sabbir001",
+                                            style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.w500,
+                                              color: awsMixedColor,
+                                              fontSize: 18,
                                             ),
-                                            padding: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                                top: 20,
-                                                bottom: 00),
-                                            margin: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                                top: 20,
-                                                bottom: 00),
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  margin: const EdgeInsets.only(
-                                                      right: 20.0,
-                                                      top: 20,
-                                                      left: 10,
-                                                      bottom: 20),
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.topCenter,
-                                                    child: Text(
-                                                      _startTxt,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          color: awsEndColor,
-                                                          fontSize: 25,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                ),
-
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "User Name: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontSize: 18,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "Sabbir001",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Batch : ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "Test",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Start Time: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "17:40:00",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "End Time: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "18:40:00",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Duration: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "60 Minutes",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Exam Date: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "2022-10-11",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                // Start Exam
-                                                InkResponse(
-                                                  onTap: () {
-                                                    main();
-                                                    //  getNtpTime();
-                                                    // if(_upcomingExamText=="Start Exam"){
-                                                    //   _showToast("Ready to exam!");
-                                                    // }
-                                                  },
-                                                  child: Container(
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        20, 20, 20, 00),
-                                                    child: _buildButtonDesign(
-                                                        endColor: awsEndColor,
-                                                        startColor:
-                                                            awsStartColor,
-                                                        textValue:
-                                                            _upcomingExamText),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                  topRight:
-                                                      Radius.circular(10.0),
-                                                  bottomRight:
-                                                      Radius.circular(10.0),
-                                                  topLeft:
-                                                      Radius.circular(10.0),
-                                                  bottomLeft:
-                                                      Radius.circular(10.0)),
-                                              color:
-                                                  Colors.black.withOpacity(.1),
-                                            ),
-                                            padding: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                                top: 20,
-                                                bottom: 00),
-                                            margin: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                                top: 20,
-                                                bottom: 00),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "User Name: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontSize: 18,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "Sabbir001",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Batch : ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "Test",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Start Time: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "17:40:00",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "End Time: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "18:40:00",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Duration: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "60 Minutes",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Exam Date: ",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "2022-10-11",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: awsMixedColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Container(
-                                                  margin: EdgeInsets.fromLTRB(
-                                                      20, 20, 20, 00),
-                                                  child: _buildButtonDesign(
-                                                      endColor: awsMixedColor,
-                                                      startColor: awsMixedColor,
-                                                      textValue: "Finished"),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 20,
                                           ),
                                         ],
-                                      )),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Batch : ",
+                                            style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.w500,
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(
+                                            "Test",
+                                            style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.w500,
+                                              color: awsMixedColor,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Start Time: ",
+                                            style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.w500,
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(
+                                            "17:40:00",
+                                            style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.w500,
+                                              color: awsMixedColor,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "End Time: ",
+                                            style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.w500,
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(
+                                            "18:40:00",
+                                            style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.w500,
+                                              color: awsMixedColor,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Duration: ",
+                                            style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.w500,
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(
+                                            "60 Minutes",
+                                            style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.w500,
+                                              color: awsMixedColor,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Exam Date: ",
+                                            style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.w500,
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(
+                                            "2022-10-11",
+                                            style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.w500,
+                                              color: awsMixedColor,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      //int otp_coundown_second=300;
+                                      //int otp_coundown_second=300;
+                                      Container(
+                                          margin: EdgeInsets.fromLTRB(
+                                              20, 30, 20, 00),
+                                          child: InkWell(
+                                            onTap: () {
+                                              // diffSecond();
+                                              // _showToast( "click");
+                                              // _showToast( diffSecond(dt1,dt2).toString());
+                                              //  Duration duration=diffSecond(dt1,dt2);
+
+                                              // _showToast( '$duration.inMinutes.remainder(60)');
+                                              // _showToast(duration.inDays.toString());
+
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder:
+                                                          (context) =>
+                                                      const ExamStartPageScreen()));
+                                            },
+                                            child: _buildButtonDesign(
+                                                endColor: awsEndColor,
+                                                startColor:
+                                                awsStartColor,
+                                                textValue: "Running"),
+                                          )),
                                     ],
                                   ),
-                                )
+                                ),
+                                Text(getTime),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topRight:
+                                            Radius.circular(10.0),
+                                        bottomRight:
+                                            Radius.circular(10.0),
+                                        topLeft:
+                                            Radius.circular(10.0),
+                                        bottomLeft:
+                                            Radius.circular(10.0)),
+                                    color:
+                                        Colors.black.withOpacity(.1),
+                                  ),
+                                  padding: EdgeInsets.only(
+                                      left: 20,
+                                      right: 20,
+                                      top: 20,
+                                      bottom: 00),
+                                  margin: EdgeInsets.only(
+                                      left: 20,
+                                      right: 20,
+                                      top: 20,
+                                      bottom: 00),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            right: 20.0,
+                                            top: 20,
+                                            left: 10,
+                                            bottom: 20),
+                                        child: Align(
+                                          alignment:
+                                              Alignment.topCenter,
+                                          child: Text(
+                                            _startTxt,
+                                            textAlign:
+                                                TextAlign.center,
+                                            style: const TextStyle(
+                                                color: awsEndColor,
+                                                fontSize: 25,
+                                                fontWeight:
+                                                    FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
+
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "User Name: ",
+                                            style: TextStyle(
+                                              fontWeight:
+                                                  FontWeight.w500,
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Text(
+                                            "Sabbir001",
+                                            style: TextStyle(
+                                              fontWeight:
+                                                  FontWeight.w500,
+                                              color: awsMixedColor,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Batch : ",
+                                            style: TextStyle(
+                                              fontWeight:
+                                                  FontWeight.w500,
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(
+                                            "Test",
+                                            style: TextStyle(
+                                              fontWeight:
+                                                  FontWeight.w500,
+                                              color: awsMixedColor,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Start Time: ",
+                                            style: TextStyle(
+                                              fontWeight:
+                                                  FontWeight.w500,
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(
+                                            "17:40:00",
+                                            style: TextStyle(
+                                              fontWeight:
+                                                  FontWeight.w500,
+                                              color: awsMixedColor,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "End Time: ",
+                                            style: TextStyle(
+                                              fontWeight:
+                                                  FontWeight.w500,
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(
+                                            "18:40:00",
+                                            style: TextStyle(
+                                              fontWeight:
+                                                  FontWeight.w500,
+                                              color: awsMixedColor,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Duration: ",
+                                            style: TextStyle(
+                                              fontWeight:
+                                                  FontWeight.w500,
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(
+                                            "60 Minutes",
+                                            style: TextStyle(
+                                              fontWeight:
+                                                  FontWeight.w500,
+                                              color: awsMixedColor,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Exam Date: ",
+                                            style: TextStyle(
+                                              fontWeight:
+                                                  FontWeight.w500,
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(
+                                            "2022-10-11",
+                                            style: TextStyle(
+                                              fontWeight:
+                                                  FontWeight.w500,
+                                              color: awsMixedColor,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      // Start Exam
+                                      InkResponse(
+                                        onTap: () {
+                                          main();
+                                          //  getNtpTime();
+                                          // if(_upcomingExamText=="Start Exam"){
+                                          //   _showToast("Ready to exam!");
+                                          // }
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.fromLTRB(
+                                              20, 20, 20, 00),
+                                          child: _buildButtonDesign(
+                                              endColor: awsEndColor,
+                                              startColor:
+                                                  awsStartColor,
+                                              textValue:
+                                                  _upcomingExamText),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+
+                                const SizedBox(
+                                  height: 20,
+                                ),
+
+                                _buildWhatYouWillLearnList()
+
                               ],
                             ),
-                          ),
-                        ],
-                      ))
+                          )),
                     ],
                   )
                 ],
@@ -938,6 +724,385 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
         ),
       ),
     );
+  }
+
+
+  Widget _buildWhatYouWillLearnList() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        //shimmer design
+        ListView.builder(
+          itemCount: 4,
+          // itemCount: orderRoomList == null ? 0 : orderRoomList.length,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topRight:
+                    Radius.circular(10.0),
+                    bottomRight:
+                    Radius.circular(10.0),
+                    topLeft:
+                    Radius.circular(10.0),
+                    bottomLeft:
+                    Radius.circular(10.0)),
+                color:
+                Colors.black.withOpacity(.1),
+              ),
+              padding: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  top: 20,
+                  bottom: 00),
+              margin: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  top: 20,
+                  bottom: 00),
+              child: Column(
+                children: [
+
+
+                  Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Batch : ",
+                        style: TextStyle(
+                          fontWeight:
+                          FontWeight.w500,
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        "Test",
+                        style: TextStyle(
+                          fontWeight:
+                          FontWeight.w500,
+                          color: awsMixedColor,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Start Time: ",
+                        style: TextStyle(
+                          fontWeight:
+                          FontWeight.w500,
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        "17:40:00",
+                        style: TextStyle(
+                          fontWeight:
+                          FontWeight.w500,
+                          color: awsMixedColor,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "End Time: ",
+                        style: TextStyle(
+                          fontWeight:
+                          FontWeight.w500,
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        "18:40:00",
+                        style: TextStyle(
+                          fontWeight:
+                          FontWeight.w500,
+                          color: awsMixedColor,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Duration: ",
+                        style: TextStyle(
+                          fontWeight:
+                          FontWeight.w500,
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        "60 Minutes",
+                        style: TextStyle(
+                          fontWeight:
+                          FontWeight.w500,
+                          color: awsMixedColor,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Exam Date: ",
+                        style: TextStyle(
+                          fontWeight:
+                          FontWeight.w500,
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        "2022-10-11",
+                        style: TextStyle(
+                          fontWeight:
+                          FontWeight.w500,
+                          color: awsMixedColor,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                      margin: EdgeInsets.fromLTRB(
+                          20, 20, 20, 00),
+                      child: InkWell(
+                        onTap: (){
+
+
+                        },
+                        child: _buildButtonDesign(
+                            endColor: awsMixedColor,
+                            startColor: awsMixedColor,
+                            textValue: "View Details"),
+                      )
+                  ),
+                ],
+              ),
+            );
+          },
+        )
+
+      ],
+    );
+  }
+
+  Widget _buildFinishedExamCardDesign(){
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topRight:
+            Radius.circular(10.0),
+            bottomRight:
+            Radius.circular(10.0),
+            topLeft:
+            Radius.circular(10.0),
+            bottomLeft:
+            Radius.circular(10.0)),
+        color:
+        Colors.black.withOpacity(.1),
+      ),
+      padding: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 20,
+          bottom: 00),
+      margin: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 20,
+          bottom: 00),
+      child: Column(
+        children: [
+
+
+          Row(
+            mainAxisAlignment:
+            MainAxisAlignment.center,
+            children: [
+              Text(
+                "Batch : ",
+                style: TextStyle(
+                  fontWeight:
+                  FontWeight.w500,
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+              Text(
+                "Test",
+                style: TextStyle(
+                  fontWeight:
+                  FontWeight.w500,
+                  color: awsMixedColor,
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Row(
+            mainAxisAlignment:
+            MainAxisAlignment.center,
+            children: [
+              Text(
+                "Start Time: ",
+                style: TextStyle(
+                  fontWeight:
+                  FontWeight.w500,
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+              Text(
+                "17:40:00",
+                style: TextStyle(
+                  fontWeight:
+                  FontWeight.w500,
+                  color: awsMixedColor,
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Row(
+            mainAxisAlignment:
+            MainAxisAlignment.center,
+            children: [
+              Text(
+                "End Time: ",
+                style: TextStyle(
+                  fontWeight:
+                  FontWeight.w500,
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+              Text(
+                "18:40:00",
+                style: TextStyle(
+                  fontWeight:
+                  FontWeight.w500,
+                  color: awsMixedColor,
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Row(
+            mainAxisAlignment:
+            MainAxisAlignment.center,
+            children: [
+              Text(
+                "Duration: ",
+                style: TextStyle(
+                  fontWeight:
+                  FontWeight.w500,
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+              Text(
+                "60 Minutes",
+                style: TextStyle(
+                  fontWeight:
+                  FontWeight.w500,
+                  color: awsMixedColor,
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Row(
+            mainAxisAlignment:
+            MainAxisAlignment.center,
+            children: [
+              Text(
+                "Exam Date: ",
+                style: TextStyle(
+                  fontWeight:
+                  FontWeight.w500,
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+              Text(
+                "2022-10-11",
+                style: TextStyle(
+                  fontWeight:
+                  FontWeight.w500,
+                  color: awsMixedColor,
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(
+                20, 20, 20, 00),
+            child: InkWell(
+              onTap: (){
+
+
+              },
+              child: _buildButtonDesign(
+                  endColor: awsMixedColor,
+                  startColor: awsMixedColor,
+                  textValue: "View Details"),
+            )
+          ),
+        ],
+      ),
+    );
+
   }
 
   Widget _buildNextButton() {
