@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:marquee/marquee.dart';
 import 'package:ntp/ntp.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Colors.dart';
+import 'api_service/sharePreferenceDataSaveName.dart';
 import 'background/background.dart';
 import 'exam_start_page.dart';
 
@@ -31,6 +33,8 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
 
   int otp_coundown_second = 0;
 
+  String _userName="",_fullName="",_userBatch="",_userType="",_userId="";
+
   //
 
   diffSecond1() {
@@ -44,15 +48,15 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
     }
   }
 
-  diffSecond() {
-    DateTime dt1 = DateTime.parse("2021-12-23 11:50:40");
-    DateTime dt2 = DateTime.parse("2021-12-23 11:50:30");
-    Duration diff = dt1.difference(dt2);
-
-    // otp_coundown_second=40;
-    _showToast(diff.inSeconds.toString());
-    //otp_coundown_second=diff.inSeconds;
-  }
+  // diffSecond() {
+  //   DateTime dt1 = DateTime.parse("2021-12-23 11:50:40");
+  //   DateTime dt2 = DateTime.parse("2021-12-23 11:50:30");
+  //   Duration diff = dt1.difference(dt2);
+  //
+  //   // otp_coundown_second=40;
+  //   _showToast(diff.inSeconds.toString());
+  //   //otp_coundown_second=diff.inSeconds;
+  // }
 
   void startTimer(int second) {
     const oneSec = Duration(seconds: 1);
@@ -87,6 +91,8 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
   @mustCallSuper
   void initState() {
     super.initState();
+
+    loadUserIdFromSharePref();
 
     // DateTime dt2 = DateTime.parse("2021-12-23 9:47:00");
     diffSecond1();
@@ -420,7 +426,7 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Text(
+                                          const Text(
                                             "User Name: ",
                                             style: TextStyle(
                                               fontWeight:
@@ -430,7 +436,7 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
                                             ),
                                           ),
                                           Text(
-                                            "Sabbir001",
+                                            _userName,
                                             style: TextStyle(
                                               fontWeight:
                                                   FontWeight.w500,
@@ -457,7 +463,7 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
                                             ),
                                           ),
                                           Text(
-                                            "Test",
+                                            _userBatch,
                                             style: TextStyle(
                                               fontWeight:
                                                   FontWeight.w500,
@@ -603,7 +609,7 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
                                   height: 20,
                                 ),
 
-                                _buildWhatYouWillLearnList()
+                                _buildFinishedExamList()
 
                               ],
                             ),
@@ -692,6 +698,8 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
   //   // print('Difference: ${_myTime.difference(_ntpTime).inMilliseconds}ms');
   // }
 
+
+  //create button
   Widget _buildButtonDesign(
       {required String textValue,
       required Color startColor,
@@ -727,7 +735,8 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
   }
 
 
-  Widget _buildWhatYouWillLearnList() {
+  //finished exam list
+  Widget _buildFinishedExamList() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -767,33 +776,8 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
                 children: [
 
 
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Batch : ",
-                        style: TextStyle(
-                          fontWeight:
-                          FontWeight.w500,
-                          color: Colors.black,
-                          fontSize: 18,
-                        ),
-                      ),
-                      Text(
-                        "Test",
-                        style: TextStyle(
-                          fontWeight:
-                          FontWeight.w500,
-                          color: awsMixedColor,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
+
+
                   Row(
                     mainAxisAlignment:
                     MainAxisAlignment.center,
@@ -923,188 +907,9 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
     );
   }
 
-  Widget _buildFinishedExamCardDesign(){
-
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-            topRight:
-            Radius.circular(10.0),
-            bottomRight:
-            Radius.circular(10.0),
-            topLeft:
-            Radius.circular(10.0),
-            bottomLeft:
-            Radius.circular(10.0)),
-        color:
-        Colors.black.withOpacity(.1),
-      ),
-      padding: EdgeInsets.only(
-          left: 20,
-          right: 20,
-          top: 20,
-          bottom: 00),
-      margin: EdgeInsets.only(
-          left: 20,
-          right: 20,
-          top: 20,
-          bottom: 00),
-      child: Column(
-        children: [
 
 
-          Row(
-            mainAxisAlignment:
-            MainAxisAlignment.center,
-            children: [
-              Text(
-                "Batch : ",
-                style: TextStyle(
-                  fontWeight:
-                  FontWeight.w500,
-                  color: Colors.black,
-                  fontSize: 18,
-                ),
-              ),
-              Text(
-                "Test",
-                style: TextStyle(
-                  fontWeight:
-                  FontWeight.w500,
-                  color: awsMixedColor,
-                  fontSize: 18,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Row(
-            mainAxisAlignment:
-            MainAxisAlignment.center,
-            children: [
-              Text(
-                "Start Time: ",
-                style: TextStyle(
-                  fontWeight:
-                  FontWeight.w500,
-                  color: Colors.black,
-                  fontSize: 18,
-                ),
-              ),
-              Text(
-                "17:40:00",
-                style: TextStyle(
-                  fontWeight:
-                  FontWeight.w500,
-                  color: awsMixedColor,
-                  fontSize: 18,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Row(
-            mainAxisAlignment:
-            MainAxisAlignment.center,
-            children: [
-              Text(
-                "End Time: ",
-                style: TextStyle(
-                  fontWeight:
-                  FontWeight.w500,
-                  color: Colors.black,
-                  fontSize: 18,
-                ),
-              ),
-              Text(
-                "18:40:00",
-                style: TextStyle(
-                  fontWeight:
-                  FontWeight.w500,
-                  color: awsMixedColor,
-                  fontSize: 18,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Row(
-            mainAxisAlignment:
-            MainAxisAlignment.center,
-            children: [
-              Text(
-                "Duration: ",
-                style: TextStyle(
-                  fontWeight:
-                  FontWeight.w500,
-                  color: Colors.black,
-                  fontSize: 18,
-                ),
-              ),
-              Text(
-                "60 Minutes",
-                style: TextStyle(
-                  fontWeight:
-                  FontWeight.w500,
-                  color: awsMixedColor,
-                  fontSize: 18,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Row(
-            mainAxisAlignment:
-            MainAxisAlignment.center,
-            children: [
-              Text(
-                "Exam Date: ",
-                style: TextStyle(
-                  fontWeight:
-                  FontWeight.w500,
-                  color: Colors.black,
-                  fontSize: 18,
-                ),
-              ),
-              Text(
-                "2022-10-11",
-                style: TextStyle(
-                  fontWeight:
-                  FontWeight.w500,
-                  color: awsMixedColor,
-                  fontSize: 18,
-                ),
-              ),
-            ],
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(
-                20, 20, 20, 00),
-            child: InkWell(
-              onTap: (){
-
-
-              },
-              child: _buildButtonDesign(
-                  endColor: awsMixedColor,
-                  startColor: awsMixedColor,
-                  textValue: "View Details"),
-            )
-          ),
-        ],
-      ),
-    );
-
-  }
-
+  //create button
   Widget _buildNextButton() {
     return ElevatedButton(
       onPressed: () {},
@@ -1138,14 +943,37 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
     );
   }
 
+  //toast create
   _showToast(String message) {
     Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: awsMixedColor,
+        backgroundColor:awsMixedColor,
         textColor: Colors.white,
         fontSize: 16.0);
   }
+
+
+  ///get data from share pref
+  loadUserIdFromSharePref() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    try {
+      setState(() {
+
+        _userName= sharedPreferences.getString(pref_user_name )??"";
+        _fullName= sharedPreferences.getString(pref_full_name )??"";
+        _userBatch=  sharedPreferences.getString(pref_user_batch )??"";
+        _userType= sharedPreferences.getString(pref_user_type )??"";
+        _userId= sharedPreferences.getString(pref_user_id )??"";
+
+
+      });
+    } catch(e) {
+      //code
+    }
+
+  }
+
 }

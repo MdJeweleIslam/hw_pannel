@@ -184,7 +184,7 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
 
                                 ),
                                 Expanded(child: Container(
-                                  color: Colors.transparent,
+                                  color:  transparent,
                                   child: Theme(
                                     data: Theme.of(context).copyWith(
                                       unselectedWidgetColor: awsEndColor,

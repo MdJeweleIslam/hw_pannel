@@ -6,9 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'Colors.dart';
+import 'api_service/api_service.dart';
+import 'api_service/sharePreferenceDataSaveName.dart';
 import 'exam_page.dart';
 import 'gradiant_icon.dart';
 
@@ -44,9 +47,11 @@ class _LogInScreenState extends State<LogInScreen> {
               Center(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                    ).copyWith(top: 20),
+                    padding: EdgeInsets.only(left: 30,right: 30,top: 20,bottom: 20),
+
+                    // padding: const EdgeInsets.symmetric(
+                    //   horizontal: 40,
+                    // ).copyWith(top: 20),
                     child: Column(
                       children: [
                         Padding(
@@ -92,7 +97,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 25,
                         ),
 
 
@@ -120,7 +125,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         ),
 
                         const SizedBox(
-                          height: 40,
+                          height: 45,
                         ),
                         _buildLoginButton(),
                         const SizedBox(
@@ -189,6 +194,7 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
 
+  //user name input field create
   Widget _buildTextFieldUserName({
     required bool obscureText,
     Widget? prefixedIcon,
@@ -247,7 +253,7 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
 
-
+//password input field create
   Widget _buildTextFieldPassword({
     required bool obscureText,
     Widget? prefixedIcon,
@@ -255,14 +261,14 @@ class _LogInScreenState extends State<LogInScreen> {
     String? labelText,
   }) {
     return Material(
-      color:transparent,
-      child:
+    color:transparent,
+    child:
 
-        Focus(
-        onFocusChange: (hasFocus) {
+    Focus(
+      onFocusChange: (hasFocus) {
       setState(() => _passwordLevelTextColor = hasFocus ? hint_color : hint_color);
     },
-        child:  TextField(
+    child:  TextField(
           controller: passwordController,
           cursorColor:awsCursorColor,
           cursorWidth: 1.5,
@@ -320,33 +326,30 @@ class _LogInScreenState extends State<LogInScreen> {
             ),
           ),
         ),
-
-        )
+    )
 
     );
   }
 
+  //join now url page redirect
   Future<void> _launchUrl() async {
     if (!await launchUrl(_url)) {
       throw 'Could not launch $_url';
     }
   }
 
+  //login button create
   Widget _buildLoginButton() {
     return ElevatedButton(
         onPressed: () {
 
           String userNameTxt = userNameController!.text;
           String passwordTxt = passwordController!.text;
-          if (_inputValid(userNameTxt, passwordTxt) == false) {
-           _logInUser(userNameTxt, passwordTxt);
-           Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const ExamPageScreen()));
-
-
-          }else {
-
+          if (_inputValid(userNameTxt, passwordTxt)== false) {
+            _userLogIn(userName: userNameTxt,password: passwordTxt);
           }
-          //Navigator.push(context,MaterialPageRoute(builder: (context)=>SignUpScreen()));
+
+
         },
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,
@@ -379,6 +382,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
+  //join now asking
   Widget _buildSignUpQuestion() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -424,6 +428,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
+  //input text validation check
   _inputValid(String userName, String password) {
     if (userName.isEmpty) {
       Fluttertoast.cancel();
@@ -446,65 +451,101 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
 
-  _logInUser(String mobile, String password) async {
-    // try {
-    //   final result = await InternetAddress.lookup('example.com');
-    //   if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-    //     print('connected');
-    //     _showLoadingDialog(context,"Checking...");
-    //     try {
-    //       Response response = await post(Uri.parse('$BASE_URL_API$SUB_URL_API_SIGN_IN'),
-    //           body: {'phone_number': mobile, 'password': password});
-    //
-    //       if (response.statusCode == 200) {
-    //         Navigator.of(context).pop();
-    //         setState(() {
-    //           var data = jsonDecode(response.body.toString());
-    //          saveUserInfo(data);
-    //           if(data['data']["is_teacher"]==true){
-    //             Navigator.push(context,MaterialPageRoute(builder: (context)=>const HomeForTeacherScreen()));
-    //
-    //             // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const HomeForStudentScreen()));
-    //           }else{
-    //             Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const HomeForStudentScreen()));
-    //
-    //           }
-    //
-    //
-    //         });
-    //       }
-    //       else if (response.statusCode == 201){
-    //
-    //         var data = jsonDecode(response.body);
-    //         _reSendCode( user_id: data['data']["id"].toString());
-    //
-    //       }
-    //       else if (response.statusCode == 400) {
-    //         Navigator.of(context).pop();
-    //         var data = jsonDecode(response.body.toString());
-    //         Fluttertoast.cancel();
-    //         //  _showToast(data['message'].toString());
-    //         _showToast("phone or password not match!");
-    //       }
-    //       else {
-    //         Navigator.of(context).pop();
-    //         var data = jsonDecode(response.body.toString());
-    //         Fluttertoast.cancel();
-    //         _showToast(data['message'].toString());
-    //       }
-    //     } catch (e) {
-    //       Navigator.of(context).pop();
-    //       Fluttertoast.cancel();
-    //       print(e.toString());
-    //       _showToast("failed");
-    //     }
-    //   }
-    // } on SocketException catch (e) {
-    //   Fluttertoast.cancel();
-    //   _showToast("No Internet Connection!");
-    // }
+  //login api call
+  _userLogIn({
+    required String userName,
+    required String password,
+  }) async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        showLoadingDialog(context, "Checking...");
+        try {
+          Response response =
+          await post(Uri.parse('$BASE_URL_API$SUB_URL_API_LOG_IN'), body: {
+            'username': userName,
+            'password': password,
+          });
+          Navigator.of(context).pop();
+          // _showToast(response.statusCode.toString());
+
+          if (response.statusCode == 200) {
+            _showToast("success");
+             var data = jsonDecode(response.body);
+            //
+            saveUserInfo(data);
+
+           // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const ExamPageScreen()));
+
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) =>
+                   ExamPageScreen(),
+              ),
+                  (route) => false,
+            );
+
+
+          }
+
+          else if (response.statusCode == 403) {
+            setState(() {
+              //_showToast("success");
+              var data = jsonDecode(response.body);
+              _showToast(data['msg']);
+
+            });
+          } else {
+            var data = jsonDecode(response.body);
+            _showToast(data['message']);
+          }
+        } catch (e) {
+          Navigator.of(context).pop();
+          //print(e.toString());
+        }
+      }
+    } on SocketException catch (_) {
+      Fluttertoast.cancel();
+      _showToast("No Internet Connection!");
+    }
   }
 
+  //save data with share pref
+  void saveUserInfo(var userInfo) async {
+    try {
+      SharedPreferences sharedPreferences =
+      await SharedPreferences.getInstance();
+
+      sharedPreferences.setString(pref_user_name, userInfo['data']['username'].toString());
+      sharedPreferences.setString(pref_full_name, userInfo['data']['fullname'].toString());
+      sharedPreferences.setString(pref_user_batch, userInfo['data']['batch'].toString());
+      sharedPreferences.setString(pref_user_type, userInfo['data']['user_type'].toString());
+      sharedPreferences.setString(pref_user_id, userInfo['data']['user_id'].toString());
+
+
+
+    } catch (e) {
+
+      //code
+
+
+    }
+
+
+    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+
+
+  }
+
+  //toast create
   _showToast(String message) {
     Fluttertoast.showToast(
         msg: message,
@@ -517,7 +558,46 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
 
-
+  //loading dialog crete
+  void showLoadingDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        // return VerificationScreen();
+        return Dialog(
+          child: Wrap(
+            children: [
+              Container(
+                  margin: const EdgeInsets.only(
+                      left: 15.0, right: 15.0, top: 20, bottom: 20),
+                  child: Center(
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const CircularProgressIndicator(
+                          backgroundColor: awsStartColor,
+                          color: awsEndColor,
+                          strokeWidth: 5,
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        Text(
+                          message,
+                          style: const TextStyle(fontSize: 20),
+                        )
+                      ],
+                    ),
+                  ))
+            ],
+            // child: VerificationScreen(),
+          ),
+        );
+      },
+    );
+  }
 
 
 }

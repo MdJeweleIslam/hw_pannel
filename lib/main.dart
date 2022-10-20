@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hw_pannel/exam_page.dart';
+import 'package:hw_pannel/teacher_question/create_short_question.dart';
 import 'package:hw_pannel/time_over.dart';
 
 import 'Colors.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
           children: [
 
            // Background(),
-            ExamPageScreen(),
+            CreateShortQuestionScreen("1","1"),
           ],
         ),
       ),

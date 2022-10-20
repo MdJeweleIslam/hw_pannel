@@ -3,6 +3,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'Colors.dart';
+
 
 class NoDataFound{
 
@@ -31,7 +33,7 @@ noItemFound(String text) {
                           text,
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.awsMixedColor,
+                            color: awsMixedColor,
                           ),
                         ),
                         SizedBox(
