@@ -5,27 +5,22 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart';
+import 'package:hw_pannel/view1/background.dart';
 import 'package:marquee/marquee.dart';
 
-import '../gradiant_icon.dart';
-import 'Colors.dart';
-import 'background/background.dart';
+import '../../../gradiant_icon.dart';
+import '../../Colors.dart';
+ import '../../controller/forget_password_page_controller.dart';
+import 'background.dart';
 
-class ForgetPasswordScreen extends StatefulWidget {
-  const ForgetPasswordScreen({Key? key}) : super(key: key);
+class ForgetPasswordScreen extends StatelessWidget {
 
-  @override
-  State<ForgetPasswordScreen> createState() => _ForgetPasswordState();
-}
+  final forgetPasswordPageController = Get.put(ForgetPasswordPageController());
 
-class _ForgetPasswordState extends State<ForgetPasswordScreen> {
-  TextEditingController? _emailController = new TextEditingController();
-  bool _isObscure = true;
-  bool _isCountingStatus=false;
-  String _time="4:00";
-  late Timer _timer;
-  int _start = 4 * 60;
+
 
   late String userId;
 
@@ -164,7 +159,7 @@ class _ForgetPasswordState extends State<ForgetPasswordScreen> {
     return Container(
       color: transparent,
       child: TextField(
-        controller: _emailController,
+        controller: forgetPasswordPageController.emailController.value,
         cursorColor: awsCursorColor,
         cursorWidth: 1.5,
         textInputAction: TextInputAction.next,
@@ -202,7 +197,7 @@ class _ForgetPasswordState extends State<ForgetPasswordScreen> {
   Widget _buildNextButton() {
     return ElevatedButton(
       onPressed: () {
-        String emailTxt = _emailController!.text;
+        String emailTxt = forgetPasswordPageController.emailController.value.text;
         if (_inputValid(emailTxt) == false) {
 
           _sendEmailForOtp(emailTxt);
@@ -285,12 +280,14 @@ class _ForgetPasswordState extends State<ForgetPasswordScreen> {
 
   _inputValid(String email) {
     if (email.isEmpty) {
+      Fluttertoast.cancel();
       _showToast("E-mail can't empty");
       return;
     }
     if (!RegExp(
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email)) {
+      Fluttertoast.cancel();
       _showToast("Enter valid email");
       return;
     }

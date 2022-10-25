@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GradientIcon extends StatelessWidget {
-  GradientIcon(
 
+  GradientIcon(
       this.icon,
       this.size,
       this.gradient,
@@ -32,4 +32,7 @@ class GradientIcon extends StatelessWidget {
       },
     );
   }
+
+
+
 }

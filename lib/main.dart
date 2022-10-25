@@ -2,21 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hw_pannel/exam_page.dart';
-import 'package:hw_pannel/teacher_question/create_short_question.dart';
-import 'package:hw_pannel/time_over.dart';
-
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:hw_pannel/view/log_in_page.dart';
 import 'Colors.dart';
-import 'background/background.dart';
-import 'exam_start_page.dart';
-import 'fotget_password_page.dart';
-
-import 'log_in_page.dart';
-
 
 
 void main() {
-  runApp(const MyApp());
+  GetStorage.init();
+  runApp( MyApp());
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor:awsStartColor,
     systemNavigationBarColor:awsEndColor,
@@ -28,14 +22,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return  GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Stack(
           children: [
 
            // Background(),
-            CreateShortQuestionScreen("1","1"),
+            LogInScreen(),
+            //CreateShortQuestionScreen("1","1"),
           ],
         ),
       ),
@@ -49,6 +44,7 @@ class MyApp extends StatelessWidget {
       _showToast("resumed");
     }
   }
+
   _showToast(String message) {
     Fluttertoast.showToast(
         msg: message,
@@ -59,4 +55,6 @@ class MyApp extends StatelessWidget {
         textColor: Colors.white,
         fontSize: 16.0);
   }
+
+
 }

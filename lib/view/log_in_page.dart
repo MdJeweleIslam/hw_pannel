@@ -3,36 +3,41 @@ import 'dart:io';
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'Colors.dart';
-import 'api_service/api_service.dart';
-import 'api_service/sharePreferenceDataSaveName.dart';
-import 'exam_page.dart';
-import 'gradiant_icon.dart';
+import '../../Colors.dart';
+import '../../api_service/api_service.dart';
+import '../../api_service/login_api_service.dart';
+import '../../api_service/sharePreferenceDataSaveName.dart';
+import '../../controller/create_mcg_question_controller.dart';
+import '../../controller/log_in_page_controller.dart';
+ import 'fotget_password_page.dart';
+import '../../gradiant_icon.dart';
 
 
 
 
 
-class LogInScreen extends StatefulWidget {
-  const LogInScreen({Key? key}) : super(key: key);
-  @override
-  State<LogInScreen> createState() => _LogInScreenState();
-}
+class LogInScreen extends StatelessWidget {
 
-class _LogInScreenState extends State<LogInScreen> {
-  TextEditingController? userNameController = TextEditingController();
-  TextEditingController? passwordController = TextEditingController();
-  bool _isObscure = true;
+  final logInPageController = Get.put(LogInPageController());
 
-  late FocusNode phoneFocusNode;
-  Color _userNameLevelTextColor = hint_color;
-  Color _passwordLevelTextColor = hint_color;
+
+
+ // TextEditingController? userNameController = TextEditingController();
+ // TextEditingController? passwordController = TextEditingController();
+ //  bool _isObscure = true;
+
+ // late FocusNode phoneFocusNode;
+ // Color _userNameLevelTextColor = hint_color;
+ // Color _passwordLevelTextColor = hint_color;
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -143,6 +148,7 @@ class _LogInScreenState extends State<LogInScreen> {
                             ),
                           ),
                           onTap: () {
+                            Get.to(ForgetPasswordScreen());
                             // Navigator.push(
                             //     context,
                             //     MaterialPageRoute(
@@ -173,17 +179,7 @@ class _LogInScreenState extends State<LogInScreen> {
   }
   final Uri _url = Uri.parse('https://www.arenawebsecurity.net/');
 
-  @override
-  void initState() {
-    super.initState();
-    phoneFocusNode = FocusNode();
-  }
 
-  @override
-  void dispose() {
-    phoneFocusNode.dispose();
-    super.dispose();
-  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -205,7 +201,7 @@ class _LogInScreenState extends State<LogInScreen> {
       color:transparent,
       child: Focus(
         onFocusChange: (hasFocus) {
-          setState(() => _userNameLevelTextColor = hasFocus ? hint_color : hint_color);
+          logInPageController.userNameLevelTextColor.value = hasFocus ? hint_color : hint_color;
         },
         child: TextFormField(
           cursorColor: awsCursorColor,
@@ -214,7 +210,7 @@ class _LogInScreenState extends State<LogInScreen> {
           // autofocus: false,
 
           //focusNode: phoneFocusNode,
-          controller: userNameController,
+          controller: logInPageController.userNameController.value,
         //  textInputAction: TextInputAction.next,
           style: const TextStyle(color: Colors.black, fontSize: 18),
           decoration: InputDecoration(
@@ -231,7 +227,7 @@ class _LogInScreenState extends State<LogInScreen> {
               borderSide: BorderSide(color:awsStartColor, width: .2),
             ),
             labelStyle: TextStyle(
-              color:_userNameLevelTextColor,
+              color:logInPageController.userNameLevelTextColor.value,
             ),
             hintText: hintText,
             hintStyle: const TextStyle(
@@ -266,14 +262,14 @@ class _LogInScreenState extends State<LogInScreen> {
 
     Focus(
       onFocusChange: (hasFocus) {
-      setState(() => _passwordLevelTextColor = hasFocus ? hint_color : hint_color);
+     logInPageController.passwordLevelTextColor.value = hasFocus ? hint_color : hint_color;
     },
     child:  TextField(
-          controller: passwordController,
+          controller: logInPageController.passwordController.value,
           cursorColor:awsCursorColor,
           cursorWidth: 1.5,
 
-          obscureText: _isObscure,
+          obscureText: logInPageController.isObscure.value,
           // obscuringCharacter: "*",
           style: const TextStyle(color: Colors.black, fontSize: 18),
           decoration: InputDecoration(
@@ -284,7 +280,7 @@ class _LogInScreenState extends State<LogInScreen> {
             suffixIcon: IconButton(
                 color: awsColor,
                 icon: GradientIcon(
-                  _isObscure ? Icons.visibility_off : Icons.visibility,
+                  logInPageController.isObscure.value ? Icons.visibility_off : Icons.visibility,
                   26,
                   LinearGradient(
                     colors: <Color>[
@@ -299,9 +295,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
                 // Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {
-                  setState(() {
-                    _isObscure = !_isObscure;
-                  });
+                  logInPageController.updateIsObscure(!logInPageController.isObscure.value);
                 }),
 
             filled: true,
@@ -322,7 +316,7 @@ class _LogInScreenState extends State<LogInScreen> {
             ),
             labelText: labelText,
             labelStyle:  TextStyle(
-              color: _passwordLevelTextColor,
+              color: logInPageController.passwordLevelTextColor.value,
             ),
           ),
         ),
@@ -343,10 +337,13 @@ class _LogInScreenState extends State<LogInScreen> {
     return ElevatedButton(
         onPressed: () {
 
-          String userNameTxt = userNameController!.text;
-          String passwordTxt = passwordController!.text;
+          String userNameTxt = logInPageController.userNameController.value.text;
+          String passwordTxt = logInPageController.passwordController.value.text;
           if (_inputValid(userNameTxt, passwordTxt)== false) {
-            _userLogIn(userName: userNameTxt,password: passwordTxt);
+
+
+            LogInApiService().userLogIn(userName: userNameTxt, password: passwordTxt);
+
           }
 
 
@@ -451,65 +448,66 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
 
-  //login api call
-  _userLogIn({
-    required String userName,
-    required String password,
-  }) async {
-    try {
-      final result = await InternetAddress.lookup('example.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        showLoadingDialog(context, "Checking...");
-        try {
-          Response response =
-          await post(Uri.parse('$BASE_URL_API$SUB_URL_API_LOG_IN'), body: {
-            'username': userName,
-            'password': password,
-          });
-          Navigator.of(context).pop();
-          // _showToast(response.statusCode.toString());
-
-          if (response.statusCode == 200) {
-            _showToast("success");
-             var data = jsonDecode(response.body);
-            //
-            saveUserInfo(data);
-
-           // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const ExamPageScreen()));
-
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) =>
-                   ExamPageScreen(),
-              ),
-                  (route) => false,
-            );
-
-
-          }
-
-          else if (response.statusCode == 403) {
-            setState(() {
-              //_showToast("success");
-              var data = jsonDecode(response.body);
-              _showToast(data['msg']);
-
-            });
-          } else {
-            var data = jsonDecode(response.body);
-            _showToast(data['message']);
-          }
-        } catch (e) {
-          Navigator.of(context).pop();
-          //print(e.toString());
-        }
-      }
-    } on SocketException catch (_) {
-      Fluttertoast.cancel();
-      _showToast("No Internet Connection!");
-    }
-  }
+  // //login api call
+  // _userLogIn({
+  //   required String userName,
+  //   required String password,
+  // }) async {
+  //   try {
+  //     final result = await InternetAddress.lookup('example.com');
+  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+  //       showLoadingDialog(context, "Checking...");
+  //       try {
+  //         Response response =
+  //         await post(Uri.parse('$BASE_URL_API$SUB_URL_API_LOG_IN'), body: {
+  //           'username': userName,
+  //           'password': password,
+  //         });
+  //         Navigator.of(context).pop();
+  //         // _showToast(response.statusCode.toString());
+  //
+  //         if (response.statusCode == 200) {
+  //           _showToast("success");
+  //            var data = jsonDecode(response.body);
+  //           //
+  //           saveUserInfo(data);
+  //
+  //          // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const ExamPageScreen()));
+  //
+  //           Navigator.pushAndRemoveUntil(
+  //             context,
+  //             MaterialPageRoute(
+  //               builder: (BuildContext context) =>
+  //                  ExamPageScreen(),
+  //             ),
+  //                 (route) => false,
+  //           );
+  //
+  //
+  //         }
+  //
+  //         else if (response.statusCode == 403) {
+  //           setState(() {
+  //             //_showToast("success");
+  //             var data = jsonDecode(response.body);
+  //             _showToast(data['msg']);
+  //
+  //           });
+  //         }
+  //         else {
+  //           var data = jsonDecode(response.body);
+  //           _showToast(data['message']);
+  //         }
+  //       } catch (e) {
+  //         Navigator.of(context).pop();
+  //         //print(e.toString());
+  //       }
+  //     }
+  //   } on SocketException catch (_) {
+  //     Fluttertoast.cancel();
+  //     _showToast("No Internet Connection!");
+  //   }
+  // }
 
   //save data with share pref
   void saveUserInfo(var userInfo) async {

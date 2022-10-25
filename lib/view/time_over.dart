@@ -5,30 +5,18 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart';
+import 'package:hw_pannel/view1/background.dart';
 import 'package:marquee/marquee.dart';
 
-import '../gradiant_icon.dart';
-import 'Colors.dart';
-import 'background/background.dart';
+import '../../gradiant_icon.dart';
+import '../Colors.dart';
+ import 'background.dart';
 import 'exam_page.dart';
 
-class TimeOverScreen extends StatefulWidget {
-  const TimeOverScreen({Key? key}) : super(key: key);
-
-  @override
-  State<TimeOverScreen> createState() => _TimeOverScreenState();
-}
-
-class _TimeOverScreenState extends State<TimeOverScreen> {
-  TextEditingController? _emailController = new TextEditingController();
-  bool _isObscure = true;
-  bool _isCountingStatus=false;
-  String _time="4:00";
-  late Timer _timer;
-  int _start = 4 * 60;
-
-  late String userId;
+class TimeOverScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -77,13 +65,10 @@ class _TimeOverScreenState extends State<TimeOverScreen> {
 
   }
 
-
   Widget _buildHomeButton() {
     return ElevatedButton(
       onPressed: () {
-
-        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const ExamPageScreen()));
-
+        Get.off(ExamPageScreen());
       },
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,

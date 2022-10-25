@@ -38,7 +38,7 @@ dependencies:
   fluttertoast: ^8.0.8
   otp_text_field: ^1.1.1
   # api
-  http: ^0.13.0
+  http: ^0.13.5
   #date
   intl: ^0.17.0
   #share prefrence
@@ -54,6 +54,8 @@ dependencies:
   marquee: ^2.2.3
   url_launcher: ^6.1.6
   ntp: ^2.0.0
+  get: ^4.6.5
+  get_storage: ^2.0.3
 
 dev_dependencies:
   flutter_test:

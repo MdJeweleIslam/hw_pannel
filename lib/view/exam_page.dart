@@ -2,105 +2,28 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:marquee/marquee.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+ import 'package:marquee/marquee.dart';
 import 'package:ntp/ntp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Colors.dart';
-import 'api_service/sharePreferenceDataSaveName.dart';
-import 'background/background.dart';
+import '../Colors.dart';
+import '../api_service/sharePreferenceDataSaveName.dart';
+ import '../controller/exam_page_controller.dart';
+ import 'background.dart';
 import 'exam_start_page.dart';
 
-class ExamPageScreen extends StatefulWidget {
-  const ExamPageScreen({Key? key}) : super(key: key);
+class ExamPageScreen extends StatelessWidget {
 
-  @override
-  State<ExamPageScreen> createState() => _ExamPageScreenState();
-}
 
-class _ExamPageScreenState extends State<ExamPageScreen> {
-  bool _isCountingStatus = false;
-  String _time = "4:00";
-  late Timer _timer;
-  int _start = 4 * 60;
+  final examPageController = Get.put(ExamPageController());
 
-  late String userId;
 
-  String _startTxt = "00:00:00";
+ // String _userName="",_fullName="",_userBatch="",_userType="",_userId="";
 
-  String _upcomingExamText = "Up Coming";
-  String getTime = "";
 
-  int otp_coundown_second = 0;
 
-  String _userName="",_fullName="",_userBatch="",_userType="",_userId="";
-
-  //
-
-  diffSecond1() {
-    DateTime dt1 = DateTime.parse("2021-12-23 11:50:50");
-    DateTime dt2 = DateTime.parse("2021-12-23 11:50:40");
-    Duration diff = dt1.difference(dt2);
-
-    // otp_coundown_second=40;
-    if (diff.inSeconds > 0) {
-      otp_coundown_second = diff.inSeconds;
-    }
-  }
-
-  // diffSecond() {
-  //   DateTime dt1 = DateTime.parse("2021-12-23 11:50:40");
-  //   DateTime dt2 = DateTime.parse("2021-12-23 11:50:30");
-  //   Duration diff = dt1.difference(dt2);
-  //
-  //   // otp_coundown_second=40;
-  //   _showToast(diff.inSeconds.toString());
-  //   //otp_coundown_second=diff.inSeconds;
-  // }
-
-  void startTimer(int second) {
-    const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (second <= 0) {
-          setState(() {
-            _upcomingExamText = "Start Exam";
-            _isCountingStatus = true;
-            timer.cancel();
-          });
-        } else {
-          setState(() {
-            second--;
-            _startTxt = _printDuration(Duration(seconds: second));
-          });
-        }
-      },
-    );
-  }
-
-  String _printDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitHour = twoDigits(duration.inHours.remainder(60));
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$twoDigitHour:$twoDigitMinutes:$twoDigitSeconds";
-  }
-
-  @override
-  @mustCallSuper
-  void initState() {
-    super.initState();
-
-    loadUserIdFromSharePref();
-
-    // DateTime dt2 = DateTime.parse("2021-12-23 9:47:00");
-    diffSecond1();
-    _isCountingStatus = false;
-    startTimer(otp_coundown_second);
-
-    //controller = CountdownTimerController(endTime: endTime, onEnd: onEnd);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -349,20 +272,11 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
                                               20, 30, 20, 00),
                                           child: InkWell(
                                             onTap: () {
-                                              // diffSecond();
-                                              // _showToast( "click");
-                                              // _showToast( diffSecond(dt1,dt2).toString());
-                                              //  Duration duration=diffSecond(dt1,dt2);
+                                              examPageController.cancelTimer();
 
-                                              // _showToast( '$duration.inMinutes.remainder(60)');
-                                              // _showToast(duration.inDays.toString());
+                                              Get.to(ExamStartPageScreen());
 
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder:
-                                                          (context) =>
-                                                      const ExamStartPageScreen()));
+
                                             },
                                             child: _buildButtonDesign(
                                                 endColor: awsEndColor,
@@ -373,7 +287,11 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
                                     ],
                                   ),
                                 ),
-                                Text(getTime),
+                                Obx(() =>
+                                    Text(examPageController.getTime.value),
+
+                                ),
+
                                 Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.only(
@@ -409,16 +327,22 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
                                         child: Align(
                                           alignment:
                                               Alignment.topCenter,
-                                          child: Text(
-                                            _startTxt,
-                                            textAlign:
+                                          child:
+
+                                          Obx(() =>
+                                              Text(
+                                                examPageController.startTxt.value,
+                                                textAlign:
                                                 TextAlign.center,
-                                            style: const TextStyle(
-                                                color: awsEndColor,
-                                                fontSize: 25,
-                                                fontWeight:
+                                                style: const TextStyle(
+                                                    color: awsEndColor,
+                                                    fontSize: 25,
+                                                    fontWeight:
                                                     FontWeight.bold),
+                                              ),
+
                                           ),
+
                                         ),
                                       ),
 
@@ -435,15 +359,16 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
                                               color: Colors.black,
                                             ),
                                           ),
-                                          Text(
-                                            _userName,
+                                          Obx(() => Text(
+                                            examPageController.userName.value,
                                             style: TextStyle(
                                               fontWeight:
-                                                  FontWeight.w500,
+                                              FontWeight.w500,
                                               color: awsMixedColor,
                                               fontSize: 18,
                                             ),
-                                          ),
+                                          ))
+                                          ,
                                         ],
                                       ),
                                       SizedBox(
@@ -462,15 +387,16 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
                                               fontSize: 18,
                                             ),
                                           ),
-                                          Text(
-                                            _userBatch,
+                                          Obx(() => Text(
+                                            examPageController.userBatch.value,
                                             style: TextStyle(
                                               fontWeight:
-                                                  FontWeight.w500,
+                                              FontWeight.w500,
                                               color: awsMixedColor,
                                               fontSize: 18,
                                             ),
-                                          ),
+                                          ))
+                                          ,
                                         ],
                                       ),
                                       SizedBox(
@@ -582,23 +508,30 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
                                         ],
                                       ),
                                       // Start Exam
+
                                       InkResponse(
                                         onTap: () {
-                                          main();
+
+                                          examPageController.main();
+                                          // main();
                                           //  getNtpTime();
-                                          // if(_upcomingExamText=="Start Exam"){
-                                          //   _showToast("Ready to exam!");
-                                          // }
+
+                                          if(examPageController.upcomingExamText.value=="Start Exam"){
+                                            _showToast("Ready to exam!");
+                                          }
                                         },
                                         child: Container(
                                           margin: EdgeInsets.fromLTRB(
                                               20, 20, 20, 00),
-                                          child: _buildButtonDesign(
-                                              endColor: awsEndColor,
-                                              startColor:
-                                                  awsStartColor,
-                                              textValue:
-                                                  _upcomingExamText),
+                                          child: _buildButtonDesign1(
+                                            endColor: awsEndColor,
+                                            startColor:
+                                            awsStartColor,
+
+                                            //  _upcomingExamText
+                                          ),
+
+
                                         ),
                                       )
                                     ],
@@ -651,13 +584,14 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
     var devicedateUtc = DateTime.now().toUtc();
     var ntpdateUtc = _ntpTime.toUtc();
 
-    setState(() {
-      // _showToast(' $_myTime');
-      getTime = 'Device time: $_myTime' +
-          '\nNtp time: $_ntpTime' +
-          '\nDevice utc: $devicedateUtc' +
-          '\nNtp utc: $ntpdateUtc';
-    });
+    ///dfff
+    // setState(() {
+    //
+    //   getTime = 'Device time: $_myTime' +
+    //       '\nNtp time: $_ntpTime' +
+    //       '\nDevice utc: $devicedateUtc' +
+    //       '\nNtp utc: $ntpdateUtc';
+    // });
 
     return;
   }
@@ -700,6 +634,42 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
 
 
   //create button
+
+
+  Widget _buildButtonDesign1(
+      {
+      required Color startColor,
+      required Color endColor}) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [startColor, endColor],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(10.0),
+            bottomRight: Radius.circular(0.0),
+            topLeft: Radius.circular(10),
+            bottomLeft: Radius.circular(0)),
+      ),
+      child: Container(
+        height: 50,
+        alignment: Alignment.center,
+        child:Obx(() => Text(
+          examPageController.upcomingExamText.value,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'PT-Sans',
+            fontSize: 16,
+            fontWeight: FontWeight.normal,
+            color: Colors.white,
+          ),
+        ),)
+      ),
+    );
+  }
+
   Widget _buildButtonDesign(
       {required String textValue,
       required Color startColor,
@@ -960,16 +930,16 @@ class _ExamPageScreenState extends State<ExamPageScreen> {
   loadUserIdFromSharePref() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
-      setState(() {
-
-        _userName= sharedPreferences.getString(pref_user_name )??"";
-        _fullName= sharedPreferences.getString(pref_full_name )??"";
-        _userBatch=  sharedPreferences.getString(pref_user_batch )??"";
-        _userType= sharedPreferences.getString(pref_user_type )??"";
-        _userId= sharedPreferences.getString(pref_user_id )??"";
-
-
-      });
+      // setState(() {
+      //
+      //   _userName= sharedPreferences.getString(pref_user_name )??"";
+      //   _fullName= sharedPreferences.getString(pref_full_name )??"";
+      //   _userBatch=  sharedPreferences.getString(pref_user_batch )??"";
+      //   _userType= sharedPreferences.getString(pref_user_type )??"";
+      //   _userId= sharedPreferences.getString(pref_user_id )??"";
+      //
+      //
+      // });
     } catch(e) {
       //code
     }

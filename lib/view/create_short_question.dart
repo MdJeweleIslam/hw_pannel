@@ -1,62 +1,38 @@
-import 'dart:convert';
 
 import 'dart:io';
 
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shimmer/shimmer.dart';
-
 import '../Colors.dart';
 import '../api_service/sharePreferenceDataSaveName.dart';
+import '../controller/create_short_question_controller.dart';
 
-class CreateShortQuestionScreen extends StatefulWidget {
+class CreateShortQuestionScreen extends StatelessWidget  {
   String quiz_id;
   String classRoomName;
-
+  final createShortQuestionController = Get.put(CreateShortQuestionController());
 
   CreateShortQuestionScreen(this.quiz_id, this.classRoomName);
 
-  @override
-  State<CreateShortQuestionScreen> createState() => _CreateShortQuestionScreenState(this.quiz_id,this.classRoomName);
-
-}
-
-class _CreateShortQuestionScreenState extends State<CreateShortQuestionScreen> {
-
-  String _quiz_id;
-  String _classRoomName;
-
-
-  _CreateShortQuestionScreenState(this._quiz_id, this._classRoomName);
-
-  TextEditingController? _shortQuestionNameController = TextEditingController();
-  TextEditingController? _classRoomNameUpdateController =
-      TextEditingController();
-  bool _isObscure = true;
-
-  TextEditingController? otpEditTextController = new TextEditingController();
   String _userName="",_fullName="",_userBatch="",_userType="",_userId="";
-
-
   bool shimmerStatus = true;
 
   List teacherIndividualClassRoomQuizList = [];
   var teacherIndividualClassRoomQuizListResponse;
 
-  @override
-  @mustCallSuper
-  initState() {
-    super.initState();
-    // _getTeacherRoomDataList();
-    loadUserIdFromSharePref().then((_) {
-      // _getTeacherIndividualClassroomQuizList(_classRoomId,_accessToken);
-    });
-    //loadUserIdFromSharePref();
-  }
+  // @override
+  // @mustCallSuper
+  // initState() {
+  //   super.initState();
+  //   // _getTeacherRoomDataList();
+  //   loadUserIdFromSharePref().then((_) {
+  //     // _getTeacherIndividualClassroomQuizList(_classRoomId,_accessToken);
+  //   });
+  //   //loadUserIdFromSharePref();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +101,7 @@ class _CreateShortQuestionScreenState extends State<CreateShortQuestionScreen> {
     String? labelText,
   }) {
     return TextFormField(
-      controller: _shortQuestionNameController,
+      controller: createShortQuestionController.shortQuestionNameController.value,
       minLines: 5,
       maxLines: null,
       keyboardType: TextInputType.multiline,
@@ -152,11 +128,11 @@ class _CreateShortQuestionScreenState extends State<CreateShortQuestionScreen> {
     return ElevatedButton(
       onPressed: () {
 
-        String shortQuestionTxt = _shortQuestionNameController!.text;
+        String shortQuestionTxt = createShortQuestionController.shortQuestionNameController.value.text;
 
         if (shortQuestionTxt.isEmpty) {
           Fluttertoast.cancel();
-          _showToast("question can't empty");
+          _showToast("Question name can't empty!");
           return;
         }
 
@@ -169,7 +145,7 @@ class _CreateShortQuestionScreenState extends State<CreateShortQuestionScreen> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(7))),
       child: Ink(
         decoration: BoxDecoration(
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               colors: [ awsStartColor, awsEndColor],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
@@ -178,7 +154,7 @@ class _CreateShortQuestionScreenState extends State<CreateShortQuestionScreen> {
         child: Container(
           height: 50,
           alignment: Alignment.center,
-          child: Text(
+          child: const Text(
             "Save",
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -293,19 +269,21 @@ class _CreateShortQuestionScreenState extends State<CreateShortQuestionScreen> {
   loadUserIdFromSharePref() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
-      setState(() {
-
-        _userName= sharedPreferences.getString(pref_user_name )??"";
-        _fullName= sharedPreferences.getString(pref_full_name )??"";
-        _userBatch=  sharedPreferences.getString(pref_user_batch )??"";
-        _userType= sharedPreferences.getString(pref_user_type )??"";
-        _userId= sharedPreferences.getString(pref_user_id )??"";
-
-
-      });
+      // setState(() {
+      //
+      //   _userName= sharedPreferences.getString(pref_user_name )??"";
+      //   _fullName= sharedPreferences.getString(pref_full_name )??"";
+      //   _userBatch=  sharedPreferences.getString(pref_user_batch )??"";
+      //   _userType= sharedPreferences.getString(pref_user_type )??"";
+      //   _userId= sharedPreferences.getString(pref_user_id )??"";
+      //
+      //
+      // });
     } catch(e) {
       //code
     }
 
   }
+
+
 }

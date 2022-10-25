@@ -2,68 +2,25 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hw_pannel/time_over.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
 
 import 'package:marquee/marquee.dart';
 
-import 'Colors.dart';
-import 'NoDataFound.dart';
-import 'background/background.dart';
-
-class ExamStartPageScreen extends StatefulWidget {
-  const ExamStartPageScreen({Key? key}) : super(key: key);
-
-  @override
-  State<ExamStartPageScreen> createState() => _ExamPageScreenState();
-}
-
-class _ExamPageScreenState extends State<ExamStartPageScreen> {
+import '../../Colors.dart';
+import '../../NoDataFound.dart';
+import '../../controller/exam_start_page_controller.dart';
+import 'background.dart';
 
 
-  bool _isCountingStatus=false;
-  String _time="4:00";
-  late Timer _timer;
-  int _start = 4 * 60;
+
+class ExamStartPageScreen extends StatelessWidget  {
+
+  final examStartPageController = Get.put(ExamStartPageController());
 
   late String userId;
 
-  String _startTxt = "00:00:00";
-
-  String _upcomingExamText="Up Coming";
-
-  int otp_coundown_second=0;
-
-  int selectedValue = -1;
-
-  TextEditingController? _shortQuestionNameController = TextEditingController();
-  String questionType = "1";
-
-  diffSecond1(){
-    DateTime dt1 = DateTime.parse("2021-12-23 11:50:30");
-    DateTime dt2 = DateTime.parse("2021-12-23 11:50:00");
-    Duration diff = dt1.difference(dt2);
-
-    // otp_coundown_second=40;
-    if(diff.inSeconds>0 ){
-      otp_coundown_second=diff.inSeconds;
-    }
-  }
-
-  var abcd=["(a)","(b)","(c)","(d)","(e)","(f)","(g)","(h)"];
-
-  @override
-  @mustCallSuper
-  void initState() {
-    super.initState();
-
-    // DateTime dt2 = DateTime.parse("2021-12-23 9:47:00");
-    diffSecond1();
-    _isCountingStatus=false;
-    startTimer(otp_coundown_second);
-
-    //controller = CountdownTimerController(endTime: endTime, onEnd: onEnd);
-  }
-String _message="If you click 'Skip' or 'Submit' button, You will can not go back previous page.";
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +42,7 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
                           children: [
                             Expanded(
                                 child: Marquee(
-                                  text:_message ,
+                                  text:examStartPageController.message.value,
                                   style: TextStyle(fontWeight: FontWeight.w500, fontSize:18,color: awsEndColor),
                                   scrollAxis: Axis.horizontal, //scroll direction
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,18 +84,27 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
                                         color: Colors.black,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500)),
-                                Text(
-                                    ("1"),
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500)),
-                                Text(
-                                    (" of " +"20"),
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500)),
+
+                                Obx(() =>
+                                    Text(
+                                        examStartPageController.currentQuestionNo.value,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500)),
+
+                                ),
+
+                                Obx(() =>
+                                    Text((" of " +examStartPageController.totalQuestionNo.value),
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500)),
+
+                                ),
+
+
                               ],
                             ),
                             SizedBox(height: 10,),
@@ -151,20 +117,26 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
                                   fontWeight: FontWeight.w500),
                             ),
                             SizedBox(height: 5,),
-                            Text(
-                              _startTxt,
+
+
+
+                            Obx(() => Text(
+                              examStartPageController.startTxt.value,
+
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: awsStartColor,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold),
-                            ),
+                            ),)
+
+
                           ],
                         ),
                       ),
 
 
-                      if(questionType=="1")...{
+                      if(examStartPageController.questionType.value=="1")...{
                         Expanded(child: Column(
                           children: <Widget>[
                             Expanded(child:  Column(
@@ -195,23 +167,25 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
                                       shrinkWrap: false,
                                       physics: const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
-                                        return
+                                        return Obx(() => RadioListTile<int>(
+                                            value: index,
+                                            activeColor: awsEndColor,
+                                            title: Text(
+                                              examStartPageController.abcdList[index].toString()+
+                                                  ". mcq_option_answer",
+                                              // optionList[index]["mcq_option_answer"].toString(),
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                            groupValue: examStartPageController.selectedValue.value,
+                                            onChanged: (value){
+                                              examStartPageController.selectedValueUpdate(index);
 
-                                          RadioListTile<int>(
-                                              value: index,
-                                              activeColor: Colors.appRed,
-                                              title: Text(
-                                                abcd[index].toString()+
-                                                ". mcq_option_answer",
-                                                // optionList[index]["mcq_option_answer"].toString(),
-                                                style: TextStyle(fontSize: 16),
-                                              ),
-                                              groupValue: selectedValue,
-                                              onChanged: (value) => setState(() {
-                                                selectedValue = index;
-                                                // selected_question_mcq_options_id=optionList[index]["question_mcq_options_id"];
-                                              })
-                                          );
+                                            }
+
+
+                                        ))
+
+                                          ;
                                       },
                                     ),
                                   ),
@@ -239,7 +213,7 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
 
 
                       }
-                      else if(questionType=="2")...{
+                      else if(examStartPageController.questionType.value=="2")...{
                         Padding(
                           padding: EdgeInsets.only(left: 10,right: 10,top: 20,bottom: 00),
                           child: Flex(direction: Axis.horizontal,
@@ -309,7 +283,7 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
     String? labelText,
   }) {
     return TextFormField(
-      controller: _shortQuestionNameController,
+      controller: examStartPageController.shortQuestionNameController.value,
       minLines: 5,
       maxLines: null,
       keyboardType: TextInputType.multiline,
@@ -329,7 +303,7 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
     return ElevatedButton(
       onPressed: () {
 
-        String shortQuestionAnswerTxt = _shortQuestionNameController!.text;
+        String shortQuestionAnswerTxt = examStartPageController.shortQuestionNameController.value.text;
 
         if (shortQuestionAnswerTxt.isEmpty) {
           Fluttertoast.cancel();
@@ -376,7 +350,7 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
     return ElevatedButton(
       onPressed: () {
 
-        if (selectedValue==-1) {
+        if (examStartPageController.selectedValue.value==-1) {
           Fluttertoast.cancel();
           _showToast("please select answer! ");
           return;
@@ -465,47 +439,7 @@ String _message="If you click 'Skip' or 'Submit' button, You will can not go bac
         fontSize: 16.0);
   }
 
-  diffSecond() {
 
-    DateTime dt1 = DateTime.parse("2021-12-23 11:50:00");
-    DateTime dt2 = DateTime.parse("2021-12-23 11:20:00");
-    Duration diff = dt1.difference(dt2);
 
-    // otp_coundown_second=40;
-    _showToast(diff.inSeconds.toString());
-    //otp_coundown_second=diff.inSeconds;
-  }
-
-  void startTimer(int second) {
-    const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
-      oneSec,
-          (Timer timer) {
-        if (second == 0) {
-          setState(() {
-
-            _upcomingExamText="Start Exam";
-            _isCountingStatus=true;
-            _startTxt="Exam Time Finished";
-            timer.cancel();
-            Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const TimeOverScreen()));
-          });
-        } else {
-          setState(() {
-            second--;
-            _startTxt=_printDuration(Duration(seconds: second));
-          });
-        }
-      },
-    );
-  }
-
-  String _printDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2,"0");
-    String twoDigitHour = twoDigits(duration.inHours.remainder(60));
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$twoDigitHour:$twoDigitMinutes:$twoDigitSeconds";
-  }
 
 }
