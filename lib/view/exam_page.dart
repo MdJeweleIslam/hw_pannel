@@ -13,6 +13,7 @@ import '../api_service/sharePreferenceDataSaveName.dart';
  import '../controller/exam_page_controller.dart';
  import 'background.dart';
 import 'exam_start_page.dart';
+import 'navigation_drawer_page.dart';
 
 class ExamPageScreen extends StatelessWidget {
 
@@ -22,7 +23,7 @@ class ExamPageScreen extends StatelessWidget {
 
  // String _userName="",_fullName="",_userBatch="",_userType="",_userId="";
 
-
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
 
 
   @override
@@ -31,6 +32,9 @@ class ExamPageScreen extends StatelessWidget {
       child: Scaffold(
           backgroundColor: Colors.backGroundColor,
           // backgroundColor: Colors.backGroundColor,
+          key: _key,
+
+          drawer: NavigationDrawerPasswordScreen(),
           body: SizedBox(
               width: double.infinity,
               height: double.infinity,
@@ -40,32 +44,41 @@ class ExamPageScreen extends StatelessWidget {
 
                   Column(
                     children: [
+
                       Container(
-                        margin: EdgeInsets.fromLTRB(00, 20, 00, 10),
-                        height: 30,
-                        child: Column(
+                        margin: const EdgeInsets.fromLTRB(00, 20, 00, 10),
+
+                        child: Row(
                           children: [
-                            Expanded(
-                                child: Marquee(
-                              text:
-                                  'Working for Application upgrade. Sorry for the inconvenience!',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 20,
-                                  color: awsEndColor),
-                              scrollAxis: Axis.horizontal,
-                              //scroll direction
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              blankSpace: MediaQuery.of(context).size.width,
-                              velocity: 70.0,
-                              //speed
-                              pauseAfterRound: Duration(seconds: 1),
-                              startPadding: 10.0,
-                              accelerationDuration: Duration(seconds: 1),
-                              accelerationCurve: Curves.linear,
-                              decelerationDuration:
-                                  Duration(milliseconds: 1000),
-                              decelerationCurve: Curves.easeOut,
+                           const SizedBox(width: 20,),
+                           InkWell(
+                             onTap: (){
+                               _key.currentState!.openDrawer();
+                             },
+                             child:  Container(
+                               decoration: const BoxDecoration(
+                                 borderRadius: BorderRadius.only(
+                                     topRight: Radius.circular(5.0),
+                                     bottomRight: Radius.circular(5.0),
+                                     topLeft: Radius.circular(5.0),
+                                     bottomLeft: Radius.circular(5.0)),
+                                 color: Colors.white,
+                               ),
+                               padding: const EdgeInsets.all(7),
+
+                               child:const Icon(Icons.menu_rounded,
+                                 size: 22,
+                                 color: awsEndColor,
+                               ),
+                             ),
+                           ),
+                            const SizedBox(width: 20,),
+                            Expanded(child: Text("Exam List",
+                            style: TextStyle(
+                               fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: awsEndColor
+                            ),
                             ))
                           ],
                         ),
@@ -82,7 +95,7 @@ class ExamPageScreen extends StatelessWidget {
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                         topRight:
                                         Radius.circular(10.0),
                                         bottomRight:
@@ -634,7 +647,6 @@ class ExamPageScreen extends StatelessWidget {
 
 
   //create button
-
 
   Widget _buildButtonDesign1(
       {

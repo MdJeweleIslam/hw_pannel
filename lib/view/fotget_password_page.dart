@@ -8,8 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart';
-import 'package:hw_pannel/view1/background.dart';
-import 'package:marquee/marquee.dart';
+ import 'package:marquee/marquee.dart';
 
 import '../../../gradiant_icon.dart';
 import '../../Colors.dart';
