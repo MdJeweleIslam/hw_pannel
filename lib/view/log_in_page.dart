@@ -522,7 +522,6 @@ class LogInScreen extends StatelessWidget {
       sharedPreferences.setString(pref_user_id, userInfo['data']['user_id'].toString());
 
 
-
     } catch (e) {
 
       //code

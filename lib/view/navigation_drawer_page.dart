@@ -153,21 +153,6 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
 
 
 
-  _inputValid(String email) {
-    if (email.isEmpty) {
-      Fluttertoast.cancel();
-      _showToast("E-mail can't empty");
-      return;
-    }
-    if (!RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(email)) {
-      Fluttertoast.cancel();
-      _showToast("Enter valid email");
-      return;
-    }
-    return false;
-  }
 
   _showToast(String message) {
     Fluttertoast.showToast(
