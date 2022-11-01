@@ -7,13 +7,13 @@ import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:hw_pannel/api_service/sharePreferenceDataSaveName.dart';
+import 'package:hw_pannel/view/HomePage.dart';
 
 import '../Colors.dart';
 import '../view/exam_page.dart';
  import 'api_service.dart';
 
 class LogInApiService {
-
 
   //login api call
   userLogIn({
@@ -27,8 +27,7 @@ class LogInApiService {
 
           showLoadingDialog("Checking");
 
-          var response = await http
-              .post(Uri.parse('$BASE_URL_API$SUB_URL_API_LOG_IN'), body: {
+          var response = await http.post(Uri.parse('$BASE_URL_API$SUB_URL_API_LOG_IN'), body: {
             'username': userName,
             'password': password,
           });
@@ -46,16 +45,19 @@ class LogInApiService {
              );
 
 
-            Get.offAll(ExamPageScreen());
+            Get.offAll(HomePageScreen());
 
-
-          } else if (response.statusCode == 403) {
+          }
+          else if (response.statusCode == 403) {
             var data = jsonDecode(response.body);
             _showToast(data['msg']);
-          } else {
+          }
+          else {
             var data = jsonDecode(response.body);
             _showToast(data['message']);
           }
+
+
         } catch (e) {
           //  Navigator.of(context).pop();
           //print(e.toString());
@@ -70,7 +72,6 @@ class LogInApiService {
       _showToast("No Internet Connection!");
     }
   }
-
 
   void saveUserInfo({required String name,required String fullName,required String batch,required String user_type, required String user_id}) async {
     try {
@@ -158,4 +159,6 @@ class LogInApiService {
         textColor: Colors.white,
         fontSize: 16.0);
   }
+
+
 }

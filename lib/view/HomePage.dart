@@ -17,11 +17,7 @@ import 'navigation_drawer_page.dart';
 
 class HomePageScreen extends StatelessWidget {
 
-
   final examPageController = Get.put(HomePageController());
-
-
- // String _userName="",_fullName="",_userBatch="",_userType="",_userId="";
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   final Uri _url = Uri.parse('https://arenawebsecurity.net/profile#paymentID');
@@ -167,9 +163,6 @@ class HomePageScreen extends StatelessWidget {
               ))),
     );
   }
-
-
-
 
   //finished exam list
   Widget _buildFinishedExamList() {

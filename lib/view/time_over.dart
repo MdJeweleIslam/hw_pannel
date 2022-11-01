@@ -1,16 +1,9 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:http/http.dart';
- import 'package:marquee/marquee.dart';
 
-import '../../gradiant_icon.dart';
 import '../Colors.dart';
  import 'background.dart';
 import 'exam_page.dart';
@@ -21,8 +14,7 @@ class TimeOverScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-      //  backgroundColor: Colors.backGroundColor,
-        // backgroundColor: Colors.backGroundColor,
+     // backgroundColor: Colors.backGroundColor,
         body: SizedBox(
             width: double.infinity,
             height: double.infinity,

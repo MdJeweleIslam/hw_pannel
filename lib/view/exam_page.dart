@@ -889,8 +889,6 @@ class ExamPageScreen extends StatelessWidget {
     );
   }
 
-
-
   //create button
   Widget _buildNextButton() {
     return ElevatedButton(

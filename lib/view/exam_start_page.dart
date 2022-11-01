@@ -21,7 +21,6 @@ class ExamStartPageScreen extends StatelessWidget  {
 
   late String userId;
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -438,8 +437,5 @@ class ExamStartPageScreen extends StatelessWidget  {
         textColor: Colors.white,
         fontSize: 16.0);
   }
-
-
-
 
 }
