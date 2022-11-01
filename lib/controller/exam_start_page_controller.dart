@@ -1,14 +1,10 @@
 import 'dart:async';
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ntp/ntp.dart';
 
 import '../view/time_over.dart';
-
-
 
 class ExamStartPageController extends GetxController {
 

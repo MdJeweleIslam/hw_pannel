@@ -9,10 +9,6 @@ import '../api_service/sharePreferenceDataSaveName.dart';
 
 class ExamPageController extends GetxController {
 
-
-
-
-
   final shortQuestionNameController = TextEditingController().obs;
   final shortQuestionOptionNameController = TextEditingController().obs;
   var answerOption="".obs;
@@ -37,8 +33,6 @@ class ExamPageController extends GetxController {
     RetriveUserInfo();
     updateIsCountingStatus(false);
    // int a=int.parse(otpCountDownSecond.value);
-
-
    // startTimer(otpCountDownSecond);
    // startTimer(40);
    // startTimer(int.parse(otpCountDownSecond));

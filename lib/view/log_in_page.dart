@@ -27,17 +27,6 @@ class LogInScreen extends StatelessWidget {
 
   final logInPageController = Get.put(LogInPageController());
 
-
-
- // TextEditingController? userNameController = TextEditingController();
- // TextEditingController? passwordController = TextEditingController();
- //  bool _isObscure = true;
-
- // late FocusNode phoneFocusNode;
- // Color _userNameLevelTextColor = hint_color;
- // Color _passwordLevelTextColor = hint_color;
-
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -178,8 +167,6 @@ class LogInScreen extends StatelessWidget {
     );
   }
   final Uri _url = Uri.parse('https://www.arenawebsecurity.net/');
-
-
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

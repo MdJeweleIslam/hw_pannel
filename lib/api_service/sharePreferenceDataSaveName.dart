@@ -1,5 +1,4 @@
 
-
 String pref_file_base_name = "com.arena_hw_panel.arena_hw_panel.preference_file";
 
 String pref_user_name = "$pref_file_base_name.pref_user_name";

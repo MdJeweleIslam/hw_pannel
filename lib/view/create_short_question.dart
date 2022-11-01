@@ -4,10 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Colors.dart';
-import '../api_service/sharePreferenceDataSaveName.dart';
 import '../controller/create_short_question_controller.dart';
 
 class CreateShortQuestionScreen extends StatelessWidget  {
