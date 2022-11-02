@@ -93,6 +93,8 @@ class ExamPageScreen extends StatelessWidget {
                                   width: 180,
                                   height: 90,
                                 ),
+
+                                _buildFinishedExamList(),
                                 Container(
                                   decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.only(
@@ -725,7 +727,7 @@ class ExamPageScreen extends StatelessWidget {
       children: [
         //shimmer design
         ListView.builder(
-          itemCount: 4,
+          itemCount:examPageController.classRoomQuizList.length,
           // itemCount: orderRoomList == null ? 0 : orderRoomList.length,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -752,8 +754,8 @@ class ExamPageScreen extends StatelessWidget {
               margin: EdgeInsets.only(
                   left: 20,
                   right: 20,
-                  top: 20,
-                  bottom: 00),
+                  top: 10,
+                  bottom: 10),
               child: Column(
                 children: [
 
@@ -774,7 +776,7 @@ class ExamPageScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "17:40:00",
+                        "${examPageController.classRoomQuizList[index].quizStartTime}",
                         style: TextStyle(
                           fontWeight:
                           FontWeight.w500,
@@ -801,7 +803,9 @@ class ExamPageScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "18:40:00",
+                        "${examPageController.classRoomQuizList[index].quizEndTime}",
+
+                       // "18:40:00",
                         style: TextStyle(
                           fontWeight:
                           FontWeight.w500,
@@ -828,7 +832,7 @@ class ExamPageScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "60 Minutes",
+                        "${examPageController.classRoomQuizList[index].quizDuration} Minutes",
                         style: TextStyle(
                           fontWeight:
                           FontWeight.w500,
@@ -855,7 +859,7 @@ class ExamPageScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "2022-10-11",
+                        "${examPageController.classRoomQuizList[index].quizStartDate}",
                         style: TextStyle(
                           fontWeight:
                           FontWeight.w500,

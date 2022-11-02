@@ -1,11 +1,18 @@
 import 'dart:async';
+import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart';
 import 'package:ntp/ntp.dart';
 
+import '../Colors.dart';
 import '../api_service/sharePreferenceDataSaveName.dart';
+import '../model/individual_classroom_quiz_all_list_model.dart';
 
 class ExamPageController extends GetxController {
 
@@ -23,19 +30,33 @@ class ExamPageController extends GetxController {
   var upcomingExamText = "Up Coming".obs;
   var getTime = "".obs;
 
+  var classRoomId = "10".obs;
+  var uid = "156fa72f-729f-48a7-b0ff-5cb165e31b64".obs;
+
   var userName="".obs,fullName="".obs,userBatch="".obs,userType="".obs,userId="".obs;
+
+  var classRoomQuizList=[].obs;
+
+  // @override
+  // void onInit() {
+  //   // TODO: implement onInit
+  //   super.onInit();
+  //   getExamList();
+  //   diffSecond();
+  //   RetriveUserInfo();
+  //   updateIsCountingStatus(false);
+  //  // int a=int.parse(otpCountDownSecond.value);
+  //  // startTimer(otpCountDownSecond);
+  //  // startTimer(40);
+  //  // startTimer(int.parse(otpCountDownSecond));
+  // }
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    diffSecond();
-    RetriveUserInfo();
-    updateIsCountingStatus(false);
-   // int a=int.parse(otpCountDownSecond.value);
-   // startTimer(otpCountDownSecond);
-   // startTimer(40);
-   // startTimer(int.parse(otpCountDownSecond));
+    getExamList();
+
   }
 
   void RetriveUserInfo() async {
@@ -135,11 +156,9 @@ class ExamPageController extends GetxController {
     otpCountDownSecond(value);
   }
 
-
   updateGetTime(String value) {
     getTime(value);
   }
-
 
   Future<void> main() async {
     [
@@ -188,6 +207,68 @@ class ExamPageController extends GetxController {
     // });
 
     return;
+  }
+
+  void updateClassRoomQuizList(List<IndividualClassroomQuizAllListItem> newList){
+    classRoomQuizList=newList as RxList;
+  }
+
+
+//get first page data
+  void getExamList() async{
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          var response = await put(
+            Uri.parse('http://192.168.1.4:8000/api/individual-classroom-quiz-all-list/$classRoomId/'),
+            body: {
+              'uid':"$uid"
+            }
+
+          );
+
+         // _showToast("${response.statusCode}");
+          if (response.statusCode == 200) {
+
+           _showToast("success");
+            log('data:'+response.body.toString());
+             var data = response.body;
+            IndividualClassroomQuizAllListModel individualClassroomQuizAllListModel=
+            individualClassroomQuizAllListModelFromJson(data);
+
+            classRoomQuizList(individualClassroomQuizAllListModel.data);
+
+          }
+          else {
+           // Fluttertoast.cancel();
+
+            log('data:'+response.body.toString());
+            _showToast("failed try again!");
+
+          }
+        } catch (e) {
+          // Fluttertoast.cancel();
+        }
+      }
+    } on SocketException catch (e) {
+
+      Fluttertoast.cancel();
+      // _showToast("No Internet Connection!");
+    }
+    //updateIsFirstLoadRunning(false);
+  }
+
+  //toast create
+  _showToast(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor:awsMixedColor,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 
 }

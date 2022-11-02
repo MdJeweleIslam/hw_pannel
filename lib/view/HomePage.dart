@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:hw_pannel/view/exam_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -12,7 +11,6 @@ import '../Colors.dart';
 
 import '../controller/home_page_controller.dart';
 import 'background.dart';
-import 'exam_start_page.dart';
 import 'navigation_drawer_page.dart';
 
 class HomePageScreen extends StatelessWidget {
