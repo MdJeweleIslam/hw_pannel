@@ -23,6 +23,11 @@ class ExamPageController extends GetxController {
 
   late Timer timer;
   var startTxt = "00:00:00".obs;
+
+  //if value 0 then exam finished or not start ,
+  //if value 1 then exam is start running,
+  var isExamStart = 0.obs;
+
   var otpCountDownSecond = 0.obs;
 
   var isCountingStatus = false.obs;
@@ -30,34 +35,40 @@ class ExamPageController extends GetxController {
   var upcomingExamText = "Up Coming".obs;
   var getTime = "".obs;
 
-  var classRoomId = "10".obs;
-  var uid = "156fa72f-729f-48a7-b0ff-5cb165e31b64".obs;
+  var classRoomId = "8".obs;
+  var uid = "09a8a3fb-0c63-49ec-abc4-657132ff8e9f".obs;
 
   var userName="".obs,fullName="".obs,userBatch="".obs,userType="".obs,userId="".obs;
 
   var classRoomQuizList=[].obs;
+
+  DateTime dt1 = DateTime.parse("2021-12-23 11:50:50") ;
+  DateTime dt2 = DateTime.parse("2021-12-23 11:40:10") ;
+
+  var startDateTime= "2021-12-23 11:50:50".obs;
+  var endDateTime = "2021-12-23 11:40:10".obs;
+  var currentDateTime = "2021-12-23 11:40:10".obs;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+
+    getExamList();
+
+    RetriveUserInfo();
+    updateIsCountingStatus(false);
+  }
 
   // @override
   // void onInit() {
   //   // TODO: implement onInit
   //   super.onInit();
   //   getExamList();
-  //   diffSecond();
+  //   diffSecond(DateTime.parse("2021-12-23 11:50:50"),DateTime.parse("2021-12-23 11:40:10"));
   //   RetriveUserInfo();
   //   updateIsCountingStatus(false);
-  //  // int a=int.parse(otpCountDownSecond.value);
-  //  // startTimer(otpCountDownSecond);
-  //  // startTimer(40);
-  //  // startTimer(int.parse(otpCountDownSecond));
   // }
-
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    getExamList();
-
-  }
 
   void RetriveUserInfo() async {
     try {
@@ -91,15 +102,20 @@ class ExamPageController extends GetxController {
   }
 
 
-  diffSecond() {
-    DateTime dt1 = DateTime.parse("2021-12-23 11:50:50");
-    DateTime dt2 = DateTime.parse("2021-12-23 11:50:10");
+  diffSecond(DateTime dt1,DateTime dt2,) {
+    // DateTime dt1 = DateTime.parse("2021-12-23 11:50:50");
+    // DateTime dt2 = DateTime.parse("2021-12-23 11:40:10");
     Duration diff = dt1.difference(dt2);
 
     if (diff.inSeconds > 0) {
       updateOtpCountDownSecond(diff.inSeconds);
       startTimer(diff.inSeconds);
     }
+  }
+
+ int timeDifferenceSecond(DateTime dt1,DateTime dt2,) {
+    Duration diff = dt1.difference(dt2);
+    return diff.inSeconds;
   }
 
   void startTimer(var second) {
@@ -110,7 +126,9 @@ class ExamPageController extends GetxController {
         if (second <= 0) {
           // _upcomingExamText = "Start Exam";
           updateUpcomingExamText("Start Exam");
+          // updateIsExamStart(1);
           updateIsCountingStatus(true);
+          updateIsExamStart(1);
          // _isCountingStatus = true;
           timer.cancel();
         }
@@ -159,6 +177,9 @@ class ExamPageController extends GetxController {
   updateGetTime(String value) {
     getTime(value);
   }
+  updateIsExamStart(int value) {
+    isExamStart(value);
+  }
 
   Future<void> main() async {
     [
@@ -189,9 +210,25 @@ class ExamPageController extends GetxController {
 
     var devicedateUtc = DateTime.now().toUtc();
     var ntpdateUtc = _ntpTime.toUtc();
+    updateCurrentDateTime(_ntpTime.toString());
 
+   // _showToast("startDateTime-currentDateTime: "+timeDifferenceSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString())).toString());
+    //startDateTime > currentDateTime
+    if(timeDifferenceSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString()))>0){
+      updateIsExamStart(0);
+    }else{
+      //endDateTime > currentDateTime
+      if(timeDifferenceSecond(DateTime.parse(endDateTime.toString()),DateTime.parse(currentDateTime.toString()))>0){
+        updateIsExamStart(1);
+        updateUpcomingExamText("Start Exam");
+      }else{
+        updateIsExamStart(0);
+      }
+    }
+
+    diffSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString()));
     updateGetTime(
-        'Device time: $_myTime' +
+            'Device time: $_myTime' +
             '\nNtp time: $_ntpTime' +
             '\nDevice utc: $devicedateUtc' +
             '\nNtp utc: $ntpdateUtc'
@@ -209,35 +246,57 @@ class ExamPageController extends GetxController {
     return;
   }
 
-  void updateClassRoomQuizList(List<IndividualClassroomQuizAllListItem> newList){
+  void updateClassRoomQuizList(List<QuizInfo> newList){
     classRoomQuizList=newList as RxList;
   }
 
-
-//get first page data
+//get exam quiz list
   void getExamList() async{
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         try {
           var response = await put(
-            Uri.parse('http://192.168.1.4:8000/api/individual-classroom-quiz-all-list/$classRoomId/'),
+            // Uri.parse('http://192.168.1.4:8000/api/individual-classroom-quiz-all-list/$classRoomId/'),
+            Uri.parse('http://192.168.1.4:8000/api/student-all-join-classroom-list-mobile/$classRoomId/'),
             body: {
               'uid':"$uid"
             }
-
           );
-
-         // _showToast("${response.statusCode}");
+        //  _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
 
-           _showToast("success");
-            log('data:'+response.body.toString());
-             var data = response.body;
-            IndividualClassroomQuizAllListModel individualClassroomQuizAllListModel=
-            individualClassroomQuizAllListModelFromJson(data);
+            _showToast("success");
+            var data = response.body;
+            IndividualClassroomQuizAllListModel individualClassroomQuizAllListModel= individuaClassroomQuizAllListModelFromJson(data);
 
-            classRoomQuizList(individualClassroomQuizAllListModel.data);
+            classRoomQuizList(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo);
+
+
+            for(int i=0;i<classRoomQuizList.length;i++){
+              if(classRoomQuizList[i].isComplete==false){
+
+                updateStartDateTime("${classRoomQuizList[0].quizTimeInfo[0].quizStartDate}"+
+                    " ${classRoomQuizList[0].quizTimeInfo[0].quizStartTime}");
+                updateEndDateTime("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
+                    " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");
+
+                main();
+
+                // updateCurrentDateTime("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
+                //     " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");
+
+               // diffSecond(DateTime.parse(endDateTime.toString()),DateTime.parse(startDateTime.toString()));
+
+
+                return;
+              }
+            }
+
+
+
+             _showToast(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo.length.toString());
+            _showToast(classRoomQuizList.length.toString());
 
           }
           else {
@@ -257,6 +316,20 @@ class ExamPageController extends GetxController {
       // _showToast("No Internet Connection!");
     }
     //updateIsFirstLoadRunning(false);
+  }
+
+  updateStartDateTime(String value) {
+    startDateTime(value);
+
+  }
+
+  updateEndDateTime(String value) {
+    endDateTime(value);
+
+  }
+  updateCurrentDateTime(String value) {
+    currentDateTime(value);
+
   }
 
   //toast create
