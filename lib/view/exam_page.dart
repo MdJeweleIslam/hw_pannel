@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
  import 'package:marquee/marquee.dart';
 import 'package:ntp/ntp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -90,6 +91,9 @@ class ExamPageScreen extends StatelessWidget {
                                   width: 180,
                                   height: 90,
                                 ),
+                            Obx(() => Text("current time: "+examPageController.currentDateTime.value)),
+                            Obx(() => Text("start time: "+examPageController.startDateTime.value)),
+                            Obx(() => Text("end time: "+examPageController.endDateTime.value)),
 
                                 _buildFinishedExamList(),
 
@@ -526,7 +530,7 @@ class ExamPageScreen extends StatelessWidget {
                                       InkResponse(
                                         onTap: () {
 
-                                          examPageController.main();
+                                       //   examPageController.main();
                                           // main();
                                           //  getNtpTime();
 
@@ -556,7 +560,7 @@ class ExamPageScreen extends StatelessWidget {
                                   height: 20,
                                 ),
 
-                                _buildFinishedExamList()
+
 
                               ],
                             ),
@@ -720,6 +724,7 @@ class ExamPageScreen extends StatelessWidget {
                     bottom: 00),
                 child: Column(
                   children: [
+
                     Container(
                       margin: const EdgeInsets.only(
                           right: 20.0,
@@ -804,6 +809,7 @@ class ExamPageScreen extends StatelessWidget {
                     SizedBox(
                       height: 5,
                     ),
+
                     Row(
                       mainAxisAlignment:
                       MainAxisAlignment.center,
@@ -817,15 +823,19 @@ class ExamPageScreen extends StatelessWidget {
                             fontSize: 18,
                           ),
                         ),
-                        Text(
-                          "17:40:00",
-                          style: TextStyle(
-                            fontWeight:
-                            FontWeight.w500,
-                            color: awsMixedColor,
-                            fontSize: 18,
-                          ),
-                        ),
+                        Obx(() =>
+                            Text(
+
+                              utcToLocalTime("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}"
+                                  +" ${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartTime}"),
+                              // "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartTime}" ,
+                              style: TextStyle(
+                                fontWeight:
+                                FontWeight.w500,
+                                color: awsMixedColor,
+                                fontSize: 18,
+                              ),
+                            )),
                       ],
                     ),
                     SizedBox(
@@ -844,15 +854,20 @@ class ExamPageScreen extends StatelessWidget {
                             fontSize: 18,
                           ),
                         ),
-                        Text(
-                          "18:40:00",
-                          style: TextStyle(
-                            fontWeight:
-                            FontWeight.w500,
-                            color: awsMixedColor,
-                            fontSize: 18,
-                          ),
-                        ),
+                        Obx(() =>
+                            Text(
+
+                              utcToLocalTime("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}"
+                                  +" ${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizEndTime}"),
+                              // "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizEndTime}",
+
+                              style: TextStyle(
+                                fontWeight:
+                                FontWeight.w500,
+                                color: awsMixedColor,
+                                fontSize: 18,
+                              ),
+                            )),
                       ],
                     ),
                     SizedBox(
@@ -871,15 +886,18 @@ class ExamPageScreen extends StatelessWidget {
                             fontSize: 18,
                           ),
                         ),
-                        Text(
-                          "60 Minutes",
-                          style: TextStyle(
-                            fontWeight:
-                            FontWeight.w500,
-                            color: awsMixedColor,
-                            fontSize: 18,
-                          ),
-                        ),
+                        Obx(() =>
+                            Text(
+                              //"${examPageController.classRoomQuizList[index].quizDuration} Minutes",
+                              "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizDuration} Minutes" ,
+                              //"quration",
+                              style: TextStyle(
+                                fontWeight:
+                                FontWeight.w500,
+                                color: awsMixedColor,
+                                fontSize: 18,
+                              ),
+                            )),
                       ],
                     ),
                     SizedBox(
@@ -898,26 +916,32 @@ class ExamPageScreen extends StatelessWidget {
                             fontSize: 18,
                           ),
                         ),
-                        Text(
-                          "2022-10-11",
-                          style: TextStyle(
-                            fontWeight:
-                            FontWeight.w500,
-                            color: awsMixedColor,
-                            fontSize: 18,
-                          ),
-                        ),
+                        Obx(() =>
+                            Text(
+
+
+                              utcToLocalDate("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}"),
+
+                              // "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}" ,
+                              //  "${examPageController.classRoomQuizList[index].quizStartDate}",
+
+                              style: TextStyle(
+                                fontWeight:
+                                FontWeight.w500,
+                                color: awsMixedColor,
+                                fontSize: 18,
+                              ),
+                            )),
                       ],
                     ),
-                    // Start Exam
 
                     InkResponse(
                       onTap: () {
 
 
                         if(examPageController.isExamStart==1){
-                          Get.to(ExamStartPageScreen());
-                          _showToast("ready!");
+                       Get.to(ExamStartPageScreen(quizId:"${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}",));
+                         // _showToast( "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}" );
                         }else{
                           _showToast("failed!");
                         }
@@ -984,7 +1008,10 @@ class ExamPageScreen extends StatelessWidget {
                         ),
                         Obx(() =>
                             Text(
-                              "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartTime}" ,
+
+                              utcToLocalTime("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}"
+                                  +" ${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartTime}"),
+                              // "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartTime}" ,
                               style: TextStyle(
                                 fontWeight:
                                 FontWeight.w500,
@@ -1013,7 +1040,9 @@ class ExamPageScreen extends StatelessWidget {
                         Obx(() =>
                             Text(
 
-                              "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizEndTime}",
+                              utcToLocalTime("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}"
+                                  +" ${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizEndTime}"),
+                              // "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizEndTime}",
 
                               style: TextStyle(
                                 fontWeight:
@@ -1072,7 +1101,11 @@ class ExamPageScreen extends StatelessWidget {
                         ),
                         Obx(() =>
                             Text(
-                              "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}" ,
+
+
+                              utcToLocalDate("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}"),
+
+                              // "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}" ,
                               //  "${examPageController.classRoomQuizList[index].quizStartDate}",
 
                               style: TextStyle(
@@ -1110,6 +1143,49 @@ class ExamPageScreen extends StatelessWidget {
         )
       ],
     );
+  }
+
+
+  //utc to local convert and time return
+  String utcToLocalTime(String value){
+    try{
+      var dateFormat = DateFormat("dd-MM-yyyy hh:mm aa"); // you can change the format here
+      var utcDate = dateFormat.format(DateTime.parse(value)); // pass the UTC time here
+      var localDate = dateFormat.parse(utcDate, true).toLocal().toString();//convert local time
+
+     // var dateFormat1 = DateFormat("hh:mm aa");
+      var dateFormat2 = DateFormat("hh:mm:ss aa");
+
+       String formattedTime = dateFormat2.format(DateTime.parse(localDate));
+      return formattedTime;
+    }
+    catch(Exception ){
+      return "catch";
+    }
+
+
+
+  }
+
+  //utc to local convert and date return
+  String utcToLocalDate(String value){
+    try{
+      var dateFormat = DateFormat("dd-MM-yyyy hh:mm aa"); // you can change the format here
+      var utcDate = dateFormat.format(DateTime.parse(value)); // pass the UTC time here
+      var localDate = dateFormat.parse(utcDate, true).toLocal().toString();//convert local time
+
+      // var dateFormat1 = DateFormat("hh:mm aa");
+      var dateFormat2 = DateFormat("dd-MM-yyyy");
+
+      String formattedTime = dateFormat2.format(DateTime.parse(localDate));
+      return formattedTime;
+    }
+    catch(Exception ){
+      return "catch";
+    }
+
+
+
   }
 
   //create button

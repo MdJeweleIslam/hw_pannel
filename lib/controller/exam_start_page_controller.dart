@@ -1,18 +1,26 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 
+import '../Colors.dart';
 import '../view/time_over.dart';
 
 class ExamStartPageController extends GetxController {
+
+   String quizId="8";
+  //
+  // ExamStartPageController(this.quizId);
 
   ///timer variable
   var startTxt = "00:00:00".obs;
   late Timer timer;
   var otpCountDownSecond = 0.obs;
-
+  var uid = "09a8a3fb-0c63-49ec-abc4-657132ff8e9f".obs;
 
   ///question no variable
   var currentQuestionNo="1".obs;
@@ -29,7 +37,8 @@ class ExamStartPageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    diffSecond1();
+    getExamQuestion();
+    // diffSecond1();
 
   }
 
@@ -37,7 +46,7 @@ class ExamStartPageController extends GetxController {
   ///input two time and difference between time and pass second with timer
   diffSecond1() {
     DateTime dt1 = DateTime.parse("2021-12-23 11:50:50");
-    DateTime dt2 = DateTime.parse("2021-12-23 11:50:10");
+    DateTime dt2 = DateTime.parse("2021-12-23 10:50:10");
     Duration diff = dt1.difference(dt2);
 
     if (diff.inSeconds > 0) {
@@ -105,6 +114,53 @@ class ExamStartPageController extends GetxController {
     questionType(value);
   }
 
+//get exam quiz list
+  void getExamQuestion() async{
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          var response = await put(
+            // Uri.parse('http://192.168.1.4:8000/api/individual-classroom-quiz-all-list/$classRoomId/'),
+              Uri.parse('http://192.168.1.4:8000/api/exam-question-list-mobile/09a8a3fb-0c63-49ec-abc4-657132ff8e9f/'),
+              body: {
+                'uid':"$uid",
+                'quiz_id':"$quizId",
+              }
+          );
+            _showToast("${response.statusCode}");
+          if (response.statusCode == 200) {
 
+            _showToast("success");
+
+          }
+          else {
+
+            _showToast("failed try again!");
+
+          }
+        } catch (e) {
+          // Fluttertoast.cancel();
+        }
+      }
+    } on SocketException catch (e) {
+
+      Fluttertoast.cancel();
+      // _showToast("No Internet Connection!");
+    }
+    //updateIsFirstLoadRunning(false);
+  }
+
+  //toast create
+  _showToast(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor:awsMixedColor,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
 
 }

@@ -1,34 +1,37 @@
 
 import 'dart:convert';
 
-IndividualClassroomQuizAllListModel individuaClassroomQuizAllListModelFromJson(String str) => IndividualClassroomQuizAllListModel.fromJson(json.decode(str));
+IndividualClassroomQuizAllListModel individualClassroomQuizAllListModelFromJson(String str) => IndividualClassroomQuizAllListModel.fromJson(json.decode(str));
 
-String individuaClassroomQuizAllListModelToJson(IndividualClassroomQuizAllListModel data) => json.encode(data.toJson());
+String individualClassroomQuizAllListModelToJson(IndividualClassroomQuizAllListModel data) => json.encode(data.toJson());
 
 class IndividualClassroomQuizAllListModel {
   IndividualClassroomQuizAllListModel({
     required this.error,
     required this.message,
     required this.data,
+    required this.currentTimes,
   });
 
   bool error;
   String message;
   List<Datum> data;
+  DateTime currentTimes;
 
   factory IndividualClassroomQuizAllListModel.fromJson(Map<String, dynamic> json) => IndividualClassroomQuizAllListModel(
     error: json["error"],
     message: json["message"],
     data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    currentTimes: DateTime.parse(json["current_times"]),
   );
 
   Map<String, dynamic> toJson() => {
     "error": error,
     "message": message,
     "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "current_times": currentTimes.toIso8601String(),
   };
 }
-
 class Datum {
   Datum({
     required this.studentJoinClassroomId,

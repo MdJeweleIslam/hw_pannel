@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:ntp/ntp.dart';
 
 import '../Colors.dart';
@@ -45,9 +46,9 @@ class ExamPageController extends GetxController {
   DateTime dt1 = DateTime.parse("2021-12-23 11:50:50") ;
   DateTime dt2 = DateTime.parse("2021-12-23 11:40:10") ;
 
-  var startDateTime= "2021-12-23 11:50:50".obs;
-  var endDateTime = "2021-12-23 11:40:10".obs;
-  var currentDateTime = "2021-12-23 11:40:10".obs;
+  var startDateTime= "".obs;
+  var endDateTime = "".obs;
+  var currentDateTime = "".obs;
 
   @override
   void onInit() {
@@ -69,6 +70,28 @@ class ExamPageController extends GetxController {
   //   RetriveUserInfo();
   //   updateIsCountingStatus(false);
   // }
+
+
+  //utc to local convert and date return
+  String utcToLocalDate(String value){
+    try{
+      ///var dateFormat = DateFormat("dd-MM-yyyy hh:mm aa"); // you can change the format here
+     /// var dateFormat = DateFormat("dd-MM-yyyy hh:mm"); // you can change the format here
+      var dateFormat = DateFormat("yyyy-MM-dd hh:mm:ss"); // you can change the format here
+      var utcDate = dateFormat.format(DateTime.parse(value)); // pass the UTC time here
+      var localDate = dateFormat.parse(utcDate, true).toLocal().toString();//convert local time
+
+      // var dateFormat1 = DateFormat("hh:mm aa");
+      var dateFormat2 = DateFormat("dd-MM-yyyy");
+
+      String formattedTime = dateFormat.format(DateTime.parse(localDate));
+      return formattedTime;
+    }
+    catch(Exception ){
+      return "catch";
+    }
+
+  }
 
   void RetriveUserInfo() async {
     try {
@@ -108,17 +131,22 @@ class ExamPageController extends GetxController {
     Duration diff = dt1.difference(dt2);
 
     if (diff.inSeconds > 0) {
+      _showToast('> 0');
       updateOtpCountDownSecond(diff.inSeconds);
       startTimer(diff.inSeconds);
+    }else{
+     // _showToast("elsse");
     }
   }
 
  int timeDifferenceSecond(DateTime dt1,DateTime dt2,) {
+
     Duration diff = dt1.difference(dt2);
     return diff.inSeconds;
   }
 
   void startTimer(var second) {
+
     const oneSec = Duration(seconds: 1);
     timer = Timer.periodic(
       oneSec,
@@ -181,42 +209,14 @@ class ExamPageController extends GetxController {
     isExamStart(value);
   }
 
-  Future<void> main() async {
-    [
-      'time.google.com',
-      'time.facebook.com',
-      'time.euro.apple.com',
-      'pool.ntp.org',
-    ].forEach(_checkTime);
-  }
 
-  Future<void> _checkTime(String lookupAddress) async {
-    DateTime _myTime;
-    DateTime _ntpTime;
 
-    /// Or you could get NTP current (It will call DateTime.now() and add NTP offset to it)
-    _myTime = DateTime.now();
-
-    /// Or get NTP offset (in milliseconds) and add it yourself
-    final int offset = await NTP.getNtpOffset(
-        localTime: _myTime, lookUpAddress: lookupAddress);
-
-    _ntpTime = _myTime.add(Duration(milliseconds: offset));
-
-    print('\n==== $lookupAddress ====');
-    print('My time: $_myTime');
-    print('NTP time: $_ntpTime');
-    print('Difference: ${_myTime.difference(_ntpTime).inMilliseconds}ms');
-
-    var devicedateUtc = DateTime.now().toUtc();
-    var ntpdateUtc = _ntpTime.toUtc();
-    updateCurrentDateTime(_ntpTime.toString());
-
-   // _showToast("startDateTime-currentDateTime: "+timeDifferenceSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString())).toString());
+  _checkTime(){
     //startDateTime > currentDateTime
     if(timeDifferenceSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString()))>0){
       updateIsExamStart(0);
-    }else{
+    }
+    else{
       //endDateTime > currentDateTime
       if(timeDifferenceSecond(DateTime.parse(endDateTime.toString()),DateTime.parse(currentDateTime.toString()))>0){
         updateIsExamStart(1);
@@ -227,24 +227,75 @@ class ExamPageController extends GetxController {
     }
 
     diffSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString()));
-    updateGetTime(
-            'Device time: $_myTime' +
-            '\nNtp time: $_ntpTime' +
-            '\nDevice utc: $devicedateUtc' +
-            '\nNtp utc: $ntpdateUtc'
-
-    );
-
-    // setState(() {
-    //   // _showToast(' $_myTime');
-    //   getTime = 'Device time: $_myTime' +
-    //       '\nNtp time: $_ntpTime' +
-    //       '\nDevice utc: $devicedateUtc' +
-    //       '\nNtp utc: $ntpdateUtc';
-    // });
 
     return;
   }
+
+
+  // Future<void> main() async {
+  //   [
+  //     'time.google.com',
+  //     'time.facebook.com',
+  //     'time.euro.apple.com',
+  //     'pool.ntp.org',
+  //   ].forEach(_checkTime);
+  // }
+  //
+  // Future<void> _checkTime(String lookupAddress) async {
+  //   DateTime _myTime;
+  //   DateTime _ntpTime;
+  //
+  //   /// Or you could get NTP current (It will call DateTime.now() and add NTP offset to it)
+  //   _myTime = DateTime.now();
+  //
+  //   /// Or get NTP offset (in milliseconds) and add it yourself
+  //   final int offset = await NTP.getNtpOffset(
+  //       localTime: _myTime, lookUpAddress: lookupAddress);
+  //
+  //   _ntpTime = _myTime.add(Duration(milliseconds: offset));
+  //
+  //   print('\n==== $lookupAddress ====');
+  //   print('My time: $_myTime');
+  //   print('NTP time: $_ntpTime');
+  //   print('Difference: ${_myTime.difference(_ntpTime).inMilliseconds}ms');
+  //
+  //   var devicedateUtc = DateTime.now().toUtc();
+  //   var ntpdateUtc = _ntpTime.toUtc();
+  //   updateCurrentDateTime(_ntpTime.toString());
+  //
+  //   // _showToast("startDateTime-currentDateTime: "+timeDifferenceSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString())).toString());
+  //   //startDateTime > currentDateTime
+  //   if(timeDifferenceSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString()))>0){
+  //     updateIsExamStart(0);
+  //   }else{
+  //     //endDateTime > currentDateTime
+  //     if(timeDifferenceSecond(DateTime.parse(endDateTime.toString()),DateTime.parse(currentDateTime.toString()))>0){
+  //       updateIsExamStart(1);
+  //       updateUpcomingExamText("Start Exam");
+  //     }else{
+  //       updateIsExamStart(0);
+  //     }
+  //   }
+  //
+  //   diffSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString()));
+  //   updateGetTime(
+  //       'Device time: $_myTime' +
+  //           '\nNtp time: $_ntpTime' +
+  //           '\nDevice utc: $devicedateUtc' +
+  //           '\nNtp utc: $ntpdateUtc'
+  //
+  //   );
+  //
+  //   // setState(() {
+  //   //   // _showToast(' $_myTime');
+  //   //   getTime = 'Device time: $_myTime' +
+  //   //       '\nNtp time: $_ntpTime' +
+  //   //       '\nDevice utc: $devicedateUtc' +
+  //   //       '\nNtp utc: $ntpdateUtc';
+  //   // });
+  //
+  //   return;
+  // }
 
   void updateClassRoomQuizList(List<QuizInfo> newList){
     classRoomQuizList=newList as RxList;
@@ -268,7 +319,7 @@ class ExamPageController extends GetxController {
 
             _showToast("success");
             var data = response.body;
-            IndividualClassroomQuizAllListModel individualClassroomQuizAllListModel= individuaClassroomQuizAllListModelFromJson(data);
+            IndividualClassroomQuizAllListModel individualClassroomQuizAllListModel= individualClassroomQuizAllListModelFromJson(data);
 
             classRoomQuizList(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo);
 
@@ -276,12 +327,15 @@ class ExamPageController extends GetxController {
             for(int i=0;i<classRoomQuizList.length;i++){
               if(classRoomQuizList[i].isComplete==false){
 
-                updateStartDateTime("${classRoomQuizList[0].quizTimeInfo[0].quizStartDate}"+
-                    " ${classRoomQuizList[0].quizTimeInfo[0].quizStartTime}");
-                updateEndDateTime("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
-                    " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");
 
-                main();
+
+                updateStartDateTime(utcToLocalDate("${classRoomQuizList[0].quizTimeInfo[0].quizStartDate}"+
+                    " ${classRoomQuizList[0].quizTimeInfo[0].quizStartTime}"));
+                updateEndDateTime(utcToLocalDate("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
+                    " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}"));
+                updateCurrentDateTime(utcToLocalDate(individualClassroomQuizAllListModel.currentTimes.toString()));
+
+                _checkTime();
 
                 // updateCurrentDateTime("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
                 //     " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");

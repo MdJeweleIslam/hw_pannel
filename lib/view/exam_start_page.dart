@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:http/http.dart';
 
 
 import 'package:marquee/marquee.dart';
@@ -16,6 +18,8 @@ import 'background.dart';
 
 
 class ExamStartPageScreen extends StatelessWidget  {
+  String quizId;
+  ExamStartPageScreen({required this.quizId});
 
   final examStartPageController = Get.put(ExamStartPageController());
 
@@ -437,5 +441,7 @@ class ExamStartPageScreen extends StatelessWidget  {
         textColor: Colors.white,
         fontSize: 16.0);
   }
+
+
 
 }
