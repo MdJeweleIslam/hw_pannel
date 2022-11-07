@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart';
 
 import '../Colors.dart';
+import '../model/McqQuestionModel.dart';
+import '../model/ShortQuestionModel.dart';
 import '../view/time_over.dart';
 
 class ExamStartPageController extends GetxController {
@@ -128,18 +131,39 @@ class ExamStartPageController extends GetxController {
                 'quiz_id':"$quizId",
               }
           );
-            _showToast("${response.statusCode}");
+          _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
+            var data = jsonDecode(response.body);
+            if(data["data"][0]["is_mcq_questions"]){
+              _showToast("mcq");
+              McqQuestionModel mcqQuestionModel=mcqQuestionModelFromJson(response.body);
+              _showToast(mcqQuestionModel.data[0].questionId.toString());
 
-            _showToast("success");
+
+
+            }
+          else if(data["data"][0]["is_short_questions"]){
+              _showToast("mcq");
+              ShortQuestionModel shortQuestionModel=shortQuestionModelFromJson(response.body);
+              _showToast(shortQuestionModel.data[0].questionId.toString());
+
+
+            }else{
+
+              _showToast("none");
+            }
+
+
+
 
           }
           else {
 
-            _showToast("failed try again!");
+          //  _showToast("failed try again!");
 
           }
         } catch (e) {
+          _showToast("failed try again!");
           // Fluttertoast.cancel();
         }
       }
