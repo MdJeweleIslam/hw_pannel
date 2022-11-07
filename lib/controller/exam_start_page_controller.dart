@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +27,16 @@ class ExamStartPageController extends GetxController {
   var uid = "09a8a3fb-0c63-49ec-abc4-657132ff8e9f".obs;
 
   ///question no variable
-  var currentQuestionNo="1".obs;
-  var totalQuestionNo="30".obs;
-  /// if one then mcq and 2 then short question
-  var questionType = "2".obs;
+  var currentQuestionNo="00".obs;
+  var totalQuestionNo="00".obs;
+  /// if 1 then mcq and 2 then short question and 3 question already submit
+   var questionType = 0.obs;
+
+   var studentId = "8".obs;
+   var questionMcqOptionsId="".obs;
+
+  Rx<McqQuestionModel> mcqQuestionDataModel = McqQuestionModel().obs;
+  Rx<ShortQuestionModel> shortQuestionModel = ShortQuestionModel().obs;
 
   final shortQuestionNameController = TextEditingController().obs;
   var abcdList=["(a)","(b)","(c)","(d)","(e)","(f)","(g)","(h)"];
@@ -110,12 +117,25 @@ class ExamStartPageController extends GetxController {
     totalQuestionNo(value);
   }
 
+
+  updateQuestionMcqOptionsId(String value) {
+    questionMcqOptionsId(value);
+  }
+
   void selectedValueUpdate(int option){
     selectedValue(option);
   }
-  void updateQuestionType(String value){
-    questionType(value);
-  }
+   updateQuestionType(int value) {
+     questionType(value);
+   }
+
+   void updateMcqQuestionModel(McqQuestionModel newData){
+     mcqQuestionDataModel(newData);
+   }
+   void updateShortQuestionModel(ShortQuestionModel newData){
+     shortQuestionModel(newData) ;
+   }
+
 
 //get exam quiz list
   void getExamQuestion() async{
@@ -131,31 +151,39 @@ class ExamStartPageController extends GetxController {
                 'quiz_id':"$quizId",
               }
           );
-          _showToast("${response.statusCode}");
+           _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
             var data = jsonDecode(response.body);
             if(data["data"][0]["is_mcq_questions"]){
-              _showToast("mcq");
+              // _showToast("mcq");
               McqQuestionModel mcqQuestionModel=mcqQuestionModelFromJson(response.body);
-              _showToast(mcqQuestionModel.data[0].questionId.toString());
 
+              updateTotalQuestionNo(mcqQuestionModel.totalQuestions.toString());
+              updateCurrentQuestionNo((mcqQuestionModel.questionsAnswerSubmitted!+1).toString());
+              // _showToast(mcqQuestionModel.data!.length.toString());
+              updateQuestionType(2);
+              updateMcqQuestionModel(mcqQuestionModel);
 
 
             }
-          else if(data["data"][0]["is_short_questions"]){
-              _showToast("mcq");
-              ShortQuestionModel shortQuestionModel=shortQuestionModelFromJson(response.body);
-              _showToast(shortQuestionModel.data[0].questionId.toString());
+            else if(data["data"][0]["is_short_questions"]){
+                _showToast("short");
+                ShortQuestionModel shortQuestionModel=shortQuestionModelFromJson(response.body);
 
+                updateTotalQuestionNo(shortQuestionModel.totalQuestions.toString());
+                updateCurrentQuestionNo((shortQuestionModel.questionsAnswerSubmitted!+1).toString());
+                updateShortQuestionModel(shortQuestionModel);
+                updateQuestionType(1);
 
-            }else{
+              }
+            else{
+                updateQuestionType(0);
+                _showToast("none");
+              }
 
-              _showToast("none");
-            }
-
-
-
-
+          }
+          else if(response.statusCode == 201){
+            updateQuestionType(3);
           }
           else {
 
@@ -163,7 +191,109 @@ class ExamStartPageController extends GetxController {
 
           }
         } catch (e) {
-          _showToast("failed try again!");
+
+          // Log(e.toString());
+          _showToast(e.toString());
+          // Fluttertoast.cancel();
+        }
+      }
+    } on SocketException catch (e) {
+
+      Fluttertoast.cancel();
+       _showToast("No Internet Connection!");
+    }
+    //updateIsFirstLoadRunning(false);
+  }
+
+
+  //submit Mcq Question Answer
+   void submitMcqQuestionAnswer({
+     required String questionMcqOptionsId, required String studentId,
+     required String quizId, required String questionId, required String uid
+  }) async{
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          var response = await post(
+              Uri.parse('http://192.168.1.4:8000/api/student-mcq-submit-answer-mobile/'),
+              body: {
+                'question_mcq_options_id':questionMcqOptionsId,
+                'student_id':studentId,
+                'quiz_id':quizId,
+                'question_id':questionId,
+                'uid':uid,
+              }
+          );
+          // _showToast("${response.statusCode}");
+          if (response.statusCode == 200) {
+            _showToast("Submit success full");
+           selectedValueUpdate(-1);
+           updateQuestionMcqOptionsId("");
+           updateQuestionType(0);
+           getExamQuestion();
+
+          }
+          else {
+
+            //  _showToast("failed try again!");
+
+          }
+        } catch (e) {
+
+          // Log(e.toString());
+          _showToast(e.toString());
+          // Fluttertoast.cancel();
+        }
+      }
+    } on SocketException catch (e) {
+
+      Fluttertoast.cancel();
+      // _showToast("No Internet Connection!");
+    }
+    //updateIsFirstLoadRunning(false);
+  }
+
+
+  //submit short Question Answer
+  void submitShortQuestionAnswer({
+    required String answerText, required String studentId,
+    required String quizId, required String questionId, required String uid
+  }) async{
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          var response = await post(
+              Uri.parse('http://192.168.1.4:8000/api/student-short-submit-answer-mobile/'),
+              body: {
+                'student_answer':answerText,
+                'student_id':studentId,
+                'quiz_id':quizId,
+                'question_id':questionId,
+                'uid':uid,
+              }
+          );
+          _showToast("${response.statusCode}");
+          if (response.statusCode == 200){
+
+            _showToast("Submit success full");
+            shortQuestionNameController.value.clear();
+            selectedValueUpdate(-1);
+            updateQuestionMcqOptionsId("");
+            updateQuestionType(0);
+            getExamQuestion();
+
+          }
+          else {
+
+            //  _showToast("failed try again!");
+
+          }
+        } catch (e) {
+
+          // Log(e.toString());
+          _showToast(e.toString());
           // Fluttertoast.cancel();
         }
       }

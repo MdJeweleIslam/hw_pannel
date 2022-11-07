@@ -56,6 +56,7 @@ dependencies:
   ntp: ^2.0.0
   get: ^4.6.5
   get_storage: ^2.0.3
+  loading_indicator: ^3.1.0
 
 dev_dependencies:
   flutter_test:

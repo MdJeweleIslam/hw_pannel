@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
             // Background(),
           //  LogInScreen(),
             ExamStartPageScreen(quizId: '8',),
-          //  ExamPageScreen(),
+         // ExamPageScreen(),
             //CreateShortQuestionScreen("1","1"),
 
           ],

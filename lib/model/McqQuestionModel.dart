@@ -7,25 +7,25 @@ String mcqQuestionModelToJson(McqQuestionModel data) => json.encode(data.toJson(
 
 class McqQuestionModel {
   McqQuestionModel({
-    required this.error,
-    required this.message,
-    required this.data,
-    required this.totalQuestions,
-    required this.questionsAnswerSubmitted,
-    required this.currentTimess,
+     this.error,
+     this.message,
+     this.data,
+     this.totalQuestions,
+     this.questionsAnswerSubmitted,
+     this.currentTimess,
   });
 
-  bool error;
-  String message;
-  List<Datum> data;
-  int totalQuestions;
-  int questionsAnswerSubmitted;
-  String currentTimess;
+  bool? error;
+  String? message;
+  List<McqQuestionBody>? data;
+  int? totalQuestions;
+  int? questionsAnswerSubmitted;
+  String? currentTimess;
 
   factory McqQuestionModel.fromJson(Map<String, dynamic> json) => McqQuestionModel(
     error: json["error"],
     message: json["message"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    data: List<McqQuestionBody>.from(json["data"].map((x) => McqQuestionBody.fromJson(x))),
     totalQuestions: json["total_questions"],
     questionsAnswerSubmitted: json["questions_answer_submitted"],
     currentTimess: json["current_timess"],
@@ -34,15 +34,15 @@ class McqQuestionModel {
   Map<String, dynamic> toJson() => {
     "error": error,
     "message": message,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<McqQuestionBody>.from(data!.map((x) => x.toJson())),
     "total_questions": totalQuestions,
     "questions_answer_submitted": questionsAnswerSubmitted,
     "current_timess": currentTimess ,
   };
 }
 
-class Datum {
-  Datum({
+class McqQuestionBody {
+  McqQuestionBody({
     required this.questionId,
     required this.questionName,
     required this.isMcqQuestions,
@@ -67,10 +67,10 @@ class Datum {
   String questionName;
   bool isMcqQuestions;
   bool isShortQuestions;
-  String correctAnswer;
-  dynamic correctAnswer1;
-  dynamic correctAnswer2;
-  dynamic correctAnswer3;
+  String? correctAnswer;
+  String? correctAnswer1;
+  String? correctAnswer2;
+  String? correctAnswer3;
   String questionMark;
   String createdAt;
   String updatedAt;
@@ -82,7 +82,7 @@ class Datum {
   QuizInfo quizInfo;
   List<QuestionsOption> questionsOptions;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory McqQuestionBody.fromJson(Map<String, dynamic> json) => McqQuestionBody(
     questionId: json["question_id"],
     questionName: json["question_name"],
     isMcqQuestions: json["is_mcq_questions"],
@@ -250,7 +250,7 @@ class ClassRoomInfo {
   String?  createdAt;
   String?  updatedAt;
   String?  date;
-  dynamic userId;
+  String? userId;
 
   factory ClassRoomInfo.fromJson(Map<String, dynamic> json) => ClassRoomInfo(
     classRoomId: json["class_room_id"],
@@ -298,7 +298,7 @@ class QuizTimeInfo {
 
   int?  quizTimeId;
   bool?  isMainQuizTime;
-  dynamic quizTimeIdFk;
+  String? quizTimeIdFk;
   int?  quizDuration;
   String?  quizStartDate;
   String?  quizStartTime;
@@ -310,7 +310,7 @@ class QuizTimeInfo {
   String?  date;
   int?  classRoomId;
   int?  quizId;
-  dynamic studentId;
+  String? studentId;
 
   factory QuizTimeInfo.fromJson(Map<String, dynamic> json) => QuizTimeInfo(
     quizTimeId: json["quiz_time_id"],
@@ -368,12 +368,11 @@ class TeacherInfo {
     this.isStudent,
     this.isTeacher,
     this.date,
-    required this.groups,
-    required this.userPermissions,
+
   });
 
   int?  id;
-  dynamic lastLogin;
+  String? lastLogin;
   bool?  isSuperuser;
   String?  username;
   String?  firstName;
@@ -389,8 +388,8 @@ class TeacherInfo {
   bool?  isStudent;
   bool ? isTeacher;
   String?  date;
-  List<dynamic>   groups;
-  List<dynamic>  userPermissions;
+  // List<dynamic>?   groups;
+  // List<dynamic>?  userPermissions;
 
   factory TeacherInfo.fromJson(Map<String, dynamic> json) => TeacherInfo(
     id: json["id"],
@@ -410,8 +409,7 @@ class TeacherInfo {
     isStudent: json["is_student"],
     isTeacher: json["is_teacher"],
     date: json["date"],
-    groups: List<dynamic>.from(json["groups"].map((x) => x)),
-    userPermissions: List<dynamic>.from(json["user_permissions"].map((x) => x)),
+
   );
 
   Map<String, dynamic> toJson() => {
@@ -432,7 +430,6 @@ class TeacherInfo {
     "is_student": isStudent,
     "is_teacher": isTeacher,
     "date": date,
-    "groups": List<dynamic>.from(groups.map((x) => x)),
-    "user_permissions": List<dynamic>.from(userPermissions.map((x) => x)),
+
   };
 }

@@ -12,23 +12,23 @@ class ShortQuestionModel {
   ShortQuestionModel({
     this.error,
     this.message,
-    required this.data,
-    required this.totalQuestions,
-    required this.questionsAnswerSubmitted,
-    required this.currentTimess,
+      this.data,
+      this.totalQuestions,
+      this.questionsAnswerSubmitted,
+      this.currentTimess,
   });
 
   bool? error;
   String? message;
-  List<Datum> data;
-  int totalQuestions;
-  int questionsAnswerSubmitted;
-  String currentTimess;
+  List<ShortQuestionBody>? data;
+  int? totalQuestions;
+  int?questionsAnswerSubmitted;
+  String? currentTimess;
 
   factory ShortQuestionModel.fromJson(Map<String, dynamic> json) => ShortQuestionModel(
     error: json["error"],
     message: json["message"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    data: List<ShortQuestionBody>.from(json["data"].map((x) => ShortQuestionBody.fromJson(x))),
     totalQuestions: json["total_questions"],
     questionsAnswerSubmitted: json["questions_answer_submitted"],
     currentTimess:json["current_timess"],
@@ -37,15 +37,15 @@ class ShortQuestionModel {
   Map<String, dynamic> toJson() => {
     "error": error,
     "message": message,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
     "total_questions": totalQuestions,
     "questions_answer_submitted": questionsAnswerSubmitted,
     "current_timess": currentTimess,
   };
 }
 
-class Datum {
-  Datum({
+class ShortQuestionBody {
+  ShortQuestionBody({
     required this.questionId,
     required this.questionName,
     required this.isMcqQuestions,
@@ -63,7 +63,7 @@ class Datum {
     this.quizType,
     this.teacherInfo,
     this.quizInfo,
-    required this.questionsOptions,
+    this.questionsOptions,
   });
 
   int questionId;
@@ -83,9 +83,9 @@ class Datum {
   int? quizType;
   TeacherInfo? teacherInfo;
   QuizInfo? quizInfo;
-  List<dynamic> questionsOptions;
+  List<dynamic>? questionsOptions;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory ShortQuestionBody.fromJson(Map<String, dynamic> json) => ShortQuestionBody(
     questionId: json["question_id"],
     questionName: json["question_name"],
     isMcqQuestions: json["is_mcq_questions"],
@@ -124,7 +124,7 @@ class Datum {
     "quiz_type": quizType,
     "teacher_info": teacherInfo ,
     "quiz_info": quizInfo ,
-    "questions_options": List<dynamic>.from(questionsOptions.map((x) => x)),
+    "questions_options": List<dynamic>.from(questionsOptions!.map((x) => x)),
   };
 }
 

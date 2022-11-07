@@ -43,6 +43,11 @@ class ExamPageController extends GetxController {
 
   var classRoomQuizList=[].obs;
 
+  //if question type 0 then none question show
+  //if question type 1 then short question show
+  //if question type 2 then mcq question show
+  var questionType = 0.obs;
+
   DateTime dt1 = DateTime.parse("2021-12-23 11:50:50") ;
   DateTime dt2 = DateTime.parse("2021-12-23 11:40:10") ;
 
@@ -208,6 +213,9 @@ class ExamPageController extends GetxController {
   updateIsExamStart(int value) {
     isExamStart(value);
   }
+
+
+
 
 
 
