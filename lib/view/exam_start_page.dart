@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
 import 'package:marquee/marquee.dart';
@@ -18,14 +19,10 @@ import 'background.dart';
 
 class ExamStartPageScreen extends StatelessWidget {
   String quizId;
-
   ExamStartPageScreen({required this.quizId});
 
   final examStartPageController = Get.put(ExamStartPageController());
-
   late String userId;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +67,25 @@ class ExamStartPageScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-
+                           Obx(() => Text(
+                             "current time: "+
+                                 examStartPageController.currentTimeUtc.value
+                             ,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                color: awsEndColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          )),
+                           Obx(() => Text(
+                             "Exam End time: "+
+                             examStartPageController.examEndTimeLocal.value,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                color: awsEndColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          )),
                           Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -107,6 +122,7 @@ class ExamStartPageScreen extends StatelessWidget {
                                     Obx(
                                       () => Text(
                                           (" of " +
+
                                               examStartPageController
                                                   .totalQuestionNo.value),
                                           style: TextStyle(
@@ -440,8 +456,6 @@ class ExamStartPageScreen extends StatelessWidget {
     );
   }
 
-
-
   Widget _buildSkipButton(String questionId) {
     return ElevatedButton(
       onPressed: () {},
@@ -485,4 +499,23 @@ class ExamStartPageScreen extends StatelessWidget {
         textColor: Colors.white,
         fontSize: 16.0);
   }
+
+  // String utcToLocalDate(String value){
+  //   try{
+  //
+  //     var dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss"); // you can change the format here
+  //     var utcDate = dateFormat.format(DateTime.parse(value)); // pass the UTC time here
+  //     var localDate = dateFormat.parse(utcDate, true).toLocal().toString();//convert local time
+  //
+  //     // var dateFormat1 = DateFormat("hh:mm aa");
+  //     var dateFormat2 = DateFormat("dd-MM-yyyy");
+  //
+  //     String formattedTime = dateFormat.format(DateTime.parse(localDate));
+  //     return formattedTime;
+  //   }
+  //   catch(Exception ){
+  //     return "catch";
+  //   }
+  //
+  // }
 }

@@ -8,15 +8,23 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Colors.dart';
+import '../api_service/api_service.dart';
+import '../api_service/sharePreferenceDataSaveName.dart';
 import '../model/McqQuestionModel.dart';
 import '../model/ShortQuestionModel.dart';
+import '../view/exam_done.dart';
 import '../view/time_over.dart';
 
 class ExamStartPageController extends GetxController {
 
-   String quizId="8";
+
+
+  String quizId="8";
+
   //
   // ExamStartPageController(this.quizId);
 
@@ -29,6 +37,9 @@ class ExamStartPageController extends GetxController {
   ///question no variable
   var currentQuestionNo="00".obs;
   var totalQuestionNo="00".obs;
+
+  var examEndTimeLocal="".obs;
+  var currentTimeUtc="".obs;
   /// if 1 then mcq and 2 then short question and 3 question already submit
    var questionType = 0.obs;
 
@@ -43,20 +54,20 @@ class ExamStartPageController extends GetxController {
   var selectedValue = (-1).obs;
   var message="If you click 'Skip' or 'Submit' button, You will can not go back previous page.".obs;
 
-
   @override
   void onInit() {
     super.onInit();
+   // diffSecond1();
+    loadUserIdFromSharePref();
     getExamQuestion();
     // diffSecond1();
 
   }
 
-
   ///input two time and difference between time and pass second with timer
   diffSecond1() {
     DateTime dt1 = DateTime.parse("2021-12-23 11:50:50");
-    DateTime dt2 = DateTime.parse("2021-12-23 10:50:10");
+    DateTime dt2 = DateTime.parse("2021-12-23 10:20:10");
     Duration diff = dt1.difference(dt2);
 
     if (diff.inSeconds > 0) {
@@ -64,16 +75,36 @@ class ExamStartPageController extends GetxController {
       startTimer(diff.inSeconds);
     }
   }
-  /// timer method
+
+  diffSecond(DateTime dt1,DateTime dt2,) {
+
+    Duration diff = dt1.difference(dt2);
+
+    if (diff.inSeconds > 0) {
+      _showToast('> 0');
+      updateOtpCountDownSecond(diff.inSeconds);
+      startTimer(diff.inSeconds);
+    }else{
+       _showToast("elsse");
+    }
+  }
+
+  int timeDifferenceSecond(DateTime dt1,DateTime dt2,) {
+
+    Duration diff = dt1.difference(dt2);
+    return diff.inSeconds;
+  }
+
   void startTimer(var second) {
+
     const oneSec = Duration(seconds: 1);
     timer = Timer.periodic(
       oneSec,
           (Timer timer) {
         if (second <= 0) {
-
+          Get.to(TimeOverScreen());
+          _showToast("Exam end");
           timer.cancel();
-          Get.off(TimeOverScreen());
         }
         else {
           second--;
@@ -84,6 +115,12 @@ class ExamStartPageController extends GetxController {
     );
   }
 
+  ///timer cancel
+  void cancelTimer(){
+    timer.cancel();
+    updateStartTxt("00:00:00");
+
+  }
   /// duration to time format converter
   String _printDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
@@ -92,12 +129,7 @@ class ExamStartPageController extends GetxController {
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
     return "$twoDigitHour:$twoDigitMinutes:$twoDigitSeconds";
   }
-  ///timer cancel
-  void cancelTimer(){
-    timer.cancel();
-    updateStartTxt("00:00:00");
 
-  }
   updateOtpCountDownSecond(int value) {
     otpCountDownSecond(value);
   }
@@ -105,6 +137,13 @@ class ExamStartPageController extends GetxController {
   ///update timer text
   updateStartTxt(String value) {
     startTxt(value);
+  }
+
+  updateExamEndTimeLocal(String value) {
+    examEndTimeLocal(value);
+  }
+  updateCurrentTimeUtc(String value) {
+    currentTimeUtc(value);
   }
 
   ///update current question no
@@ -117,7 +156,6 @@ class ExamStartPageController extends GetxController {
     totalQuestionNo(value);
   }
 
-
   updateQuestionMcqOptionsId(String value) {
     questionMcqOptionsId(value);
   }
@@ -125,6 +163,7 @@ class ExamStartPageController extends GetxController {
   void selectedValueUpdate(int option){
     selectedValue(option);
   }
+
    updateQuestionType(int value) {
      questionType(value);
    }
@@ -132,12 +171,12 @@ class ExamStartPageController extends GetxController {
    void updateMcqQuestionModel(McqQuestionModel newData){
      mcqQuestionDataModel(newData);
    }
+
    void updateShortQuestionModel(ShortQuestionModel newData){
      shortQuestionModel(newData) ;
    }
 
-
-//get exam quiz list
+  //get exam quiz list
   void getExamQuestion() async{
     try {
       final result = await InternetAddress.lookup('example.com');
@@ -145,7 +184,7 @@ class ExamStartPageController extends GetxController {
         try {
           var response = await put(
             // Uri.parse('http://192.168.1.4:8000/api/individual-classroom-quiz-all-list/$classRoomId/'),
-              Uri.parse('http://192.168.1.4:8000/api/exam-question-list-mobile/09a8a3fb-0c63-49ec-abc4-657132ff8e9f/'),
+              Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_QUESTION$uid/'),
               body: {
                 'uid':"$uid",
                 'quiz_id':"$quizId",
@@ -154,6 +193,7 @@ class ExamStartPageController extends GetxController {
            _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
             var data = jsonDecode(response.body);
+            updateCurrentTimeUtc(utcToLocalDate(data["current_timess"].toString()));
             if(data["data"][0]["is_mcq_questions"]){
               // _showToast("mcq");
               McqQuestionModel mcqQuestionModel=mcqQuestionModelFromJson(response.body);
@@ -163,6 +203,16 @@ class ExamStartPageController extends GetxController {
               // _showToast(mcqQuestionModel.data!.length.toString());
               updateQuestionType(2);
               updateMcqQuestionModel(mcqQuestionModel);
+
+
+             // updateCurrentTimeUtc(data["current_timess"].toString());
+
+
+              //count down start
+             // diffSecond(DateTime.parse(examEndTimeUtc.toString()),DateTime.parse(mcqQuestionModel.currentTimess.toString()));
+
+              // diffSecond(examEndTimeUtc.value,currentTimeUtc.);
+
 
 
             }
@@ -180,14 +230,15 @@ class ExamStartPageController extends GetxController {
                 updateQuestionType(0);
                 _showToast("none");
               }
-
+            diffSecond(DateTime.parse(examEndTimeLocal.value),DateTime.parse(currentTimeUtc.value),);
           }
           else if(response.statusCode == 201){
             updateQuestionType(3);
           }
           else {
-
-          //  _showToast("failed try again!");
+            updateQuestionType(3);
+            var data = jsonDecode(response.body);
+            _showToast(data["message"]);
 
           }
         } catch (e) {
@@ -205,7 +256,6 @@ class ExamStartPageController extends GetxController {
     //updateIsFirstLoadRunning(false);
   }
 
-
   //submit Mcq Question Answer
    void submitMcqQuestionAnswer({
      required String questionMcqOptionsId, required String studentId,
@@ -216,7 +266,7 @@ class ExamStartPageController extends GetxController {
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         try {
           var response = await post(
-              Uri.parse('http://192.168.1.4:8000/api/student-mcq-submit-answer-mobile/'),
+              Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_MCQ_QUESTION_ANSWER_SUBMIT'),
               body: {
                 'question_mcq_options_id':questionMcqOptionsId,
                 'student_id':studentId,
@@ -227,11 +277,22 @@ class ExamStartPageController extends GetxController {
           );
           // _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
-            _showToast("Submit success full");
-           selectedValueUpdate(-1);
-           updateQuestionMcqOptionsId("");
-           updateQuestionType(0);
-           getExamQuestion();
+
+            if(currentQuestionNo.value == totalQuestionNo.value){
+              Fluttertoast.cancel();
+              _showToast("all question submit");
+            }
+            else{
+              Fluttertoast.cancel();
+              _showToast("Submit success full");
+              selectedValueUpdate(-1);
+              updateQuestionMcqOptionsId("");
+              updateQuestionType(0);
+              getExamQuestion();
+            }
+
+
+
 
           }
           else {
@@ -254,7 +315,6 @@ class ExamStartPageController extends GetxController {
     //updateIsFirstLoadRunning(false);
   }
 
-
   //submit short Question Answer
   void submitShortQuestionAnswer({
     required String answerText, required String studentId,
@@ -265,7 +325,7 @@ class ExamStartPageController extends GetxController {
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         try {
           var response = await post(
-              Uri.parse('http://192.168.1.4:8000/api/student-short-submit-answer-mobile/'),
+              Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_SHORT_QUESTION_ANSWER_SUBMIT'),
               body: {
                 'student_answer':answerText,
                 'student_id':studentId,
@@ -276,29 +336,32 @@ class ExamStartPageController extends GetxController {
           );
           _showToast("${response.statusCode}");
           if (response.statusCode == 200){
+            if(currentQuestionNo.value == totalQuestionNo.value){
+             // _showToast("all question submit");
+              Get.off(() => ExamDoneScreen());
+              // Get.to(ExamDoneScreen());
 
-            _showToast("Submit success full");
-            shortQuestionNameController.value.clear();
-            selectedValueUpdate(-1);
-            updateQuestionMcqOptionsId("");
-            updateQuestionType(0);
-            getExamQuestion();
 
+            }
+            else{
+              _showToast("Submit success full");
+              shortQuestionNameController.value.clear();
+              selectedValueUpdate(-1);
+              updateQuestionMcqOptionsId("");
+              updateQuestionType(0);
+              getExamQuestion();
+            }
           }
           else {
-
             //  _showToast("failed try again!");
-
           }
         } catch (e) {
-
           // Log(e.toString());
           _showToast(e.toString());
           // Fluttertoast.cancel();
         }
       }
     } on SocketException catch (e) {
-
       Fluttertoast.cancel();
       // _showToast("No Internet Connection!");
     }
@@ -315,6 +378,38 @@ class ExamStartPageController extends GetxController {
         backgroundColor:awsMixedColor,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+  //utc to local convert and date return
+  String utcToLocalDate(String value){
+    try{
+
+      var dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss"); // you can change the format here
+      var utcDate = dateFormat.format(DateTime.parse(value)); // pass the UTC time here
+      var localDate = dateFormat.parse(utcDate, true).toLocal().toString();//convert local time
+
+      // var dateFormat1 = DateFormat("hh:mm aa");
+      var dateFormat2 = DateFormat("dd-MM-yyyy");
+
+      String formattedTime = dateFormat.format(DateTime.parse(localDate));
+      return formattedTime;
+    }
+    catch(Exception ){
+      return "catch";
+    }
+
+  }
+
+  loadUserIdFromSharePref() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    try {
+      updateExamEndTimeLocal(utcToLocalDate(sharedPreferences.getString(pref_user_exam_end_time).toString()));
+     // updateExamEndTimeLocal(sharedPreferences.getString(pref_user_exam_end_time).toString());
+      _showToast(sharedPreferences.getString(pref_user_exam_end_time).toString());
+
+    } catch(e) {
+      //code
+    }
+
   }
 
 }

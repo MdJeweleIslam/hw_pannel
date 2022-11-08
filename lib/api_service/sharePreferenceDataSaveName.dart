@@ -8,6 +8,8 @@ String pref_user_batch = "$pref_file_base_name.pref_user_batch";
 String pref_user_type = "$pref_file_base_name.pref_user_type";
 String pref_user_id = "$pref_file_base_name.pref_user_id";
 
+String pref_user_exam_end_time = "$pref_file_base_name.pref_user_exam_end_time";
+
 
 
 

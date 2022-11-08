@@ -10,8 +10,10 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:ntp/ntp.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Colors.dart';
+import '../api_service/api_service.dart';
 import '../api_service/sharePreferenceDataSaveName.dart';
 import '../model/individual_classroom_quiz_all_list_model.dart';
 
@@ -33,6 +35,7 @@ class ExamPageController extends GetxController {
 
   var isCountingStatus = false.obs;
 
+  //var upcomingExamText = "Start Exam".obs;
   var upcomingExamText = "Up Coming".obs;
   var getTime = "".obs;
 
@@ -54,6 +57,7 @@ class ExamPageController extends GetxController {
   var startDateTime= "".obs;
   var endDateTime = "".obs;
   var currentDateTime = "".obs;
+  var endDateTimeUtc = "".obs;
 
   @override
   void onInit() {
@@ -82,7 +86,7 @@ class ExamPageController extends GetxController {
     try{
       ///var dateFormat = DateFormat("dd-MM-yyyy hh:mm aa"); // you can change the format here
      /// var dateFormat = DateFormat("dd-MM-yyyy hh:mm"); // you can change the format here
-      var dateFormat = DateFormat("yyyy-MM-dd hh:mm:ss"); // you can change the format here
+      var dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss"); // you can change the format here
       var utcDate = dateFormat.format(DateTime.parse(value)); // pass the UTC time here
       var localDate = dateFormat.parse(utcDate, true).toLocal().toString();//convert local time
 
@@ -215,10 +219,6 @@ class ExamPageController extends GetxController {
   }
 
 
-
-
-
-
   _checkTime(){
     //startDateTime > currentDateTime
     if(timeDifferenceSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString()))>0){
@@ -238,7 +238,6 @@ class ExamPageController extends GetxController {
 
     return;
   }
-
 
   // Future<void> main() async {
   //   [
@@ -317,15 +316,15 @@ class ExamPageController extends GetxController {
         try {
           var response = await put(
             // Uri.parse('http://192.168.1.4:8000/api/individual-classroom-quiz-all-list/$classRoomId/'),
-            Uri.parse('http://192.168.1.4:8000/api/student-all-join-classroom-list-mobile/$classRoomId/'),
+            Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_QUIZ_LIST$classRoomId/'),
             body: {
               'uid':"$uid"
             }
           );
-        //  _showToast("${response.statusCode}");
+         _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
 
-            _showToast("success");
+           // _showToast("success");
             var data = response.body;
             IndividualClassroomQuizAllListModel individualClassroomQuizAllListModel= individualClassroomQuizAllListModelFromJson(data);
 
@@ -341,6 +340,10 @@ class ExamPageController extends GetxController {
                     " ${classRoomQuizList[0].quizTimeInfo[0].quizStartTime}"));
                 updateEndDateTime(utcToLocalDate("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
                     " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}"));
+                updateEndDateTimeUtc("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
+                    " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");
+                saveExamEndDate("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
+                    " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");
                 updateCurrentDateTime(utcToLocalDate(individualClassroomQuizAllListModel.currentTimes.toString()));
 
                 _checkTime();
@@ -349,8 +352,6 @@ class ExamPageController extends GetxController {
                 //     " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");
 
                // diffSecond(DateTime.parse(endDateTime.toString()),DateTime.parse(startDateTime.toString()));
-
-
                 return;
               }
             }
@@ -387,7 +388,11 @@ class ExamPageController extends GetxController {
 
   updateEndDateTime(String value) {
     endDateTime(value);
+  }
 
+
+  updateEndDateTimeUtc(String value) {
+    endDateTimeUtc(value);
   }
   updateCurrentDateTime(String value) {
     currentDateTime(value);
@@ -404,6 +409,28 @@ class ExamPageController extends GetxController {
         backgroundColor:awsMixedColor,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+
+  void saveExamEndDate(String examEndDate) async {
+    try {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      sharedPreferences.setString(pref_user_exam_end_time, examEndDate);
+
+    } catch (e) {
+
+    }
+
+
+    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+
+
   }
 
 }

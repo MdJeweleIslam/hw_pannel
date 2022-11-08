@@ -4,10 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:hw_pannel/view/HomePage.dart';
 import 'package:hw_pannel/view/exam_page.dart';
 import 'package:hw_pannel/view/exam_start_page.dart';
-import 'package:hw_pannel/view/log_in_page.dart';
 import 'Colors.dart';
 
 
@@ -31,11 +29,12 @@ class MyApp extends StatelessWidget {
         body: Stack(
           children: [
 
-            // Background(),
-          //  LogInScreen(),
-            ExamStartPageScreen(quizId: '8',),
-         // ExamPageScreen(),
-            //CreateShortQuestionScreen("1","1"),
+         // Background(),
+         // LogInScreen(),
+        // ExamStartPageScreen(quizId: '8', examEndTime: 'df',),
+         ExamPageScreen(),
+         // TimeOverScreen(),
+         // CreateShortQuestionScreen("1","1"),
 
           ],
         ),
