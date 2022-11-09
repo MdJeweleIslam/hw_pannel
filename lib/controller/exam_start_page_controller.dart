@@ -17,6 +17,7 @@ import '../api_service/sharePreferenceDataSaveName.dart';
 import '../model/McqQuestionModel.dart';
 import '../model/ShortQuestionModel.dart';
 import '../view/exam_done.dart';
+import '../view/exam_start_page.dart';
 import '../view/time_over.dart';
 
 class ExamStartPageController extends GetxController {
@@ -30,13 +31,16 @@ class ExamStartPageController extends GetxController {
 
   ///timer variable
   var startTxt = "00:00:00".obs;
-  late Timer timer;
+  Timer? timer;
   var otpCountDownSecond = 0.obs;
   var uid = "09a8a3fb-0c63-49ec-abc4-657132ff8e9f".obs;
 
   ///question no variable
   var currentQuestionNo="00".obs;
   var totalQuestionNo="00".obs;
+  var questionListResponseStatusCode=0.obs;
+
+  var allQuestionSubmit=false.obs;
 
   var examEndTimeLocal="".obs;
   var currentTimeUtc="".obs;
@@ -64,6 +68,26 @@ class ExamStartPageController extends GetxController {
 
   }
 
+
+  @override
+  void dispose() {
+    print('I am disposed');
+    timer!.cancel();
+    super.dispose();
+
+  }
+
+  @override
+  void onClose() {
+   // timer!.cancel();
+    super.onClose();
+    ifTimerMounted();
+    print('I am closed');
+
+
+  }
+
+
   ///input two time and difference between time and pass second with timer
   diffSecond1() {
     DateTime dt1 = DateTime.parse("2021-12-23 11:50:50");
@@ -77,15 +101,14 @@ class ExamStartPageController extends GetxController {
   }
 
   diffSecond(DateTime dt1,DateTime dt2,) {
-
     Duration diff = dt1.difference(dt2);
-
     if (diff.inSeconds > 0) {
-      _showToast('> 0');
+     // _showToast('> 0');
       updateOtpCountDownSecond(diff.inSeconds);
+      timer?.cancel();
       startTimer(diff.inSeconds);
     }else{
-       _showToast("elsse");
+       _showToast("Time less than");
     }
   }
 
@@ -99,17 +122,63 @@ class ExamStartPageController extends GetxController {
 
     const oneSec = Duration(seconds: 1);
     timer = Timer.periodic(
-      oneSec,
-          (Timer timer) {
+      oneSec, ( timer) {
         if (second <= 0) {
-          Get.to(TimeOverScreen());
-          _showToast("Exam end");
+          getExamQuestion();
+          if(allQuestionSubmit==false){
+            Get.off(TimeOverScreen());
+          }
+          _showToast("Time over!");
           timer.cancel();
         }
         else {
-          second--;
-          updateStartTxt(_printDuration(Duration(seconds: second)));
-          // _startTxt = _printDuration(Duration(seconds: second));
+          if(timer.isActive){
+            second--;
+            updateStartTxt(_printDuration(Duration(seconds: second)));
+
+          }
+        }
+      },
+    );
+  }
+
+  ifTimerMounted(){
+    final itimer = timer == null ? false : timer!.isActive;
+    if(itimer){
+      timer!.cancel();
+    }else{
+      // Or Do Nothing Leave it Blank
+      print('Timer Stop Running');
+    }
+  }
+
+
+  void startTimer1(var second) {
+
+    const oneSec = Duration(seconds: 1);
+    timer = Timer.periodic(oneSec, (timer) {
+      print('timer is running');
+      //DO SOMETHING
+    });
+
+
+
+    timer = Timer.periodic(
+      oneSec, ( timer) {
+        if (second <= 0) {
+          getExamQuestion();
+          if(allQuestionSubmit==false){
+            Get.off(TimeOverScreen());
+          }
+          _showToast("Time over!");
+          timer.cancel();
+        }
+        else {
+          if(timer.isActive){
+            second--;
+            updateStartTxt(_printDuration(Duration(seconds: second)));
+
+          }
         }
       },
     );
@@ -117,7 +186,8 @@ class ExamStartPageController extends GetxController {
 
   ///timer cancel
   void cancelTimer(){
-    timer.cancel();
+    _showToast("cancell");
+    timer?.cancel();
     updateStartTxt("00:00:00");
 
   }
@@ -151,9 +221,19 @@ class ExamStartPageController extends GetxController {
     currentQuestionNo(value);
   }
 
+
+  updateAllQuestionSubmit(bool value) {
+    allQuestionSubmit(value);
+  }
+
   ///update total question no
   updateTotalQuestionNo(String value) {
     totalQuestionNo(value);
+  }
+
+
+  updateQuestionListResponseStatusCode(int value) {
+    questionListResponseStatusCode(value);
   }
 
   updateQuestionMcqOptionsId(String value) {
@@ -190,7 +270,10 @@ class ExamStartPageController extends GetxController {
                 'quiz_id':"$quizId",
               }
           );
-           _showToast("${response.statusCode}");
+
+          updateQuestionListResponseStatusCode(response.statusCode);
+
+         //  _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
             var data = jsonDecode(response.body);
             updateCurrentTimeUtc(utcToLocalDate(data["current_timess"].toString()));
@@ -217,7 +300,7 @@ class ExamStartPageController extends GetxController {
 
             }
             else if(data["data"][0]["is_short_questions"]){
-                _showToast("short");
+               // _showToast("short");
                 ShortQuestionModel shortQuestionModel=shortQuestionModelFromJson(response.body);
 
                 updateTotalQuestionNo(shortQuestionModel.totalQuestions.toString());
@@ -228,12 +311,18 @@ class ExamStartPageController extends GetxController {
               }
             else{
                 updateQuestionType(0);
-                _showToast("none");
+               // _showToast("none");
               }
             diffSecond(DateTime.parse(examEndTimeLocal.value),DateTime.parse(currentTimeUtc.value),);
           }
           else if(response.statusCode == 201){
-            updateQuestionType(3);
+            Get.off(() => ExamDoneScreen());
+          }
+          else if(response.statusCode == 203){
+            Get.off(() => TimeOverScreen());
+          }
+          else if(response.statusCode == 402){
+            Get.off(() => TimeOverScreen());
           }
           else {
             updateQuestionType(3);
@@ -279,10 +368,14 @@ class ExamStartPageController extends GetxController {
           if (response.statusCode == 200) {
 
             if(currentQuestionNo.value == totalQuestionNo.value){
-              Fluttertoast.cancel();
-              _showToast("all question submit");
+              updateAllQuestionSubmit(true);
+              cancelTimer();
+              Get.off(() => ExamDoneScreen());
+             // Fluttertoast.cancel();
+             // _showToast("all question submit");
             }
             else{
+              updateQuestionListResponseStatusCode(0);
               Fluttertoast.cancel();
               _showToast("Submit success full");
               selectedValueUpdate(-1);
@@ -290,9 +383,6 @@ class ExamStartPageController extends GetxController {
               updateQuestionType(0);
               getExamQuestion();
             }
-
-
-
 
           }
           else {
@@ -334,21 +424,26 @@ class ExamStartPageController extends GetxController {
                 'uid':uid,
               }
           );
-          _showToast("${response.statusCode}");
+        //  _showToast("${response.statusCode}");
           if (response.statusCode == 200){
             if(currentQuestionNo.value == totalQuestionNo.value){
              // _showToast("all question submit");
+              updateAllQuestionSubmit(true);
+              cancelTimer();
+
               Get.off(() => ExamDoneScreen());
               // Get.to(ExamDoneScreen());
 
 
             }
             else{
-              _showToast("Submit success full");
+            //  _showToast("Submit success full");
+              updateQuestionListResponseStatusCode(0);
               shortQuestionNameController.value.clear();
               selectedValueUpdate(-1);
               updateQuestionMcqOptionsId("");
               updateQuestionType(0);
+
               getExamQuestion();
             }
           }
@@ -372,7 +467,7 @@ class ExamStartPageController extends GetxController {
   _showToast(String message) {
     Fluttertoast.showToast(
         msg: message,
-        toastLength: Toast.LENGTH_LONG,
+        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
         backgroundColor:awsMixedColor,
@@ -404,7 +499,7 @@ class ExamStartPageController extends GetxController {
     try {
       updateExamEndTimeLocal(utcToLocalDate(sharedPreferences.getString(pref_user_exam_end_time).toString()));
      // updateExamEndTimeLocal(sharedPreferences.getString(pref_user_exam_end_time).toString());
-      _showToast(sharedPreferences.getString(pref_user_exam_end_time).toString());
+    //  _showToast(sharedPreferences.getString(pref_user_exam_end_time).toString());
 
     } catch(e) {
       //code

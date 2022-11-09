@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:ntp/ntp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Colors.dart';
@@ -25,7 +24,7 @@ class ExamPageController extends GetxController {
   var optionList = [].obs;
 
   late Timer timer;
-  var startTxt = "00:00:00".obs;
+  var startTxt = "00:00:00:00".obs;
 
   //if value 0 then exam finished or not start ,
   //if value 1 then exam is start running,
@@ -68,6 +67,23 @@ class ExamPageController extends GetxController {
 
     RetriveUserInfo();
     updateIsCountingStatus(false);
+  }
+
+  @override
+  void dispose() {
+    print('I am disposed');
+   // timer!.cancel();
+    super.dispose();
+
+  }
+
+  @override
+  void onClose() {
+    // timer!.cancel();
+    super.onClose();
+    print('I am closed');
+
+
   }
 
   // @override
@@ -187,10 +203,11 @@ class ExamPageController extends GetxController {
 
   String _printDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitHour = twoDigits(duration.inHours.remainder(60));
+    String twoDigitDay = twoDigits(duration.inDays.remainder(30));
+    String twoDigitHour = twoDigits(duration.inHours.remainder(24));
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$twoDigitHour:$twoDigitMinutes:$twoDigitSeconds";
+    return "$twoDigitDay:$twoDigitHour:$twoDigitMinutes:$twoDigitSeconds";
   }
 
   updateUpcomingExamText(String value) {

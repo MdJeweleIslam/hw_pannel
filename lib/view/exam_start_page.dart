@@ -38,6 +38,9 @@ class ExamStartPageScreen extends StatelessWidget {
                   Background(),
                   Obx(() => Column(
                         children: [
+
+
+
                           Container(
                             margin: EdgeInsets.fromLTRB(00, 20, 00, 10),
                             height: 30,
@@ -67,25 +70,30 @@ class ExamStartPageScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                           Obx(() => Text(
-                             "current time: "+
-                                 examStartPageController.currentTimeUtc.value
-                             ,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                                color: awsEndColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          )),
-                           Obx(() => Text(
-                             "Exam End time: "+
-                             examStartPageController.examEndTimeLocal.value,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                                color: awsEndColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          )),
+
+                          Obx(() =>
+                              Text(
+                                "current time: " +
+                                    examStartPageController.currentTimeUtc
+                                        .value
+                                ,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: awsEndColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500),
+                              )),
+                          Obx(() =>
+                              Text(
+                                "Exam End time: " +
+                                    examStartPageController.examEndTimeLocal
+                                        .value,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: awsEndColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500),
+                              )),
                           Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -103,7 +111,8 @@ class ExamStartPageScreen extends StatelessWidget {
                             child: Column(
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .center,
                                   children: [
                                     Text(("Question: "),
                                         style: TextStyle(
@@ -111,24 +120,29 @@ class ExamStartPageScreen extends StatelessWidget {
                                             fontSize: 15,
                                             fontWeight: FontWeight.w500)),
                                     Obx(
-                                      () => Text(
-                                          examStartPageController
-                                              .currentQuestionNo.value,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500)),
+                                          () =>
+                                          Text(
+                                              examStartPageController
+                                                  .currentQuestionNo.value,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight
+                                                      .w500)),
                                     ),
                                     Obx(
-                                      () => Text(
-                                          (" of " +
+                                          () =>
+                                          Text(
+                                              (" of " +
 
-                                              examStartPageController
-                                                  .totalQuestionNo.value),
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500)),
+                                                  examStartPageController
+                                                      .totalQuestionNo
+                                                      .value),
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight
+                                                      .w500)),
                                     ),
                                   ],
                                 ),
@@ -147,188 +161,291 @@ class ExamStartPageScreen extends StatelessWidget {
                                   height: 5,
                                 ),
                                 Obx(
-                                  () => Text(
-                                    examStartPageController.startTxt.value,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        color: awsStartColor,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                                      () =>
+                                      Text(
+                                        examStartPageController.startTxt
+                                            .value,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            color: awsStartColor,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                 )
                               ],
                             ),
                           ),
 
-                          // short question section
-
-                          if (examStartPageController.questionType.value == 1) ...{
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 10, right: 10, top: 20, bottom: 00),
-                              child:Align(
-                                alignment: Alignment.centerLeft,
-                                child: Obx(() => Text(
-                                    "Q: " +"${examStartPageController.shortQuestionModel.value.data![0].questionName}"
-                                    ,
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: 18,
-                                        fontWeight:
-                                        FontWeight.w500)),
-                                ),
-                                )
+                           if(examStartPageController.questionListResponseStatusCode.value == 200)...{
 
 
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    left: 10, right: 10, top: 14, bottom: 10),
-                                child: Flex(
-                                  direction: Axis.vertical,
-                                  children: [
-                                    Expanded(
-                                        child:
-                                            _buildShortQuestionAnswerTextField()),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          left: 20, right: 20, top: 10),
-                                      child:
-                                          _buildNextButton_short_question(),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          left: 20,
-                                          right: 20,
-                                          top: 20,
-                                          bottom: 20),
-                                      child: _buildSkipButton("1"),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          }
-                          // mcq question section
-                          else if (examStartPageController.questionType.value == 2) ...{
-                            Expanded(
-                              child: Column(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 10,
-                                              right: 10,
-                                              top: 20,
-                                              bottom: 00),
-                                          child: Flex(
-                                            direction: Axis.horizontal,
-                                            children: [
-                                              // .
-                                              Obx(() => Text(
-                                                  "Q: " +"${examStartPageController.mcqQuestionDataModel.value.data![0].questionName}"
-                                                  ,
-                                                  style: TextStyle(
-                                                      color: Colors.black87,
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                      FontWeight.w500)),),
 
-                                            ],
-                                          ),
-                                        ),
-                                        Expanded(
-                                            child: Container(
-                                          color: transparent,
-                                          child: Theme(
-                                            data: Theme.of(context).copyWith(
-                                              unselectedWidgetColor:
-                                                  awsEndColor,
-                                            ),
-                                            child:  Obx(()=>
-                                                ListView.builder(
-                                                   itemCount: examStartPageController.mcqQuestionDataModel.value.data![0].questionsOptions == null ? 0
-                                                       : examStartPageController.mcqQuestionDataModel.value.data![0].questionsOptions.length,
-                                                  // itemCount: 4,
-                                                  shrinkWrap: false,
-                                                  physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                                  itemBuilder: (context, index) {
-                                                    return Obx(() => RadioListTile<int>(
+                             // short question section
 
-                                                        value: index,
-                                                        activeColor: awsEndColor,
-                                                        title: Text(
-                                                          examStartPageController.abcdList[index].toString() +
-                                                              " ${examStartPageController.mcqQuestionDataModel.value.data![0].
-                                                              questionsOptions[index].mcqOptionAnswer}",
-                                                          // optionList[index]["mcq_option_answer"].toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 16),
-                                                        ),
-                                                        groupValue:
-                                                        examStartPageController
-                                                            .selectedValue
-                                                            .value,
-                                                        onChanged: (value) {
-                                                          // _showToast(examStartPageController.mcqQuestionDataModel.value.data![0].
-                                                          // questionsOptions[index].questionMcqOptionsId.toString());
-                                                          examStartPageController.selectedValueUpdate(index);
-
-                                                          examStartPageController.updateQuestionMcqOptionsId(examStartPageController.mcqQuestionDataModel.
-                                                          value.data![0].questionsOptions[index].questionMcqOptionsId.toString());
-
-                                                        }));
-                                                  },
-                                                ),),
+                             if (examStartPageController.questionType.value ==
+                                 1) ...{
+                               Padding(
+                                   padding: EdgeInsets.only(
+                                       left: 10,
+                                       right: 10,
+                                       top: 20,
+                                       bottom: 00),
+                                   child: Align(
+                                     alignment: Alignment.centerLeft,
+                                     child: Obx(() =>
+                                         Text(
+                                             "Q: " + "${examStartPageController
+                                                 .shortQuestionModel.value
+                                                 .data![0].questionName}"
+                                             ,
+                                             style: TextStyle(
+                                                 color: Colors.black87,
+                                                 fontSize: 18,
+                                                 fontWeight:
+                                                 FontWeight.w500)),
+                                     ),
+                                   )
 
 
-                                          ),
-                                        )),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 20, right: 20),
-                              child: _buildNextButton_mcq_question(),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  left: 20, right: 20, top: 20, bottom: 20),
-                              child: _buildSkipButton("1"),
-                            ),
-                          }
-                          //no question found
-                          else if(examStartPageController.questionType.value == 3)...{
-                              Expanded(
-                                child: NoDataFound().noItemFound(
-                                    "Question Not Found! try again! "),
-                              ),
-                            }
-                          else ...{
-                            Expanded(
-                              child:Center(
-                                child:SizedBox(
-                                  height: 80,
-                                  width: 80,
-                                  child: CircularProgressIndicator(
-                                    backgroundColor: awsStartColor,
-                                    color: awsEndColor,
-                                    strokeWidth: 5,
-                                  ),
-                                ),
+                               ),
+                               Expanded(
+                                 child: Padding(
+                                   padding: EdgeInsets.only(
+                                       left: 10,
+                                       right: 10,
+                                       top: 14,
+                                       bottom: 10),
+                                   child: Flex(
+                                     direction: Axis.vertical,
+                                     children: [
+                                       Expanded(
+                                           child:
+                                           _buildShortQuestionAnswerTextField()),
+                                       Container(
+                                         margin: EdgeInsets.only(
+                                             left: 20, right: 20, top: 10),
+                                         child:
+                                         _buildNextButton_short_question(),
+                                       ),
+                                       Container(
+                                         margin: EdgeInsets.only(
+                                             left: 20,
+                                             right: 20,
+                                             top: 20,
+                                             bottom: 20),
+                                         child: _buildSkipButton("1"),
+                                       ),
+                                     ],
+                                   ),
+                                 ),
+                               ),
+                             }
+                             // mcq question section
+                             else if (examStartPageController.questionType.value ==
+                                   2) ...{
+                                 Expanded(
+                                   child: Column(
+                                     children: <Widget>[
+                                       Expanded(
+                                         child: Column(
+                                           children: [
+                                             Padding(
+                                               padding: EdgeInsets.only(
+                                                   left: 10,
+                                                   right: 10,
+                                                   top: 20,
+                                                   bottom: 00),
+                                               child: Flex(
+                                                 direction: Axis.horizontal,
+                                                 children: [
+                                                   // .
+                                                   Obx(() =>
+                                                       Text(
+                                                           "Q: " +
+                                                               "${examStartPageController
+                                                                   .mcqQuestionDataModel
+                                                                   .value
+                                                                   .data![0]
+                                                                   .questionName}"
+                                                           ,
+                                                           style: TextStyle(
+                                                               color: Colors
+                                                                   .black87,
+                                                               fontSize: 18,
+                                                               fontWeight:
+                                                               FontWeight
+                                                                   .w500)),),
+
+                                                 ],
+                                               ),
+                                             ),
+                                             Expanded(
+                                                 child: Container(
+                                                   color: transparent,
+                                                   child: Theme(
+                                                     data: Theme.of(context)
+                                                         .copyWith(
+                                                       unselectedWidgetColor:
+                                                       awsEndColor,
+                                                     ),
+                                                     child: Obx(() =>
+                                                         ListView.builder(
+                                                           itemCount: examStartPageController
+                                                               .mcqQuestionDataModel
+                                                               .value.data![0]
+                                                               .questionsOptions ==
+                                                               null ? 0
+                                                               : examStartPageController
+                                                               .mcqQuestionDataModel
+                                                               .value.data![0]
+                                                               .questionsOptions
+                                                               .length,
+                                                           // itemCount: 4,
+                                                           shrinkWrap: false,
+                                                           physics:
+                                                           const NeverScrollableScrollPhysics(),
+                                                           itemBuilder: (
+                                                               context, index) {
+                                                             return Obx(() =>
+                                                                 RadioListTile<
+                                                                     int>(
+
+                                                                     value: index,
+                                                                     activeColor: awsEndColor,
+                                                                     title: Text(
+                                                                       examStartPageController
+                                                                           .abcdList[index]
+                                                                           .toString() +
+                                                                           " ${examStartPageController
+                                                                               .mcqQuestionDataModel
+                                                                               .value
+                                                                               .data![0]
+                                                                               .
+                                                                           questionsOptions[index]
+                                                                               .mcqOptionAnswer}",
+                                                                       // optionList[index]["mcq_option_answer"].toString(),
+                                                                       style: TextStyle(
+                                                                           fontSize: 16),
+                                                                     ),
+                                                                     groupValue:
+                                                                     examStartPageController
+                                                                         .selectedValue
+                                                                         .value,
+                                                                     onChanged: (
+                                                                         value) {
+                                                                       // _showToast(examStartPageController.mcqQuestionDataModel.value.data![0].
+                                                                       // questionsOptions[index].questionMcqOptionsId.toString());
+                                                                       examStartPageController
+                                                                           .selectedValueUpdate(
+                                                                           index);
+
+                                                                       examStartPageController
+                                                                           .updateQuestionMcqOptionsId(
+                                                                           examStartPageController
+                                                                               .mcqQuestionDataModel
+                                                                               .
+                                                                           value
+                                                                               .data![0]
+                                                                               .questionsOptions[index]
+                                                                               .questionMcqOptionsId
+                                                                               .toString());
+                                                                     }));
+                                                           },
+                                                         ),),
 
 
-                              ),
-                            ),
+                                                   ),
+                                                 )),
+                                           ],
+                                         ),
+                                       )
+                                     ],
+                                   ),
+                                 ),
+                                 Container(
+                                   margin: EdgeInsets.only(left: 20, right: 20),
+                                   child: _buildNextButton_mcq_question(),
+                                 ),
+                                 Container(
+                                   margin: EdgeInsets.only(
+                                       left: 20,
+                                       right: 20,
+                                       top: 20,
+                                       bottom: 20),
+                                   child: _buildSkipButton("1"),
+                                 ),
+                               }
+                               //no question found
+                               else...{
+                                 Expanded(
+                                   child: NoDataFound().noItemFound(
+                                       "Question Not Found! try again! "),
+                                 ),
+                               }
 
-                          }
+                           }
+                           else if (examStartPageController.questionListResponseStatusCode.value == 201) ...{
+                             Expanded(
+
+                               child: NoDataFound()
+                                   .noItemFound("Your response already submitted!"),
+                             ),
+                           }
+                           else if (examStartPageController.questionListResponseStatusCode.value == 203) ...{
+                               Expanded(
+                                 child: NoDataFound().noItemFound("Quiz time over!"),
+                               ),
+                             }
+                            else if (examStartPageController.questionListResponseStatusCode.value == 204) ...{
+                                 Expanded(
+                                   child: NoDataFound().noItemFound("Quiz not Start!"),
+                                 ),
+                               }
+                            else if (examStartPageController.questionListResponseStatusCode.value == 400) ...{
+                                   Expanded(
+                                     child: NoDataFound().noItemFound("Quiz not Created!"),
+                                   ),
+                                 }
+                            else if (examStartPageController.questionListResponseStatusCode.value == 401) ...{
+                                     Expanded(
+                                       child: NoDataFound().noItemFound("Quiz not Start!"),
+                                     ),
+                                   }
+                            else if (examStartPageController.questionListResponseStatusCode.value == 402) ...{
+                                       Expanded(
+                                         child: NoDataFound().noItemFound("Quiz time over!"),
+                                       ),
+                                     }
+                            else if (examStartPageController.questionListResponseStatusCode.value == 403) ...{
+                                         Expanded(
+                                           child: NoDataFound()
+                                               .noItemFound("Your teacher did not create quiz time!"),
+                                         ),
+                                       }
+                            else if (examStartPageController.questionListResponseStatusCode.value == 404) ...{
+                                           Expanded(
+                                             child: NoDataFound()
+                                                 .noItemFound("Exam not start in this moment!"),
+                                           ),
+                                         }
+                            else ...{
+                                             Expanded(
+                                               child: Center(
+                                                 child: SizedBox(
+                                                   height: 80,
+                                                   width: 80,
+                                                   child: CircularProgressIndicator(
+                                                     backgroundColor: awsStartColor,
+                                                     color: awsEndColor,
+                                                     strokeWidth: 5,
+                                                   ),
+                                                 ),
+
+
+                                               ),
+                                             ),
+
+                                           }
                         ],
                       ))
                 ],
@@ -458,7 +575,9 @@ class ExamStartPageScreen extends StatelessWidget {
 
   Widget _buildSkipButton(String questionId) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        examStartPageController.cancelTimer();
+      },
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,
           shape:

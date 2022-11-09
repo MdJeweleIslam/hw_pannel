@@ -5,10 +5,12 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../Colors.dart';
- import 'background.dart';
+ import '../controller/exam_start_page_controller.dart';
+import 'background.dart';
 import 'exam_page.dart';
 
 class ExamDoneScreen extends StatelessWidget {
+  final examStartPageController = Get.put(ExamStartPageController()).timer?.cancel();
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +77,7 @@ class ExamDoneScreen extends StatelessWidget {
 
 
   }
+
 
   Widget _buildHomeButton() {
     return ElevatedButton(
