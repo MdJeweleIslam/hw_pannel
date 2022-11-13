@@ -22,7 +22,7 @@ class ForgetPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.backGroundColor,
+        backgroundColor:  backGroundColor,
         // backgroundColor: Colors.backGroundColor,
         body: SizedBox(
             width: double.infinity,

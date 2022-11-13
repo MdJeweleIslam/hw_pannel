@@ -31,7 +31,7 @@ class LogInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.backGroundColor,
+        backgroundColor:  backGroundColor,
         body: SizedBox(
           width: double.infinity,
           height: double.infinity,
@@ -251,7 +251,10 @@ class LogInScreen extends StatelessWidget {
       onFocusChange: (hasFocus) {
      logInPageController.passwordLevelTextColor.value = hasFocus ? hint_color : hint_color;
     },
-    child:  TextField(
+    child:  Obx(() =>
+
+
+        TextField(
           controller: logInPageController.passwordController.value,
           cursorColor:awsCursorColor,
           cursorWidth: 1.5,
@@ -290,7 +293,7 @@ class LogInScreen extends StatelessWidget {
             prefixIcon: prefixedIcon,
             hintText: hintText,
             hintStyle: const TextStyle(
-              color: Colors.hint_color,
+              color: hint_color,
               fontWeight: FontWeight.normal,
               fontFamily: 'PTSans',
             ),
@@ -306,7 +309,7 @@ class LogInScreen extends StatelessWidget {
               color: logInPageController.passwordLevelTextColor.value,
             ),
           ),
-        ),
+        )),
     )
 
     );

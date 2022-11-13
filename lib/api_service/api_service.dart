@@ -7,6 +7,11 @@ String SUB_URL_API_LOG_IN = "android/login/";
 
 
 
+///cross login
+String SUB_URL_API_CROSSS_LOG_IN = "cross-login/";
+
+
+
 String SUB_URL_API_SHORT_QUESTION_ANSWER_SUBMIT = "api/student-short-submit-answer-mobile/";
 String SUB_URL_API_MCQ_QUESTION_ANSWER_SUBMIT = "api/student-mcq-submit-answer-mobile/";
 String SUB_URL_API_GET_QUESTION = "api/exam-question-list-mobile/";

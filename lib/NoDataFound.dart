@@ -50,41 +50,41 @@ noItemFound(String text) {
           });
 
 
-      Expanded(
-      child: Center(
-        child: ListView(
-          children: [
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  //no_item_found.png
-                  Image.asset(
-                    "assets/images/no_item_found.png",
-                    width: 80,
-                    height: 80,
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    text,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.hint_color,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 100,
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-      flex: 1,
-    );
+    //   Expanded(
+    //   child: Center(
+    //     child: ListView(
+    //       children: [
+    //         Center(
+    //           child: Column(
+    //             mainAxisAlignment: MainAxisAlignment.center,
+    //             children: [
+    //               //no_item_found.png
+    //               Image.asset(
+    //                 "assets/images/no_item_found.png",
+    //                 width: 80,
+    //                 height: 80,
+    //               ),
+    //               SizedBox(
+    //                 height: 8,
+    //               ),
+    //               Text(
+    //                 text,
+    //                 style: TextStyle(
+    //                   fontSize: 18,
+    //                   color: Colors.hint_color,
+    //                 ),
+    //               ),
+    //               SizedBox(
+    //                 height: 100,
+    //               ),
+    //             ],
+    //           ),
+    //         )
+    //       ],
+    //     ),
+    //   ),
+    //   flex: 1,
+    // );
   }
 
 }

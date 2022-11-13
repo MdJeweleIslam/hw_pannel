@@ -24,7 +24,7 @@ class HomePageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          backgroundColor: Colors.backGroundColor,
+          backgroundColor: backGroundColor,
           // backgroundColor: Colors.backGroundColor,
           key: _key,
 

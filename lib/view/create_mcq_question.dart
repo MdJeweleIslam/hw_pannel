@@ -41,7 +41,7 @@ class CreateMCQQuestionScreen extends StatelessWidget  {
   Widget build(BuildContext context)  {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.backGroundColor,
+        backgroundColor: backGroundColor,
         appBar: AppBar(
             leading: IconButton(
               alignment: Alignment.centerRight,
@@ -509,7 +509,7 @@ class CreateMCQQuestionScreen extends StatelessWidget  {
                           width: 10,
                         ),
                         const CircularProgressIndicator(
-                          backgroundColor: Colors.appRed,
+                          backgroundColor: Colors.red,
                           strokeWidth: 5,
                         ),
                         const SizedBox(

@@ -34,7 +34,7 @@ class LogInApiService {
 
         //  _showToast(response.statusCode.toString());
           if (response.statusCode == 200) {
-            _showToast("success");
+           // _showToast("success");
             var data = jsonDecode(response.body);
              saveUserInfo(
                user_id:data['data']['user_id'].toString(),
@@ -43,16 +43,18 @@ class LogInApiService {
                fullName: data['data']['fullname'].toString(),
                user_type:data['data']['user_type'].toString(),
              );
+           userCrossLogIn(apiKey: data["data"]["api_key"].toString());
 
-
-            Get.offAll(HomePageScreen());
+           // Get.offAll(HomePageScreen());
 
           }
           else if (response.statusCode == 403) {
+            Get.back();
             var data = jsonDecode(response.body);
             _showToast(data['msg']);
           }
           else {
+            Get.back();
             var data = jsonDecode(response.body);
             _showToast(data['message']);
           }
@@ -62,7 +64,55 @@ class LogInApiService {
           //  Navigator.of(context).pop();
           //print(e.toString());
         } finally {
-          Get.back();
+        //  Get.back();
+
+          /// Navigator.of(context).pop();
+        }
+      }
+    } on SocketException catch (_) {
+      Fluttertoast.cancel();
+      _showToast("No Internet Connection!");
+    }
+  }
+
+
+  //cross login api call
+  userCrossLogIn({
+    required String apiKey,
+  }) async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+
+          var response = await http.get(Uri.parse('$BASE_URL_API$SUB_URL_API_CROSSS_LOG_IN$apiKey/'),);
+
+          //  _showToast(response.statusCode.toString());
+          if (response.statusCode == 200) {
+           Get.back();
+            _showToast("success");
+            var data = jsonDecode(response.body);
+
+            Get.offAll(HomePageScreen());
+
+          }
+          else if (response.statusCode == 403) {
+            Get.back();
+            var data = jsonDecode(response.body);
+            _showToast(data['msg']);
+          }
+          else {
+            Get.back();
+            var data = jsonDecode(response.body);
+            _showToast(data['message']);
+          }
+
+
+        } catch (e) {
+          //  Navigator.of(context).pop();
+          //print(e.toString());
+        } finally {
+          // Get.back();
 
           /// Navigator.of(context).pop();
         }

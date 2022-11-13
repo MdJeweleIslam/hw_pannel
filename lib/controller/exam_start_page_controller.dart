@@ -221,7 +221,7 @@ class ExamStartPageController extends GetxController {
     currentQuestionNo(value);
   }
 
-
+  ///update all question submit
   updateAllQuestionSubmit(bool value) {
     allQuestionSubmit(value);
   }
@@ -232,6 +232,7 @@ class ExamStartPageController extends GetxController {
   }
 
 
+  //
   updateQuestionListResponseStatusCode(int value) {
     questionListResponseStatusCode(value);
   }
@@ -248,6 +249,8 @@ class ExamStartPageController extends GetxController {
      questionType(value);
    }
 
+
+   ///update mcq question data
    void updateMcqQuestionModel(McqQuestionModel newData){
      mcqQuestionDataModel(newData);
    }
