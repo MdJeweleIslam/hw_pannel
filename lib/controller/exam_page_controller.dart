@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -38,8 +39,8 @@ class ExamPageController extends GetxController {
   var upcomingExamText = "Up Coming".obs;
   var getTime = "".obs;
 
-  var classRoomId = "8".obs;
-  var uid = "09a8a3fb-0c63-49ec-abc4-657132ff8e9f".obs;
+  var id = "12".obs;
+  var uid = "97dd415d-dca6-46a7-8981-3dd12306e19e".obs;
 
   var userName="".obs,fullName="".obs,userBatch="".obs,userType="".obs,userId="".obs;
 
@@ -63,7 +64,8 @@ class ExamPageController extends GetxController {
     // TODO: implement onInit
     super.onInit();
 
-    getExamList();
+    //getExamList();
+    getStudentAllJoinClassroomList();
 
     RetriveUserInfo();
     updateIsCountingStatus(false);
@@ -325,23 +327,24 @@ class ExamPageController extends GetxController {
     classRoomQuizList=newList as RxList;
   }
 
-//get exam quiz list
-  void getExamList() async{
+
+ //get All Join Class room list
+ void getStudentAllJoinClassroomList() async{
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         try {
           var response = await put(
             // Uri.parse('http://192.168.1.4:8000/api/individual-classroom-quiz-all-list/$classRoomId/'),
-            Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_QUIZ_LIST$classRoomId/'),
-            body: {
-              'uid':"$uid"
-            }
+              Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_ALL_CLASS_ROOM_LIST$id/'),
+              body: {
+                'uid':"$uid"
+              }
           );
-         _showToast("${response.statusCode}");
+          _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
 
-           // _showToast("success");
+            // _showToast("success");
             var data = response.body;
             IndividualClassroomQuizAllListModel individualClassroomQuizAllListModel= individualClassroomQuizAllListModelFromJson(data);
 
@@ -368,19 +371,19 @@ class ExamPageController extends GetxController {
                 // updateCurrentDateTime("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
                 //     " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");
 
-               // diffSecond(DateTime.parse(endDateTime.toString()),DateTime.parse(startDateTime.toString()));
+                // diffSecond(DateTime.parse(endDateTime.toString()),DateTime.parse(startDateTime.toString()));
                 return;
               }
             }
 
 
 
-             _showToast(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo.length.toString());
+            _showToast(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo.length.toString());
             _showToast(classRoomQuizList.length.toString());
 
           }
           else {
-           // Fluttertoast.cancel();
+            // Fluttertoast.cancel();
 
             log('data:'+response.body.toString());
             _showToast("failed try again!");
@@ -397,6 +400,79 @@ class ExamPageController extends GetxController {
     }
     //updateIsFirstLoadRunning(false);
   }
+
+  //get exam quiz list
+  // void getExamList() async{
+  //   try {
+  //     final result = await InternetAddress.lookup('example.com');
+  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+  //       try {
+  //         var response = await put(
+  //           // Uri.parse('http://192.168.1.4:8000/api/individual-classroom-quiz-all-list/$classRoomId/'),
+  //           Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_QUIZ_LIST$classRoomId/'),
+  //           body: {
+  //             'uid':"$uid"
+  //           }
+  //         );
+  //        _showToast("${response.statusCode}");
+  //         if (response.statusCode == 200) {
+  //
+  //          // _showToast("success");
+  //           var data = response.body;
+  //           IndividualClassroomQuizAllListModel individualClassroomQuizAllListModel= individualClassroomQuizAllListModelFromJson(data);
+  //
+  //           classRoomQuizList(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo);
+  //
+  //
+  //           for(int i=0;i<classRoomQuizList.length;i++){
+  //             if(classRoomQuizList[i].isComplete==false){
+  //
+  //
+  //
+  //               updateStartDateTime(utcToLocalDate("${classRoomQuizList[0].quizTimeInfo[0].quizStartDate}"+
+  //                   " ${classRoomQuizList[0].quizTimeInfo[0].quizStartTime}"));
+  //               updateEndDateTime(utcToLocalDate("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
+  //                   " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}"));
+  //               updateEndDateTimeUtc("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
+  //                   " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");
+  //               saveExamEndDate("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
+  //                   " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");
+  //               updateCurrentDateTime(utcToLocalDate(individualClassroomQuizAllListModel.currentTimes.toString()));
+  //
+  //               _checkTime();
+  //
+  //               // updateCurrentDateTime("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
+  //               //     " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");
+  //
+  //              // diffSecond(DateTime.parse(endDateTime.toString()),DateTime.parse(startDateTime.toString()));
+  //               return;
+  //             }
+  //           }
+  //
+  //
+  //
+  //            _showToast(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo.length.toString());
+  //           _showToast(classRoomQuizList.length.toString());
+  //
+  //         }
+  //         else {
+  //          // Fluttertoast.cancel();
+  //
+  //           log('data:'+response.body.toString());
+  //           _showToast("failed try again!");
+  //
+  //         }
+  //       } catch (e) {
+  //         // Fluttertoast.cancel();
+  //       }
+  //     }
+  //   } on SocketException catch (e) {
+  //
+  //     Fluttertoast.cancel();
+  //     // _showToast("No Internet Connection!");
+  //   }
+  //   //updateIsFirstLoadRunning(false);
+  // }
 
   updateStartDateTime(String value) {
     startDateTime(value);

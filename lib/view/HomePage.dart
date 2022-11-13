@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:hw_pannel/view/exam_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../Colors.dart';
 
+import '../api_service/sharePreferenceDataSaveName.dart';
 import '../controller/home_page_controller.dart';
 import 'background.dart';
 import 'navigation_drawer_page.dart';
@@ -476,9 +478,21 @@ class HomePageScreen extends StatelessWidget {
         fontSize: 16.0);
   }
 
-
   ///get data from share pref
   loadUserIdFromSharePref() async {
+    try {
+      var storage =GetStorage();
+      storage.read(hw_pannel_pref_user_uid);
+      storage.read(hw_pannel_pref_user_id);
+    } catch(e) {
+      //code
+    }
+
+  }
+
+
+
+  loadUserIdFromSharePref1() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
       // setState(() {

@@ -27,7 +27,9 @@ class LogInApiService {
 
           showLoadingDialog("Checking");
 
-          var response = await http.post(Uri.parse('$BASE_URL_API$SUB_URL_API_LOG_IN'), body: {
+          var response = await http.post(Uri.parse('$BASE_URL_API$SUB_URL_API_LOG_IN'),
+          // var response = await http.post(Uri.parse('https://hw.arenaclass.stream/apk/login/'),
+              body: {
             'username': userName,
             'password': password,
           });
@@ -42,8 +44,15 @@ class LogInApiService {
                batch: data['data']['batch'].toString(),
                fullName: data['data']['fullname'].toString(),
                user_type:data['data']['user_type'].toString(),
+               user_api_key: data['data']['api_key'].toString(),
              );
-           userCrossLogIn(apiKey: data["data"]["api_key"].toString());
+
+
+           userCrossLogIn(
+             apiKey: data["data"]["api_key"].toString(),
+             password: password,
+
+           );
 
            // Get.offAll(HomePageScreen());
 
@@ -79,6 +88,7 @@ class LogInApiService {
   //cross login api call
   userCrossLogIn({
     required String apiKey,
+    required String password,
   }) async {
     try {
       final result = await InternetAddress.lookup('example.com');
@@ -87,13 +97,21 @@ class LogInApiService {
 
           var response = await http.get(Uri.parse('$BASE_URL_API$SUB_URL_API_CROSSS_LOG_IN$apiKey/'),);
 
-          //  _showToast(response.statusCode.toString());
+            // _showToast(response.statusCode.toString());
           if (response.statusCode == 200) {
            Get.back();
-            _showToast("success");
-            var data = jsonDecode(response.body);
 
-            Get.offAll(HomePageScreen());
+          List data = jsonDecode(response.body);
+
+           userAutoLogIn(
+               username: data[0]["username"].toString(),
+               email: data[0]["email"].toString(),
+               phone_number: data[0]["phone"].toString(),
+               gender: data[0]["genders"].toString(),
+               password: password,
+               api_key: apiKey,
+               batch: data[0]["batch"].toString()
+           );
 
           }
           else if (response.statusCode == 403) {
@@ -123,7 +141,71 @@ class LogInApiService {
     }
   }
 
-  void saveUserInfo({required String name,required String fullName,required String batch,required String user_type, required String user_id}) async {
+
+
+  userAutoLogIn({
+    required String username,
+    required String email,
+    required String phone_number,
+    required String gender,
+    required String password,
+    required String api_key,
+    required String batch,
+  }) async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+
+          var response = await http.post(
+              Uri.parse('http://192.168.1.4:8002/api/auto-login/'),
+              body: {
+                'username': username,
+                'email': email,
+                'phone_number': phone_number,
+                'gender': gender,
+                'password': password,
+                'api_key': api_key,
+                'batch': batch
+          });
+
+          if (response.statusCode == 200) {
+            Get.back();
+            var data = jsonDecode(response.body);
+            saveUserUId(uId: data['uid'].toString(), id: 'id');
+            Get.offAll(HomePageScreen());
+
+          }
+          else if (response.statusCode == 403) {
+            Get.back();
+            var data = jsonDecode(response.body);
+            _showToast(data['msg']);
+          }
+          else {
+            Get.back();
+            var data = jsonDecode(response.body);
+            _showToast(data['message']);
+          }
+
+
+        } catch (e) {
+          //  Navigator.of(context).pop();
+          //print(e.toString());
+        } finally {
+          //  Get.back();
+
+          /// Navigator.of(context).pop();
+        }
+      }
+    } on SocketException catch (_) {
+      Fluttertoast.cancel();
+      _showToast("No Internet Connection!");
+    }
+  }
+
+  void saveUserInfo({required String name,required String fullName,
+    required String batch,required String user_type,
+    required String user_id,required String user_api_key}) async {
     try {
 
       var storage =GetStorage();
@@ -132,7 +214,34 @@ class LogInApiService {
       storage.write(pref_user_batch, batch);
       storage.write(pref_user_type, user_type);
       storage.write(pref_user_id, user_id);
+      storage.write(pref_user_api_key, user_api_key);
 
+    } catch (e) {
+
+      //code
+
+
+    }
+
+
+    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+
+
+  }
+
+  void saveUserUId({required String uId,required String id,}) async {
+    try {
+
+      var storage =GetStorage();
+      storage.write(hw_pannel_pref_user_uid, uId);
+      storage.write(hw_pannel_pref_user_id, id);
     } catch (e) {
 
       //code
