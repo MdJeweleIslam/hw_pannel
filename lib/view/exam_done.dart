@@ -6,6 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 
 import '../Colors.dart';
  import '../controller/exam_start_page_controller.dart';
+import 'HomePage.dart';
 import 'background.dart';
 import 'exam_page.dart';
 
@@ -82,7 +83,9 @@ class ExamDoneScreen extends StatelessWidget {
   Widget _buildHomeButton() {
     return ElevatedButton(
       onPressed: () {
-        Get.off(ExamPageScreen());
+      //  Get.off(ExamPageScreen());
+        Get.offAll(HomePageScreen());
+        // Get.off(HomePageScreen());
       },
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,

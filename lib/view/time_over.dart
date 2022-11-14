@@ -5,7 +5,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../Colors.dart';
- import 'background.dart';
+ import 'HomePage.dart';
+import 'background.dart';
 import 'exam_page.dart';
 
 class TimeOverScreen extends StatelessWidget {
@@ -59,7 +60,8 @@ class TimeOverScreen extends StatelessWidget {
   Widget _buildHomeButton() {
     return ElevatedButton(
       onPressed: () {
-        Get.off(ExamPageScreen());
+        // Get.off(ExamPageScreen());
+        Get.offAll(HomePageScreen());
       },
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,

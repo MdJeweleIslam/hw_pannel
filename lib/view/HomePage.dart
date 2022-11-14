@@ -18,6 +18,7 @@ import 'navigation_drawer_page.dart';
 class HomePageScreen extends StatelessWidget {
 
   final examPageController = Get.put(HomePageController());
+  // final examPageController = Get.lazyPut(HomePageController());
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   final Uri _url = Uri.parse('https://arenawebsecurity.net/profile#paymentID');

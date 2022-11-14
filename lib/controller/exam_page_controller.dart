@@ -82,8 +82,8 @@ class ExamPageController extends GetxController {
       userId(storage.read(pref_user_id)??"");
 
 
-       _showToast( storage.read(hw_pannel_pref_user_uid));
-       _showToast( storage.read(hw_pannel_pref_user_id));
+       // _showToast( storage.read(hw_pannel_pref_user_uid));
+       // _showToast( storage.read(hw_pannel_pref_user_id));
       storage.read(hw_pannel_pref_user_uid);
       storage.read(hw_pannel_pref_user_id);
 
@@ -393,7 +393,7 @@ class ExamPageController extends GetxController {
                 'uid':"$hwPanelUId"
               }
           );
-          _showToast("${response.statusCode}");
+          // _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
 
             // _showToast("success");
@@ -430,8 +430,8 @@ class ExamPageController extends GetxController {
 
 
 
-            _showToast(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo.length.toString());
-            _showToast(classRoomQuizList.length.toString());
+            // _showToast(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo.length.toString());
+            // _showToast(classRoomQuizList.length.toString());
 
           }
           else {
@@ -548,7 +548,7 @@ class ExamPageController extends GetxController {
   _showToast(String message) {
     Fluttertoast.showToast(
         msg: message,
-        toastLength: Toast.LENGTH_LONG,
+        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
         backgroundColor:awsMixedColor,
@@ -558,8 +558,36 @@ class ExamPageController extends GetxController {
 
   void saveExamEndDate(String examEndDate) async {
     try {
+      var storage =GetStorage();
+      storage.write(pref_user_exam_end_time, examEndDate);
+
+      // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      // sharedPreferences.setString(pref_user_exam_end_time, examEndDate);
+    //  _showToast("end date"+storage.read(pref_user_exam_end_time));
+
+    } catch (e) {
+
+    }
+
+
+    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+
+
+  }
+
+  void saveExamEndDate1(String examEndDate) async {
+    try {
+
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.setString(pref_user_exam_end_time, examEndDate);
+      _showToast("end date"+examEndDate);
 
     } catch (e) {
 

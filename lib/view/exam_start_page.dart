@@ -97,8 +97,8 @@ class ExamStartPageScreen extends StatelessWidget {
                         Obx(() =>
                             Text(
                               "Exam End time: " +
-                                  examStartPageController.examEndTimeLocal
-                                      .value,
+                                  examStartPageController.utcToLocalDate(examStartPageController.examEndTimeLocal.value)
+                                  ,
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: awsEndColor,
@@ -234,18 +234,18 @@ class ExamStartPageScreen extends StatelessWidget {
                                         _buildShortQuestionAnswerTextField()),
                                     Container(
                                       margin: EdgeInsets.only(
-                                          left: 20, right: 20, top: 10),
+                                          left: 20, right: 20, top: 10,bottom: 20),
                                       child:
                                       _buildNextButton_short_question(),
                                     ),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          left: 20,
-                                          right: 20,
-                                          top: 20,
-                                          bottom: 20),
-                                      child: _buildSkipButton("1"),
-                                    ),
+                                    // Container(
+                                    //   margin: EdgeInsets.only(
+                                    //       left: 20,
+                                    //       right: 20,
+                                    //       top: 20,
+                                    //       bottom: 20),
+                                    //   child: _buildSkipButton("1"),
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -374,17 +374,17 @@ class ExamStartPageScreen extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(left: 20, right: 20),
+                              margin: EdgeInsets.only(left: 20, right: 20,top: 10,bottom: 20),
                               child: _buildNextButton_mcq_question(),
                             ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  left: 20,
-                                  right: 20,
-                                  top: 20,
-                                  bottom: 20),
-                              child: _buildSkipButton("1"),
-                            ),
+                            // Container(
+                            //   margin: EdgeInsets.only(
+                            //       left: 20,
+                            //       right: 20,
+                            //       top: 20,
+                            //       bottom: 20),
+                            //   child: _buildSkipButton("1"),
+                            // ),
                           }
                           //no question found
                           else...{
@@ -498,6 +498,8 @@ class ExamStartPageScreen extends StatelessWidget {
           return;
         }
 
+
+
         examStartPageController.submitShortQuestionAnswer(
             answerText:shortQuestionAnswerTxt,
             questionId:examStartPageController.shortQuestionModel.value.data![0].questionId.toString(),
@@ -588,7 +590,7 @@ class ExamStartPageScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSkipButton(String questionId) {
+  Widget _buildSkipButton1(String questionId) {
     return ElevatedButton(
       onPressed: () {
         examStartPageController.cancelTimer();
@@ -626,7 +628,7 @@ class ExamStartPageScreen extends StatelessWidget {
   _showToast(String message) {
     Fluttertoast.showToast(
         msg: message,
-        toastLength: Toast.LENGTH_LONG,
+        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
         backgroundColor: awsMixedColor,

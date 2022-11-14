@@ -49,10 +49,10 @@ class ExamStartPageController extends GetxController {
 
 
    //dynamic
-  var studentId = "12".obs;
-  var hwPaneQuizId="10".obs;
-  var hw_panel_id = "12".obs;
-  var hw_panel_uid = "97dd415d-dca6-46a7-8981-3dd12306e19e".obs;
+  var studentId = "".obs;
+  var hwPaneQuizId="".obs;
+  var hw_panel_id = "".obs;
+  var hw_panel_uid = "".obs;
 
 
 
@@ -70,6 +70,7 @@ class ExamStartPageController extends GetxController {
     super.onInit();
    // diffSecond1();
    //  loadUserIdFromSharePref();
+    loadUserIdFromSharePref();
     loadUidAndQuizIdFromSharePrefThenGetExamQuestion();
     //getExamQuestion();
 
@@ -196,7 +197,7 @@ class ExamStartPageController extends GetxController {
 
   ///timer cancel
   void cancelTimer(){
-    _showToast("cancell");
+   // _showToast("cancel timer");
     timer?.cancel();
     updateStartTxt("00:00:00");
 
@@ -222,6 +223,8 @@ class ExamStartPageController extends GetxController {
   updateExamEndTimeLocal(String value) {
     examEndTimeLocal(value);
   }
+
+
   updateCurrentTimeUtc(String value) {
     currentTimeUtc(value);
   }
@@ -268,6 +271,9 @@ class ExamStartPageController extends GetxController {
   updateHwPaneQuizId(String value) {
     hwPaneQuizId(value);
   }
+  updateStudentId(String value) {
+    studentId(value);
+  }
 
 
    ///update mcq question data
@@ -281,8 +287,6 @@ class ExamStartPageController extends GetxController {
 
   //get exam quiz list
   void getExamQuestion({required String hwPanelUid, required String hwPaneQuizId}) async{
-
-
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -338,7 +342,19 @@ class ExamStartPageController extends GetxController {
                 updateQuestionType(0);
                // _showToast("none");
               }
-            diffSecond(DateTime.parse(examEndTimeLocal.value),DateTime.parse(currentTimeUtc.value),);
+
+
+            // _showToast("send diff end "+utcToLocalDate(examEndTimeLocal.value));
+            // _showToast("send diff current "+currentTimeUtc.value);
+            //
+            // DateTime dt1 = DateTime.parse("2021-12-23 11:50:50");
+            // DateTime dt2 = DateTime.parse("2021-12-23 11:40:10");
+            diffSecond(DateTime.parse(utcToLocalDate(examEndTimeLocal.value)),DateTime.parse(currentTimeUtc.value),);
+
+
+           // diffSecond(dt1,dt2);
+
+
           }
           else if(response.statusCode == 201){
             Get.off(() => ExamDoneScreen());
@@ -525,8 +541,6 @@ class ExamStartPageController extends GetxController {
 
       var storage =GetStorage();
 
-
-
       storage.read(hw_pannel_pref_user_uid);
       storage.read(hw_pannel_pref_user_id);
 
@@ -534,11 +548,17 @@ class ExamStartPageController extends GetxController {
       updateHwPanelUId(storage.read(hw_pannel_pref_user_uid));
 
       updateHwPaneQuizId(storage.read(hw_panel_pref_quiz_id));
-      Fluttertoast.cancel();
-      _showToast("quiz id= "+ storage.read(hw_panel_pref_quiz_id));
+
+      updateStudentId(storage.read(hw_pannel_pref_user_id));
+
+      updateExamEndTimeLocal(storage.read(pref_user_exam_end_time).toString());
+
+      // Fluttertoast.cancel();
+
+      // _showToast("time end = "+ storage.read(pref_user_exam_end_time));
       // _showToast( storage.read(hw_pannel_pref_user_id));
 
-      getExamQuestion(hwPanelUid: storage.read(hw_pannel_pref_user_uid), hwPaneQuizId: storage.read(hw_panel_pref_quiz_id));
+    //  getExamQuestion(hwPanelUid: storage.read(hw_pannel_pref_user_uid), hwPaneQuizId: storage.read(hw_panel_pref_quiz_id));
 
 
     } catch (e) {
@@ -567,9 +587,8 @@ class ExamStartPageController extends GetxController {
       var storage =GetStorage();
       updateHwPaneQuizId(storage.read(hw_panel_pref_quiz_id));
       Fluttertoast.cancel();
-      _showToast("quiz id= "+ storage.read(hw_panel_pref_quiz_id));
+     // _showToast("quiz id= "+ storage.read(hw_panel_pref_quiz_id));
       getExamQuestion(hwPanelUid: storage.read(hw_pannel_pref_user_uid), hwPaneQuizId: storage.read(hw_panel_pref_quiz_id));
-
 
     } catch (e) {
 
