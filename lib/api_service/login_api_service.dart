@@ -172,7 +172,7 @@ class LogInApiService {
           if (response.statusCode == 200) {
             Get.back();
             var data = jsonDecode(response.body);
-            saveUserUId(uId: data['uid'].toString(), id: 'id');
+            saveUserUId(uId: data['uid'].toString(), id: data['id'].toString());
             Get.offAll(HomePageScreen());
 
           }

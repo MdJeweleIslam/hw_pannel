@@ -19,10 +19,6 @@ import '../../controller/log_in_page_controller.dart';
  import 'fotget_password_page.dart';
 import '../../gradiant_icon.dart';
 
-
-
-
-
 class LogInScreen extends StatelessWidget {
 
   final logInPageController = Get.put(LogInPageController());

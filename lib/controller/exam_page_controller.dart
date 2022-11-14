@@ -39,8 +39,8 @@ class ExamPageController extends GetxController {
   var upcomingExamText = "Up Coming".obs;
   var getTime = "".obs;
 
-  var id = "12".obs;
-  var uid = "97dd415d-dca6-46a7-8981-3dd12306e19e".obs;
+  var hw_panel_id = "0".obs;
+  var hw_panel_uid = "0".obs;
 
   var userName="".obs,fullName="".obs,userBatch="".obs,userType="".obs,userId="".obs;
 
@@ -65,10 +65,54 @@ class ExamPageController extends GetxController {
     super.onInit();
 
     //getExamList();
-    getStudentAllJoinClassroomList();
 
     RetriveUserInfo();
+
     updateIsCountingStatus(false);
+  }
+
+  void RetriveUserInfo() async {
+    try {
+
+      var storage =GetStorage();
+      userName(storage.read(pref_user_name)??"");
+      fullName(storage.read(pref_full_name)??"");
+      userBatch(storage.read(pref_user_batch)??"");
+      userType(storage.read(pref_user_type)??"");
+      userId(storage.read(pref_user_id)??"");
+
+
+       _showToast( storage.read(hw_pannel_pref_user_uid));
+       _showToast( storage.read(hw_pannel_pref_user_id));
+      storage.read(hw_pannel_pref_user_uid);
+      storage.read(hw_pannel_pref_user_id);
+
+      updateHwPanelId(storage.read(hw_pannel_pref_user_id));
+      updateHwPanelUId(storage.read(hw_pannel_pref_user_uid));
+
+      getStudentAllJoinClassroomList(
+          hwPanelId: storage.read(hw_pannel_pref_user_id).toString(),
+          hwPanelUId: storage.read(hw_pannel_pref_user_uid).toString());
+
+
+    } catch (e) {
+
+      //code
+
+
+    }
+
+
+    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+
+
   }
 
   @override
@@ -120,7 +164,7 @@ class ExamPageController extends GetxController {
 
   }
 
-  void RetriveUserInfo() async {
+  void RetriveUserInfo1() async {
     try {
 
       var storage =GetStorage();
@@ -238,6 +282,14 @@ class ExamPageController extends GetxController {
   }
 
 
+  updateHwPanelId(String value) {
+    hw_panel_id(value);
+  }
+  updateHwPanelUId(String value) {
+    hw_panel_uid(value);
+  }
+
+
   _checkTime(){
     //startDateTime > currentDateTime
     if(timeDifferenceSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString()))>0){
@@ -329,16 +381,16 @@ class ExamPageController extends GetxController {
 
 
  //get All Join Class room list
- void getStudentAllJoinClassroomList() async{
+ void getStudentAllJoinClassroomList({required String hwPanelId,required String hwPanelUId}) async{
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         try {
           var response = await put(
             // Uri.parse('http://192.168.1.4:8000/api/individual-classroom-quiz-all-list/$classRoomId/'),
-              Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_ALL_CLASS_ROOM_LIST$id/'),
+              Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_ALL_CLASS_ROOM_LIST$hwPanelId/'),
               body: {
-                'uid':"$uid"
+                'uid':"$hwPanelUId"
               }
           );
           _showToast("${response.statusCode}");

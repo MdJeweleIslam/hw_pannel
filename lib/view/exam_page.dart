@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
  import 'package:marquee/marquee.dart';
 import 'package:ntp/ntp.dart';
@@ -967,6 +968,8 @@ class ExamPageScreen extends StatelessWidget {
 
 
                         if(examPageController.isExamStart==1){
+                          _showToast("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}");
+                          saveUserQuizId(quizId: "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}");
                        Get.to(ExamStartPageScreen(
                          quizId:"${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}",
                        ));
@@ -1175,6 +1178,33 @@ class ExamPageScreen extends StatelessWidget {
     );
   }
 
+
+
+  void saveUserQuizId({required String quizId}) async {
+    try {
+
+      var storage =GetStorage();
+      storage.write(hw_panel_pref_quiz_id, quizId);
+
+    } catch (e) {
+
+      //code
+
+
+    }
+
+
+    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+
+
+  }
 
   //utc to local convert and time return
   String utcToLocalTime(String value){

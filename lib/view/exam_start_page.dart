@@ -503,7 +503,7 @@ class ExamStartPageScreen extends StatelessWidget {
             questionId:examStartPageController.shortQuestionModel.value.data![0].questionId.toString(),
             quizId: examStartPageController.shortQuestionModel.value.data![0].quizId.toString(),
             studentId: examStartPageController.studentId.value,
-            uid: examStartPageController.uid.value);
+            uid: examStartPageController.hw_panel_uid.value);
 
         // _submitShortQuestion(shortQuestionAnswerTxt,questionId);
       },
@@ -551,7 +551,7 @@ class ExamStartPageScreen extends StatelessWidget {
               questionId:examStartPageController.mcqQuestionDataModel.value.data![0].questionId.toString(),
               quizId: examStartPageController.mcqQuestionDataModel.value.data![0].quizId.toString(),
               studentId: examStartPageController.studentId.value,
-              uid: examStartPageController.uid.value);
+              uid: examStartPageController.hw_panel_uid.value);
           // _showToast(question_mcq_options_id);
           // selected_question_mcq_options_id=optionList[selectedValue]["question_mcq_options_id"].toString();
           // _submitMCQQuestion(selected_question_mcq_options_id,questionId);

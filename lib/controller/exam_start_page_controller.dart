@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,18 +23,14 @@ import '../view/time_over.dart';
 
 class ExamStartPageController extends GetxController {
 
-
-
-  String quizId="8";
-
-  //
   // ExamStartPageController(this.quizId);
 
   ///timer variable
   var startTxt = "00:00:00".obs;
   Timer? timer;
   var otpCountDownSecond = 0.obs;
-  var uid = "09a8a3fb-0c63-49ec-abc4-657132ff8e9f".obs;
+ // var uid = "09a8a3fb-0c63-49ec-abc4-657132ff8e9f".obs;
+
 
   ///question no variable
   var currentQuestionNo="00".obs;
@@ -47,8 +44,18 @@ class ExamStartPageController extends GetxController {
   /// if 1 then mcq and 2 then short question and 3 question already submit
    var questionType = 0.obs;
 
-   var studentId = "8".obs;
+
    var questionMcqOptionsId="".obs;
+
+
+   //dynamic
+  var studentId = "12".obs;
+  var hwPaneQuizId="10".obs;
+  var hw_panel_id = "12".obs;
+  var hw_panel_uid = "97dd415d-dca6-46a7-8981-3dd12306e19e".obs;
+
+
+
 
   Rx<McqQuestionModel> mcqQuestionDataModel = McqQuestionModel().obs;
   Rx<ShortQuestionModel> shortQuestionModel = ShortQuestionModel().obs;
@@ -62,8 +69,11 @@ class ExamStartPageController extends GetxController {
   void onInit() {
     super.onInit();
    // diffSecond1();
-    loadUserIdFromSharePref();
-    getExamQuestion();
+   //  loadUserIdFromSharePref();
+    loadUidAndQuizIdFromSharePrefThenGetExamQuestion();
+    //getExamQuestion();
+
+
     // diffSecond1();
 
   }
@@ -124,7 +134,7 @@ class ExamStartPageController extends GetxController {
     timer = Timer.periodic(
       oneSec, ( timer) {
         if (second <= 0) {
-          getExamQuestion();
+          loadUidAndQuizIdFromSharePrefThenGetExamQuestion();
           if(allQuestionSubmit==false){
             Get.off(TimeOverScreen());
           }
@@ -166,7 +176,7 @@ class ExamStartPageController extends GetxController {
     timer = Timer.periodic(
       oneSec, ( timer) {
         if (second <= 0) {
-          getExamQuestion();
+          loadUidAndQuizIdFromSharePrefThenGetExamQuestion();
           if(allQuestionSubmit==false){
             Get.off(TimeOverScreen());
           }
@@ -249,6 +259,16 @@ class ExamStartPageController extends GetxController {
      questionType(value);
    }
 
+  updateHwPanelId(String value) {
+    hw_panel_id(value);
+  }
+  updateHwPanelUId(String value) {
+    hw_panel_uid(value);
+  }
+  updateHwPaneQuizId(String value) {
+    hwPaneQuizId(value);
+  }
+
 
    ///update mcq question data
    void updateMcqQuestionModel(McqQuestionModel newData){
@@ -260,17 +280,19 @@ class ExamStartPageController extends GetxController {
    }
 
   //get exam quiz list
-  void getExamQuestion() async{
+  void getExamQuestion({required String hwPanelUid, required String hwPaneQuizId}) async{
+
+
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         try {
           var response = await put(
             // Uri.parse('http://192.168.1.4:8000/api/individual-classroom-quiz-all-list/$classRoomId/'),
-              Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_QUESTION$uid/'),
+              Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_QUESTION$hwPanelUid/'),
               body: {
-                'uid':"$uid",
-                'quiz_id':"$quizId",
+                'uid':"$hwPanelUid",
+                'quiz_id':"$hwPaneQuizId",
               }
           );
 
@@ -384,7 +406,7 @@ class ExamStartPageController extends GetxController {
               selectedValueUpdate(-1);
               updateQuestionMcqOptionsId("");
               updateQuestionType(0);
-              getExamQuestion();
+              loadUidAndQuizIdFromSharePrefThenGetExamQuestion();
             }
 
           }
@@ -412,7 +434,7 @@ class ExamStartPageController extends GetxController {
   void submitShortQuestionAnswer({
     required String answerText, required String studentId,
     required String quizId, required String questionId, required String uid
-  }) async{
+   }) async{
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -447,7 +469,7 @@ class ExamStartPageController extends GetxController {
               updateQuestionMcqOptionsId("");
               updateQuestionType(0);
 
-              getExamQuestion();
+              loadUidAndQuizIdFromSharePrefThenGetExamQuestion();
             }
           }
           else {
@@ -497,17 +519,89 @@ class ExamStartPageController extends GetxController {
 
   }
 
-  loadUserIdFromSharePref() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    try {
-      updateExamEndTimeLocal(utcToLocalDate(sharedPreferences.getString(pref_user_exam_end_time).toString()));
-     // updateExamEndTimeLocal(sharedPreferences.getString(pref_user_exam_end_time).toString());
-    //  _showToast(sharedPreferences.getString(pref_user_exam_end_time).toString());
 
-    } catch(e) {
+  void loadUserIdFromSharePref() async {
+    try {
+
+      var storage =GetStorage();
+
+
+
+      storage.read(hw_pannel_pref_user_uid);
+      storage.read(hw_pannel_pref_user_id);
+
+      updateHwPanelId(storage.read(hw_pannel_pref_user_id));
+      updateHwPanelUId(storage.read(hw_pannel_pref_user_uid));
+
+      updateHwPaneQuizId(storage.read(hw_panel_pref_quiz_id));
+      Fluttertoast.cancel();
+      _showToast("quiz id= "+ storage.read(hw_panel_pref_quiz_id));
+      // _showToast( storage.read(hw_pannel_pref_user_id));
+
+      getExamQuestion(hwPanelUid: storage.read(hw_pannel_pref_user_uid), hwPaneQuizId: storage.read(hw_panel_pref_quiz_id));
+
+
+    } catch (e) {
+
       //code
+
+
     }
 
+
+    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+
+
   }
+
+  void loadUidAndQuizIdFromSharePrefThenGetExamQuestion() async {
+    try {
+
+      var storage =GetStorage();
+      updateHwPaneQuizId(storage.read(hw_panel_pref_quiz_id));
+      Fluttertoast.cancel();
+      _showToast("quiz id= "+ storage.read(hw_panel_pref_quiz_id));
+      getExamQuestion(hwPanelUid: storage.read(hw_pannel_pref_user_uid), hwPaneQuizId: storage.read(hw_panel_pref_quiz_id));
+
+
+    } catch (e) {
+
+      //code
+
+
+    }
+
+
+    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+
+
+  }
+
+  // loadUserIdFromSharePref() async {
+  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  //   try {
+  //     updateExamEndTimeLocal(utcToLocalDate(sharedPreferences.getString(pref_user_exam_end_time).toString()));
+  //    // updateExamEndTimeLocal(sharedPreferences.getString(pref_user_exam_end_time).toString());
+  //   //  _showToast(sharedPreferences.getString(pref_user_exam_end_time).toString());
+  //
+  //   } catch(e) {
+  //     //code
+  //   }
+  //
+  // }
 
 }

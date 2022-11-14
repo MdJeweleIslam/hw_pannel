@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hw_pannel/view/HomePage.dart';
 import 'package:hw_pannel/view/exam_page.dart';
 import 'package:hw_pannel/view/exam_start_page.dart';
 import 'package:hw_pannel/view/log_in_page.dart';
@@ -33,8 +34,8 @@ class MyApp extends StatelessWidget {
          // Background(),
          // LogInScreen(),
       //  ExamStartPageScreen(quizId: '8', examEndTime: 'df',),
-            LogInScreen(),
-         //   ExamPageScreen(),
+           // LogInScreen(),
+         HomePageScreen(),
          // TimeOverScreen(),
          // CreateShortQuestionScreen("1","1"),
 

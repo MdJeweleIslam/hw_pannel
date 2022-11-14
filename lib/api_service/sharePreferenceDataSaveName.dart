@@ -11,6 +11,7 @@ String pref_user_id = "$pref_file_base_name.pref_user_id";
 
 String hw_pannel_pref_user_uid = "$pref_file_base_name.hw_pannel_pref_user_uid";
 String hw_pannel_pref_user_id = "$pref_file_base_name.hw_pannel_pref_user_id";
+String hw_panel_pref_quiz_id = "$pref_file_base_name.hw_panel_pref_quiz_id";
 
 
 String pref_user_api_key = "$pref_file_base_name.pref_user_api_key";
