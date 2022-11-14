@@ -35,8 +35,8 @@ class ExamPageController extends GetxController {
 
   var isCountingStatus = false.obs;
 
-  //var upcomingExamText = "Start Exam".obs;
-  var upcomingExamText = "Up Coming".obs;
+  var upcomingExamText = "Start Exam".obs;
+  // var upcomingExamText = "Up Coming".obs;
   var getTime = "".obs;
 
   var hw_panel_id = "0".obs;
