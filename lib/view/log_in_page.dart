@@ -194,7 +194,7 @@ class LogInScreen extends StatelessWidget {
 
           //focusNode: phoneFocusNode,
           controller: logInPageController.userNameController.value,
-        //  textInputAction: TextInputAction.next,
+          textInputAction: TextInputAction.next,
           style: const TextStyle(color: Colors.black, fontSize: 18),
           decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),

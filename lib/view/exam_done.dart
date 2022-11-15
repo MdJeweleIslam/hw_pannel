@@ -49,7 +49,7 @@ class ExamDoneScreen extends StatelessWidget {
                          ),
                          SizedBox(height: 10,),
                          Text(
-                           "Your answered was successfully submitted.",
+                           "Your answered has been successfully submitted.",
                            textAlign: TextAlign.center,
                            style:   TextStyle(
                                color: Colors.black.withOpacity(.5),

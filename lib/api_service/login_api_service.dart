@@ -99,10 +99,10 @@ class LogInApiService {
 
             // _showToast(response.statusCode.toString());
           if (response.statusCode == 200) {
-           Get.back();
+          // Get.back();
 
           List data = jsonDecode(response.body);
-
+          saveUserEmail(email: data[0]["email"].toString());
            userAutoLogIn(
                username: data[0]["username"].toString(),
                email: data[0]["email"].toString(),
@@ -242,6 +242,31 @@ class LogInApiService {
       var storage =GetStorage();
       storage.write(hw_pannel_pref_user_uid, uId);
       storage.write(hw_pannel_pref_user_id, id);
+    } catch (e) {
+
+      //code
+
+
+    }
+
+
+    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
+
+
+  }
+  void saveUserEmail({required String email}) async {
+    try {
+
+      var storage =GetStorage();
+      storage.write(pref_user_email, email);
+
     } catch (e) {
 
       //code

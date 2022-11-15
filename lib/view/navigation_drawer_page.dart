@@ -14,11 +14,15 @@ import 'package:hw_pannel/view/log_in_page.dart';
 import '../../../gradiant_icon.dart';
 import '../../Colors.dart';
  import '../../controller/forget_password_page_controller.dart';
+import '../controller/navigation_drawer_page_controller.dart';
 import 'background.dart';
 
 class NavigationDrawerPasswordScreen extends StatelessWidget {
+  String name,email;
 
- // final forgetPasswordPageController = Get.put(ForgetPasswordPageController());
+  NavigationDrawerPasswordScreen(this.name,this.email);
+
+  final navigationDrawerPageController = Get.put(NavigationDrawerPageController());
 
 
   late String userId;
@@ -86,14 +90,18 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
 
   Widget _buildUserDrawerHeader() {
     return UserAccountsDrawerHeader(
-        accountName: Text("Abdullah",
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 20
+        accountName:Text(
+          name,
+         // navigationDrawerPageController.userName.value,
+          // "Abdullah",
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 20
+          ),
         ),
-        ),
-        accountEmail:  Text(
-          "abdullah272056@gmail.com",
+        accountEmail:Text(
+          email,
+          // "abdullah272056@gmail.com",
           style: TextStyle(
               color: Colors.white,
               fontSize: 15
@@ -108,7 +116,7 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
         child: CircleAvatar(
           backgroundColor: awsStartColor,
           backgroundImage: AssetImage('assets/images/person_male.png'),
-          radius: 34,
+          radius: 34.5,
         ),
       ),
 

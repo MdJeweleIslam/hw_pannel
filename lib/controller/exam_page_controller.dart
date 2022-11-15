@@ -42,7 +42,7 @@ class ExamPageController extends GetxController {
   var hw_panel_id = "0".obs;
   var hw_panel_uid = "0".obs;
 
-  var userName="".obs,fullName="".obs,userBatch="".obs,userType="".obs,userId="".obs;
+  var userName="".obs,fullName="".obs,userBatch="".obs,userType="".obs,userId="".obs,email="".obs;
 
   var classRoomQuizList=[].obs;
 
@@ -76,6 +76,7 @@ class ExamPageController extends GetxController {
 
       var storage =GetStorage();
       userName(storage.read(pref_user_name)??"");
+      email(storage.read(pref_user_email)??"");
       fullName(storage.read(pref_full_name)??"");
       userBatch(storage.read(pref_user_batch)??"");
       userType(storage.read(pref_user_type)??"");
@@ -114,6 +115,7 @@ class ExamPageController extends GetxController {
 
 
   }
+
 
   @override
   void dispose() {
@@ -202,7 +204,7 @@ class ExamPageController extends GetxController {
     Duration diff = dt1.difference(dt2);
 
     if (diff.inSeconds > 0) {
-      _showToast('> 0');
+      // _showToast('> 0');
       updateOtpCountDownSecond(diff.inSeconds);
       startTimer(diff.inSeconds);
     }else{

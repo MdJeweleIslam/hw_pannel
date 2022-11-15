@@ -32,7 +32,7 @@ class ExamStartPageScreen extends StatelessWidget {
           // backgroundColor: Colors.backGroundColor,
           body:RefreshIndicator(
             color: Colors.white,
-            backgroundColor: Colors.purple,
+            backgroundColor: Colors.blue,
             triggerMode: RefreshIndicatorTriggerMode.anywhere,
             onRefresh: () async {
 

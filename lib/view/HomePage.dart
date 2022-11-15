@@ -31,10 +31,10 @@ class HomePageScreen extends StatelessWidget {
           // backgroundColor: Colors.backGroundColor,
           key: _key,
 
-          drawer: NavigationDrawerPasswordScreen(),
+          drawer: NavigationDrawerPasswordScreen(homePageController.fullName.value,homePageController.email.value),
           body: RefreshIndicator(
             color: Colors.white,
-            backgroundColor: Colors.purple,
+            backgroundColor: Colors.blue,
             triggerMode: RefreshIndicatorTriggerMode.anywhere,
             onRefresh: () async {
 
@@ -157,7 +157,7 @@ class HomePageScreen extends StatelessWidget {
                                                   },
                                                   child: _buildCardItem1(
 
-                                                    fieldValue: 'Start Exam',
+                                                    fieldValue: 'My Exam',
                                                     imageLink: 'assets/images/exam_icon.png',
 
                                                   ),

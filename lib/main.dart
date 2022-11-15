@@ -33,10 +33,10 @@ class MyApp extends StatelessWidget {
           children: [
 
          // Background(),
-         // LogInScreen(),
+
           //ExamStartPageScreen(quizId: '8', examEndTime: 'df',),
-         // LogInScreen(),
-        HomePageScreen(),
+          LogInScreen(),
+       // HomePageScreen(),
        //  ExamDoneScreen(),
          // CreateShortQuestionScreen("1","1"),
 
