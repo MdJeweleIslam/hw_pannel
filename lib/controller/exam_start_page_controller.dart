@@ -39,8 +39,9 @@ class ExamStartPageController extends GetxController {
 
   var allQuestionSubmit=false.obs;
 
-  var examEndTimeLocal="".obs;
+
   var currentTimeUtc="".obs;
+  var examEndTimeUtc="".obs;
   /// if 1 then mcq and 2 then short question and 3 question already submit
    var questionType = 0.obs;
 
@@ -220,13 +221,17 @@ class ExamStartPageController extends GetxController {
     startTxt(value);
   }
 
-  updateExamEndTimeLocal(String value) {
-    examEndTimeLocal(value);
-  }
+  // updateExamEndTimeLocal(String value) {
+  //   examEndTimeLocal(value);
+  // }
 
 
   updateCurrentTimeUtc(String value) {
     currentTimeUtc(value);
+  }
+
+  updateExamEndTimeUtc(String value) {
+    examEndTimeUtc(value);
   }
 
   ///update current question no
@@ -306,6 +311,7 @@ class ExamStartPageController extends GetxController {
           if (response.statusCode == 200) {
             var data = jsonDecode(response.body);
             updateCurrentTimeUtc(utcToLocalDate(data["current_timess"].toString()));
+            updateExamEndTimeUtc(utcToLocalDate(data["e_new_date"].toString()));
             if(data["data"][0]["is_mcq_questions"]){
               // _showToast("mcq");
               McqQuestionModel mcqQuestionModel=mcqQuestionModelFromJson(response.body);
@@ -349,7 +355,7 @@ class ExamStartPageController extends GetxController {
             //
             // DateTime dt1 = DateTime.parse("2021-12-23 11:50:50");
             // DateTime dt2 = DateTime.parse("2021-12-23 11:40:10");
-            diffSecond(DateTime.parse(utcToLocalDate(examEndTimeLocal.value)),DateTime.parse(currentTimeUtc.value),);
+            diffSecond(DateTime.parse(examEndTimeUtc.value),DateTime.parse(currentTimeUtc.value),);
 
 
            // diffSecond(dt1,dt2);
@@ -551,7 +557,7 @@ class ExamStartPageController extends GetxController {
 
       updateStudentId(storage.read(hw_pannel_pref_user_id));
 
-      updateExamEndTimeLocal(storage.read(pref_user_exam_end_time).toString());
+     // updateExamEndTimeLocal(storage.read(pref_user_exam_end_time).toString());
 
       // Fluttertoast.cancel();
 

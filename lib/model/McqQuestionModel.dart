@@ -13,6 +13,7 @@ class McqQuestionModel {
      this.totalQuestions,
      this.questionsAnswerSubmitted,
      this.currentTimess,
+     this.eNewDate,
   });
 
   bool? error;
@@ -21,6 +22,8 @@ class McqQuestionModel {
   int? totalQuestions;
   int? questionsAnswerSubmitted;
   String? currentTimess;
+  String? eNewDate;
+
 
   factory McqQuestionModel.fromJson(Map<String, dynamic> json) => McqQuestionModel(
     error: json["error"],
@@ -29,6 +32,7 @@ class McqQuestionModel {
     totalQuestions: json["total_questions"],
     questionsAnswerSubmitted: json["questions_answer_submitted"],
     currentTimess: json["current_timess"],
+    eNewDate:  json["e_new_date"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -38,6 +42,7 @@ class McqQuestionModel {
     "total_questions": totalQuestions,
     "questions_answer_submitted": questionsAnswerSubmitted,
     "current_timess": currentTimess ,
+    "e_new_date": eNewDate,
   };
 }
 

@@ -16,6 +16,7 @@ class ShortQuestionModel {
       this.totalQuestions,
       this.questionsAnswerSubmitted,
       this.currentTimess,
+    this.eNewDate,
   });
 
   bool? error;
@@ -24,6 +25,7 @@ class ShortQuestionModel {
   int? totalQuestions;
   int?questionsAnswerSubmitted;
   String? currentTimess;
+  String? eNewDate;
 
   factory ShortQuestionModel.fromJson(Map<String, dynamic> json) => ShortQuestionModel(
     error: json["error"],
@@ -32,6 +34,7 @@ class ShortQuestionModel {
     totalQuestions: json["total_questions"],
     questionsAnswerSubmitted: json["questions_answer_submitted"],
     currentTimess:json["current_timess"],
+    eNewDate:  json["e_new_date"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -41,6 +44,7 @@ class ShortQuestionModel {
     "total_questions": totalQuestions,
     "questions_answer_submitted": questionsAnswerSubmitted,
     "current_timess": currentTimess,
+    "e_new_date": eNewDate,
   };
 }
 

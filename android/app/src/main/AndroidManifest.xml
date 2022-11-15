@@ -2,7 +2,7 @@
     package="com.example.hw_pannel">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="hw_pannel"
+        android:label="Arena Class"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

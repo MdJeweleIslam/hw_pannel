@@ -103,7 +103,9 @@ class ExamStartPageScreen extends StatelessWidget {
                               Obx(() =>
                                   Text(
                                     "Exam End time: " +
-                                        examStartPageController.utcToLocalDate(examStartPageController.examEndTimeLocal.value)
+                                        examStartPageController.examEndTimeUtc
+                                            .value
+                                       // examStartPageController.utcToLocalDate(examStartPageController.examEndTimeLocal.value)
                                     ,
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
