@@ -90,11 +90,10 @@ class ExamPageController extends GetxController {
 
       updateHwPanelId(storage.read(hw_pannel_pref_user_id));
       updateHwPanelUId(storage.read(hw_pannel_pref_user_uid));
-
+     // _showToast( storage.read(hw_pannel_pref_user_uid));
       getStudentAllJoinClassroomList(
           hwPanelId: storage.read(hw_pannel_pref_user_id).toString(),
           hwPanelUId: storage.read(hw_pannel_pref_user_uid).toString());
-
 
     } catch (e) {
 
@@ -390,12 +389,13 @@ class ExamPageController extends GetxController {
         try {
           var response = await put(
             // Uri.parse('http://192.168.1.4:8000/api/individual-classroom-quiz-all-list/$classRoomId/'),
+            // Uri.parse('http://192.168.1.4:8000/api/individual-classroom-quiz-all-list/$classRoomId/'),
               Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_ALL_CLASS_ROOM_LIST$hwPanelId/'),
               body: {
                 'uid':"$hwPanelUId"
               }
           );
-          // _showToast("${response.statusCode}");
+         //  _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
 
             // _showToast("success");

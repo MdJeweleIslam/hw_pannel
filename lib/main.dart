@@ -35,8 +35,8 @@ class MyApp extends StatelessWidget {
          // Background(),
 
           //ExamStartPageScreen(quizId: '8', examEndTime: 'df',),
-          LogInScreen(),
-       // HomePageScreen(),
+         // LogInScreen(),
+        HomePageScreen(),
        //  ExamDoneScreen(),
          // CreateShortQuestionScreen("1","1"),
 

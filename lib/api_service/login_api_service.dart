@@ -156,9 +156,11 @@ class LogInApiService {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         try {
-
+        //  var response = await http.post(Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_AUTO_LOG_IN'),
           var response = await http.post(
-              Uri.parse('http://192.168.1.4:8002/api/auto-login/'),
+              // Uri.parse('http://192.168.1.4:8002/api/auto-login/'),
+
+              Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_AUTO_LOG_IN'),
               body: {
                 'username': username,
                 'email': email,
@@ -172,6 +174,7 @@ class LogInApiService {
           if (response.statusCode == 200) {
             Get.back();
             var data = jsonDecode(response.body);
+
             saveUserUId(uId: data['uid'].toString(), id: data['id'].toString());
             Get.offAll(HomePageScreen());
 
@@ -207,7 +210,6 @@ class LogInApiService {
     required String batch,required String user_type,
     required String user_id,required String user_api_key}) async {
     try {
-
       var storage =GetStorage();
       storage.write(pref_user_name, name);
       storage.write(pref_full_name, fullName);
@@ -238,7 +240,6 @@ class LogInApiService {
 
   void saveUserUId({required String uId,required String id,}) async {
     try {
-
       var storage =GetStorage();
       storage.write(hw_pannel_pref_user_uid, uId);
       storage.write(hw_pannel_pref_user_id, id);

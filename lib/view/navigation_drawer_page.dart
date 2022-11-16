@@ -73,7 +73,9 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
             _buildDrawerItem(
               text: 'Log Out',
               textIconColor: awsEndColor,
-              onTap: ()=>navigate(3),
+              onTap: (){
+                Get.offAll(()=> LogInScreen());
+              },
               iconLink: 'assets/images/log_out_icon.png',
               tileColor: Colors.transparent,
             ),

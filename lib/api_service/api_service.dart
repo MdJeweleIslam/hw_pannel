@@ -1,6 +1,7 @@
 
 String BASE_URL = "https://hw.arenaclass.stream";
-String BASE_URL_EXAM_PANNEL = "http://192.168.1.4:8002/";
+String BASE_URL_EXAM_PANNEL1 = "http://192.168.1.4:8002/";
+String BASE_URL_EXAM_PANNEL = "https://exam.arenaclass.stream/";
 String BASE_URL_API = "https://hw.arenaclass.stream/";
 
 String SUB_URL_API_LOG_IN = "apk/login/";
@@ -11,6 +12,7 @@ String SUB_URL_API_LOG_IN = "apk/login/";
 ///cross login
 String SUB_URL_API_CROSSS_LOG_IN = "cross-login/";
 // String SUB_URL_API_CROSSS_LOG_IN = "cross-login/40f8f7811abb4abb96f3dfb3757ddf88/";
+
 String SUB_URL_API_AUTO_LOG_IN = "api/auto-login/";
 
 
