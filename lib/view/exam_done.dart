@@ -5,11 +5,13 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../Colors.dart';
- import 'HomePage.dart';
+ import '../controller/exam_start_page_controller.dart';
+import 'HomePage.dart';
 import 'background.dart';
 import 'exam_page.dart';
 
-class TimeOverScreen extends StatelessWidget {
+class ExamDoneScreen extends StatelessWidget {
+  final examStartPageController = Get.put(ExamStartPageController()).timer?.cancel();
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +28,35 @@ class TimeOverScreen extends StatelessWidget {
                  child: Column(
                    mainAxisAlignment: MainAxisAlignment.center,
                    children: [
-                     Expanded(child: Container(
+                     Expanded(child: Column(
+                       mainAxisAlignment: MainAxisAlignment.center,
                        // color: Colors.blueGrey,
-                       child:  Image.asset(
-                         "assets/images/time_up.gif",
-                         height: 200.0,
-                         // height: double.infinity,
-                         width: 300.0,
-                         // width: double.infinity,
-                       ),
+                       children: [
+                         Image.asset(
+                           "assets/images/icon_response_submit.png",
+                           height: 100.0,
+                           width: 100.0,
+
+                         ),
+                         SizedBox(height: 30,),
+                         Text(
+                           "Thank You!",
+                           textAlign: TextAlign.center,
+                           style: TextStyle(
+                               color: Colors.black.withOpacity(.7),
+                               fontSize: 30,
+                               fontWeight: FontWeight.bold),
+                         ),
+                         SizedBox(height: 10,),
+                         Text(
+                           "Your answered has been successfully submitted.",
+                           textAlign: TextAlign.center,
+                           style:   TextStyle(
+                               color: Colors.black.withOpacity(.5),
+                               fontSize: 15,
+                               fontWeight: FontWeight.w500),
+                         ),
+                       ],
                      ),),
 
                     Container(
@@ -60,8 +82,9 @@ class TimeOverScreen extends StatelessWidget {
   Widget _buildHomeButton() {
     return ElevatedButton(
       onPressed: () {
-        // Get.off(ExamPageScreen());
+      //  Get.off(ExamPageScreen());
         Get.offAll(HomePageScreen());
+        // Get.off(HomePageScreen());
       },
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,

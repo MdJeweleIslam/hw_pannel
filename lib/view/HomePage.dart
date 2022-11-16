@@ -3,21 +3,22 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:hw_pannel/view/exam_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../Colors.dart';
 
+import '../api_service/sharePreferenceDataSaveName.dart';
 import '../controller/home_page_controller.dart';
 import 'background.dart';
-import 'exam_start_page.dart';
 import 'navigation_drawer_page.dart';
 
 class HomePageScreen extends StatelessWidget {
 
-  final examPageController = Get.put(HomePageController());
+  final homePageController = Get.put(HomePageController());
+  // final examPageController = Get.lazyPut(HomePageController());
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   final Uri _url = Uri.parse('https://arenawebsecurity.net/profile#paymentID');
@@ -26,141 +27,189 @@ class HomePageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          backgroundColor: Colors.backGroundColor,
+          backgroundColor: backGroundColor,
           // backgroundColor: Colors.backGroundColor,
           key: _key,
 
-          drawer: NavigationDrawerPasswordScreen(),
-          body: SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: Stack(
-                children: [
-                  Background(),
+          drawer: NavigationDrawerPasswordScreen(homePageController.fullName.value,homePageController.email.value),
+          body: RefreshIndicator(
+            color: Colors.white,
+            backgroundColor: Colors.blue,
+            triggerMode: RefreshIndicatorTriggerMode.anywhere,
+            onRefresh: () async {
 
-                  Column(
-                    children: [
+              homePageController.onInit();
 
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(00, 20, 00, 10),
+              await Future.delayed(const Duration(seconds: 1));
+              //updateDataAfterRefresh();
+            },
+            child:CustomScrollView(
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: true,
+                  child: Column(
+                    children: <Widget>[
 
-                        child: Row(
-                          children: [
-                           const SizedBox(width: 20,),
-                           InkWell(
-                             onTap: (){
-                               _key.currentState!.openDrawer();
-                             },
-                             child:  Container(
-                               decoration: const BoxDecoration(
-                                 borderRadius: BorderRadius.only(
-                                     topRight: Radius.circular(5.0),
-                                     bottomRight: Radius.circular(5.0),
-                                     topLeft: Radius.circular(5.0),
-                                     bottomLeft: Radius.circular(5.0)),
-                                 color: Colors.white,
-                               ),
-                               padding: const EdgeInsets.all(7),
+                      Expanded(child:
+                      Stack(
+                        children: [
+                          Background(),
 
-                               child:const Icon(Icons.menu_rounded,
-                                 size: 22,
-                                 color: awsEndColor,
-                               ),
-                             ),
-                           ),
-                            const SizedBox(width: 20,),
-                            Expanded(child: Text("Home Page",
-                            style: TextStyle(
-                               fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: awsEndColor
-                            ),
-                            ))
-                          ],
-                        ),
-                      ),
+                          Column(
+                            children: [
 
-                      Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  "assets/images/aws.png",
-                                  width: 180,
-                                  height: 90,
-                                ),
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(00, 20, 00, 10),
 
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                _buildCardItem(
-                                  fieldName: 'Batch Name',
-                                  fieldValue: 'Test',
-                                  imageLink: 'assets/images/batch_icon.png',
-
-                                ),
-
-                                _buildCardItem(
-                                  fieldName: 'Total Pending Assignment',
-                                  fieldValue: '1',
-                                  imageLink: 'assets/images/assignment_pending_icon.png',
-
-                                ),
-
-                                _buildCardItem(
-                                  fieldName: 'Number of Assignment Done',
-                                  fieldValue: '2',
-                                  imageLink: 'assets/images/submit_assignment1.png',
-
-                                ),
-
-                                Row(
+                                child: Row(
                                   children: [
-                                    Expanded(
-
-
-                                      child: InkWell(
-                                        onTap: (){
-                                          _launchUrl();
-                                        },
-                                        child: _buildCardItem1(
-
-                                          fieldValue: 'Pay Now',
-                                          imageLink: 'assets/images/pay_now_icon.png',
-
+                                    const SizedBox(width: 20,),
+                                    InkWell(
+                                      onTap: (){
+                                        _key.currentState!.openDrawer();
+                                      },
+                                      child:  Container(
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(5.0),
+                                              bottomRight: Radius.circular(5.0),
+                                              topLeft: Radius.circular(5.0),
+                                              bottomLeft: Radius.circular(5.0)),
+                                          color: Colors.white,
                                         ),
+                                        padding: const EdgeInsets.all(7),
 
-                                      )
+                                        child:const Icon(Icons.menu_rounded,
+                                          size: 22,
+                                          color: awsEndColor,
+                                        ),
+                                      ),
                                     ),
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: (){
-                                          Get.to(ExamPageScreen());
-
-                                        },
-                                        child: _buildCardItem1(
-
-                                          fieldValue: 'Start Exam',
-                                          imageLink: 'assets/images/exam_icon.png',
-
-                                        ),
-
-                                      )
-                                     )
+                                    const SizedBox(width: 20,),
+                                    Expanded(child: Text("Home Page",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500,
+                                          color: awsEndColor
+                                      ),
+                                    ))
                                   ],
                                 ),
+                              ),
+
+                              Expanded(
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                          "assets/images/aws.png",
+                                          width: 180,
+                                          height: 90,
+                                        ),
+
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        _buildCardItem(
+                                          fieldName: 'Batch Name',
+                                          fieldValue: 'Test',
+                                          imageLink: 'assets/images/batch_icon.png',
+
+                                        ),
+
+                                        _buildCardItem(
+                                          fieldName: 'Total Pending Assignment',
+                                          fieldValue: '1',
+                                          imageLink: 'assets/images/assignment_pending_icon.png',
+
+                                        ),
+
+                                        _buildCardItem(
+                                          fieldName: 'Number of Assignment Done',
+                                          fieldValue: '2',
+                                          imageLink: 'assets/images/submit_assignment1.png',
+
+                                        ),
+
+                                        Row(
+                                          children: [
+                                            Expanded(
+
+
+                                                child: InkWell(
+                                                  onTap: (){
+                                                    _launchUrl();
+                                                  },
+                                                  child: _buildCardItem1(
+
+                                                    fieldValue: 'Pay Now',
+                                                    imageLink: 'assets/images/pay_now_icon.png',
+
+                                                  ),
+
+                                                )
+                                            ),
+                                            Expanded(
+                                                child: InkWell(
+                                                  onTap: (){
+                                                    Get.to(ExamPageScreen());
+
+                                                  },
+                                                  child: _buildCardItem1(
+
+                                                    fieldValue: 'My Exam',
+                                                    imageLink: 'assets/images/exam_icon.png',
+
+                                                  ),
+
+                                                )
+                                            )
+                                          ],
+                                        ),
 
 
 
-                                //_buildFinishedExamList()
+                                        //_buildFinishedExamList()
 
-                              ],
-                            ),
-                          )),
+                                      ],
+                                    ),
+                                  )),
+                            ],
+                          )
+                        ],
+                      )
+
+                      ),
+
                     ],
-                  )
-                ],
-              ))),
+                  ),
+                ),
+              ],
+            ) ,
+
+
+
+
+
+            // ListView(
+            //   physics:  AlwaysScrollableScrollPhysics(),
+            //   shrinkWrap: false,
+            //   children: [
+            //
+            //
+            //
+            //   ],
+            // )
+
+
+
+
+          )
+
+
+
+
+      ),
     );
   }
 
@@ -323,7 +372,6 @@ class HomePageScreen extends StatelessWidget {
     );
   }
 
-
   Widget _buildCardItem({required String fieldValue,required String fieldName,required String imageLink}) {
     return Container(
       decoration: BoxDecoration(
@@ -400,7 +448,6 @@ class HomePageScreen extends StatelessWidget {
     );
   }
 
-
   Widget _buildCardItem1({required String fieldValue,required String imageLink}) {
     return Container(
       decoration: BoxDecoration(
@@ -464,8 +511,6 @@ class HomePageScreen extends StatelessWidget {
     }
   }
 
-
-
   //toast create
   _showToast(String message) {
     Fluttertoast.showToast(
@@ -478,9 +523,19 @@ class HomePageScreen extends StatelessWidget {
         fontSize: 16.0);
   }
 
-
   ///get data from share pref
   loadUserIdFromSharePref() async {
+    try {
+      var storage =GetStorage();
+      storage.read(hw_pannel_pref_user_uid);
+      storage.read(hw_pannel_pref_user_id);
+    } catch(e) {
+      //code
+    }
+
+  }
+
+  loadUserIdFromSharePref1() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
       // setState(() {
