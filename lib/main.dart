@@ -32,13 +32,7 @@ class MyApp extends StatelessWidget {
         body: Stack(
           children: [
 
-         // Background(),
-
-          //ExamStartPageScreen(quizId: '8', examEndTime: 'df',),
-         // LogInScreen(),
-        HomePageScreen(),
-       //  ExamDoneScreen(),
-         // CreateShortQuestionScreen("1","1"),
+             HomePageScreen(),
 
           ],
         ),
