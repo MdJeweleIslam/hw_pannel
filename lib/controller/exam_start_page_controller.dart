@@ -355,6 +355,7 @@ class ExamStartPageController extends GetxController {
             //
             // DateTime dt1 = DateTime.parse("2021-12-23 11:50:50");
             // DateTime dt2 = DateTime.parse("2021-12-23 11:40:10");
+            timer?.cancel();
             diffSecond(DateTime.parse(examEndTimeUtc.value),DateTime.parse(currentTimeUtc.value),);
 
 

@@ -16,6 +16,7 @@ import '../Colors.dart';
 import '../api_service/api_service.dart';
 import '../api_service/sharePreferenceDataSaveName.dart';
 import '../model/individual_classroom_quiz_all_list_model.dart';
+import '../view/HomePage.dart';
 
 class ExamPageController extends GetxController {
 
@@ -24,7 +25,7 @@ class ExamPageController extends GetxController {
   var answerOption="".obs;
   var optionList = [].obs;
 
-  late Timer timer;
+  Timer? timer;
   var startTxt = "00:00:00:00".obs;
 
   //if value 0 then exam finished or not start ,
@@ -51,8 +52,8 @@ class ExamPageController extends GetxController {
   //if question type 2 then mcq question show
   var questionType = 0.obs;
 
-  DateTime dt1 = DateTime.parse("2021-12-23 11:50:50") ;
-  DateTime dt2 = DateTime.parse("2021-12-23 11:40:10") ;
+  // DateTime dt1 = DateTime.parse("2021-12-23 11:50:50") ;
+  // DateTime dt2 = DateTime.parse("2021-12-23 11:40:10") ;
 
   var startDateTime= "".obs;
   var endDateTime = "".obs;
@@ -69,6 +70,12 @@ class ExamPageController extends GetxController {
     RetriveUserInfo();
 
     updateIsCountingStatus(false);
+  }
+
+
+  void goToHomePage() {
+    onInit();
+    Get.offAll(HomePageScreen());
   }
 
   void RetriveUserInfo() async {
@@ -220,9 +227,12 @@ class ExamPageController extends GetxController {
   void startTimer(var second) {
 
     const oneSec = Duration(seconds: 1);
+
+
     timer = Timer.periodic(
       oneSec,
           (Timer timer) {
+
         if (second <= 0) {
           // _upcomingExamText = "Start Exam";
           updateUpcomingExamText("Start Exam");
@@ -237,13 +247,15 @@ class ExamPageController extends GetxController {
           updateStartTxt(_printDuration(Duration(seconds: second)));
          // _startTxt = _printDuration(Duration(seconds: second));
         }
+
       },
     );
+
   }
 
   ///timer cancel
   void cancelTimer(){
-    timer.cancel();
+    timer?.cancel();
     updateStartTxt("00:00:00");
 
   }
@@ -306,6 +318,8 @@ class ExamPageController extends GetxController {
       }
     }
 
+    // timer.cancel();
+    timer?.cancel();
     diffSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString()));
 
     return;
@@ -403,6 +417,9 @@ class ExamPageController extends GetxController {
             IndividualClassroomQuizAllListModel individualClassroomQuizAllListModel= individualClassroomQuizAllListModelFromJson(data);
 
             classRoomQuizList(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo);
+
+
+
 
 
             for(int i=0;i<classRoomQuizList.length;i++){

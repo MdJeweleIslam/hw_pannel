@@ -994,7 +994,9 @@ class ExamStartPageScreen extends StatelessWidget {
           Fluttertoast.cancel();
           _showToast("Please select answer! ");
           return;
-        } else {
+        }
+
+        else {
 
           examStartPageController.submitMcqQuestionAnswer(
               questionMcqOptionsId:examStartPageController.questionMcqOptionsId.value,
@@ -1002,10 +1004,14 @@ class ExamStartPageScreen extends StatelessWidget {
               quizId: examStartPageController.mcqQuestionDataModel.value.data![0].quizId.toString(),
               studentId: examStartPageController.studentId.value,
               uid: examStartPageController.hw_panel_uid.value);
+
           // _showToast(question_mcq_options_id);
           // selected_question_mcq_options_id=optionList[selectedValue]["question_mcq_options_id"].toString();
           // _submitMCQQuestion(selected_question_mcq_options_id,questionId);
           // _showToast(selected_question_mcq_options_id);
+
+
+
         }
       },
       style: ElevatedButton.styleFrom(
