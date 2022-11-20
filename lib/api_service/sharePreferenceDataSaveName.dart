@@ -6,6 +6,10 @@ String pref_full_name = "$pref_file_base_name.pref_full_name";
 String pref_user_email = "$pref_file_base_name.pref_user_email";
 String pref_user_batch_name = "$pref_file_base_name.pref_user_batch_name";
 
+String pref_user_total_pending_assignment_count = "$pref_file_base_name.pref_user_total_pending_assignment_count";
+String pref_user_total_done_assignment_count = "$pref_file_base_name.pref_user_total_done_assignment_count";
+String pref_user_total_assignment_count = "$pref_file_base_name.pref_user_total_assignment_count";
+
 String pref_user_batch = "$pref_file_base_name.pref_user_batch";
 String pref_user_type = "$pref_file_base_name.pref_user_type";
 String pref_user_id = "$pref_file_base_name.pref_user_id";

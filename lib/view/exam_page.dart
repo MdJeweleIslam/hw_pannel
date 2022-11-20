@@ -13,7 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Colors.dart';
 import '../api_service/sharePreferenceDataSaveName.dart';
  import '../controller/exam_page_controller.dart';
- import 'background.dart';
+ import '../controller/exam_start_page_controller.dart';
+import 'background.dart';
 import 'exam_done.dart';
 import 'exam_start_page.dart';
 import 'navigation_drawer_page.dart';
@@ -115,6 +116,7 @@ class ExamPageScreen extends StatelessWidget {
                                    Obx(() => Text("start time: "+examPageController.startDateTime.value)),
                                    Obx(() => Text("end time: "+examPageController.endDateTime.value)),
                                    Obx(() => Text("end time utc: "+examPageController.endDateTimeUtc.value)),
+
                                    _buildFinishedExamList()
                                  ],
                                );
@@ -288,11 +290,7 @@ class ExamPageScreen extends StatelessWidget {
                       color:
                       Colors.black.withOpacity(.1),
                     ),
-                    padding: EdgeInsets.only(
-                        left: 20,
-                        right: 20,
-                        top: 20,
-                        bottom: 00),
+
                     margin: EdgeInsets.only(
                         left: 20,
                         right: 20,
@@ -300,249 +298,362 @@ class ExamPageScreen extends StatelessWidget {
                         bottom: 10),
                     child: Column(
                       children: [
+                        Row(
+                          children: [
+                            Expanded(child: Container()),
+                            Align(alignment: Alignment.topRight,
+                            child:  IconButton(
+                              icon: Image.asset(
+                                "assets/images/information.png",
+                                height: 25,
+                                width: 25,
+                                color: Colors.black.withOpacity(0.5),
+                                fit: BoxFit.fill,
+                              ),
+                              // color: Colors.white,
+                              onPressed: () {
+                                showDialog(context: context,
+                                    barrierDismissible:false,
+                                    builder: (BuildContext context){
+                                      return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:BorderRadius.circular(10.0)),
+                                        child:Wrap(
+                                          children: [
+                                            Container(
+
+                                              child: Column(
+
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Expanded(child: Align(
+                                                          alignment: Alignment.topRight,
+                                                          child: IconButton(
+                                                              icon: Icon(
+                                                                Icons.cancel_outlined,
+                                                                color: Colors.deepOrange.withOpacity(.6),
+                                                                size: 25,
+                                                              ),
+                                                            onPressed: (){
+                                                                Get.back();
+                                                            },
+
+                                                          ),
+
+
+
+                                                      ))
+
+                                                    ],
+                                                  ),
+
+                                                  Container(
+                                                    padding:const EdgeInsets.only(left: 18.0, right: 18.0,top: 0,bottom: 18),
+                                                    child: Column(
+                                                      children: [
+
+
+                                                        Image.asset(
+                                                          "assets/images/information.png",
+                                                          height: 30,
+                                                          width: 30,
+                                                          fit: BoxFit.fill,
+                                                          color: awsEndColor,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 15,
+                                                        ),
+                                                    Obx(() => Text(
+                                                      examPageController.instructionMessageText.value,
+                                                      textAlign: TextAlign.center,
+                                                      style:  TextStyle(
+                                                          color:Colors.black.withOpacity(0.8),
+                                                          fontSize: 15,
+                                                          fontWeight: FontWeight.normal),
+                                                    ),)
+
+                                                      ],
+                                                    ),
+                                                  )
+
+
+
+
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                );
+
+                              },
+                            ),
+                            )
+                          ],
+                        ),
 
                         Container(
-                          margin: const EdgeInsets.only(
-                              right: 20.0,
-                              top: 20,
-                              left: 10,
-                              bottom: 20),
-                          child: Align(
-                            alignment:
-                            Alignment.topCenter,
-                            child:
+                          padding: EdgeInsets.only(
+                              left: 20,
+                              right: 20,
+                              top: 00,
+                              bottom: 00),
+                          child: Column(
 
-                            Obx(() =>
-                                Text(
-                                  examPageController.startTxt.value,
-                                  textAlign:
-                                  TextAlign.center,
-                                  style: const TextStyle(
-                                      color: awsEndColor,
-                                      fontSize: 25,
-                                      fontWeight:
-                                      FontWeight.bold),
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    right: 20.0,
+                                    top: 00,
+                                    left: 10,
+                                    bottom: 20),
+                                child: Align(
+                                  alignment:
+                                  Alignment.topCenter,
+                                  child:
+
+                                  Obx(() =>
+                                      Text(
+                                        examPageController.startTxt.value,
+                                        textAlign:
+                                        TextAlign.center,
+                                        style: const TextStyle(
+                                            color: awsEndColor,
+                                            fontSize: 25,
+                                            fontWeight:
+                                            FontWeight.bold),
+                                      ),
+
+                                  ),
+
                                 ),
+                              ),
 
-                            ),
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    "User Name: ",
+                                    style: TextStyle(
+                                      fontWeight:
+                                      FontWeight.w500,
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Obx(() => Text(
+                                    examPageController.userName.value,
+                                    style: TextStyle(
+                                      fontWeight:
+                                      FontWeight.w500,
+                                      color: awsMixedColor,
+                                      fontSize: 18,
+                                    ),
+                                  ))
+                                  ,
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Batch : ",
+                                    style: TextStyle(
+                                      fontWeight:
+                                      FontWeight.w500,
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Obx(() => Text(
+                                    examPageController.userBatchName.value,
+                                    style: TextStyle(
+                                      fontWeight:
+                                      FontWeight.w500,
+                                      color: awsMixedColor,
+                                      fontSize: 18,
+                                    ),
+                                  ))
+                                  ,
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
 
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Start Time: ",
+                                    style: TextStyle(
+                                      fontWeight:
+                                      FontWeight.w500,
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Obx(() =>
+                                      Text(
+
+                                        utcToLocalTime("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}"
+                                            +" ${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartTime}"),
+                                        // "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartTime}" ,
+                                        style: TextStyle(
+                                          fontWeight:
+                                          FontWeight.w500,
+                                          color: awsMixedColor,
+                                          fontSize: 18,
+                                        ),
+                                      )),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "End Time: ",
+                                    style: TextStyle(
+                                      fontWeight:
+                                      FontWeight.w500,
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Obx(() =>
+                                      Text(
+
+                                        utcToLocalTime("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizEndDate}"
+                                            +" ${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizEndTime}"),
+                                        // "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizEndTime}",
+
+                                        style: TextStyle(
+                                          fontWeight:
+                                          FontWeight.w500,
+                                          color: awsMixedColor,
+                                          fontSize: 18,
+                                        ),
+                                      )),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Duration: ",
+                                    style: TextStyle(
+                                      fontWeight:
+                                      FontWeight.w500,
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Obx(() =>
+                                      Text(
+                                        //"${examPageController.classRoomQuizList[index].quizDuration} Minutes",
+                                        "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizDuration} Minutes" ,
+                                        //"quration",
+                                        style: TextStyle(
+                                          fontWeight:
+                                          FontWeight.w500,
+                                          color: awsMixedColor,
+                                          fontSize: 18,
+                                        ),
+                                      )),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Exam Date: ",
+                                    style: TextStyle(
+                                      fontWeight:
+                                      FontWeight.w500,
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Obx(() =>
+                                      Text(
+
+
+                                        utcToLocalDate("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}"),
+
+                                        // "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}" ,
+                                        //  "${examPageController.classRoomQuizList[index].quizStartDate}",
+
+                                        style: TextStyle(
+                                          fontWeight:
+                                          FontWeight.w500,
+                                          color: awsMixedColor,
+                                          fontSize: 18,
+                                        ),
+                                      )),
+                                ],
+                              ),
+
+                              InkResponse(
+                                onTap: () {
+
+                                  if(examPageController.isExamStart==1){
+                                    //  _showToast("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}");
+                                    saveUserQuizId(quizId: "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}");
+                                    // Get.to(()=>ExamPageScreen())?.then((value) => Get.delete<ExamPageController>());
+                                    Get.to(ExamStartPageScreen(
+                                      quizId:"${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}",
+                                    ))?.then((value) => Get.delete<ExamStartPageController>());
+                                    // Get.to(ExamStartPageScreen(
+                                    //   quizId:"${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}",
+                                    // ));
+                                    // _showToast( "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}" );
+                                  }else{
+                                    Fluttertoast.cancel();
+                                    _showToast("Exam not started yet!");
+                                    /// _showToast("Your exam time is not start!");
+                                  }
+
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(
+                                      20, 20, 20, 00),
+                                  child: _buildButtonDesign1(
+                                    endColor: awsEndColor,
+                                    startColor:
+                                    awsStartColor,
+
+                                    //  _upcomingExamText
+                                  ),
+
+
+                                ),
+                              )
+                            ],
                           ),
                         ),
 
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "User Name: ",
-                              style: TextStyle(
-                                fontWeight:
-                                FontWeight.w500,
-                                fontSize: 18,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Obx(() => Text(
-                              examPageController.userName.value,
-                              style: TextStyle(
-                                fontWeight:
-                                FontWeight.w500,
-                                color: awsMixedColor,
-                                fontSize: 18,
-                              ),
-                            ))
-                            ,
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Batch : ",
-                              style: TextStyle(
-                                fontWeight:
-                                FontWeight.w500,
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            Obx(() => Text(
-                              examPageController.userBatchName.value,
-                              style: TextStyle(
-                                fontWeight:
-                                FontWeight.w500,
-                                color: awsMixedColor,
-                                fontSize: 18,
-                              ),
-                            ))
-                            ,
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
 
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Start Time: ",
-                              style: TextStyle(
-                                fontWeight:
-                                FontWeight.w500,
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            Obx(() =>
-                                Text(
-
-                                  utcToLocalTime("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}"
-                                      +" ${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartTime}"),
-                                  // "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartTime}" ,
-                                  style: TextStyle(
-                                    fontWeight:
-                                    FontWeight.w500,
-                                    color: awsMixedColor,
-                                    fontSize: 18,
-                                  ),
-                                )),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "End Time: ",
-                              style: TextStyle(
-                                fontWeight:
-                                FontWeight.w500,
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            Obx(() =>
-                                Text(
-
-                                  utcToLocalTime("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizEndDate}"
-                                      +" ${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizEndTime}"),
-                                  // "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizEndTime}",
-
-                                  style: TextStyle(
-                                    fontWeight:
-                                    FontWeight.w500,
-                                    color: awsMixedColor,
-                                    fontSize: 18,
-                                  ),
-                                )),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Duration: ",
-                              style: TextStyle(
-                                fontWeight:
-                                FontWeight.w500,
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            Obx(() =>
-                                Text(
-                                  //"${examPageController.classRoomQuizList[index].quizDuration} Minutes",
-                                  "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizDuration} Minutes" ,
-                                  //"quration",
-                                  style: TextStyle(
-                                    fontWeight:
-                                    FontWeight.w500,
-                                    color: awsMixedColor,
-                                    fontSize: 18,
-                                  ),
-                                )),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Exam Date: ",
-                              style: TextStyle(
-                                fontWeight:
-                                FontWeight.w500,
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            Obx(() =>
-                                Text(
-
-
-                                  utcToLocalDate("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}"),
-
-                                  // "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizStartDate}" ,
-                                  //  "${examPageController.classRoomQuizList[index].quizStartDate}",
-
-                                  style: TextStyle(
-                                    fontWeight:
-                                    FontWeight.w500,
-                                    color: awsMixedColor,
-                                    fontSize: 18,
-                                  ),
-                                )),
-                          ],
-                        ),
-
-                        InkResponse(
-                          onTap: () {
-
-
-                            if(examPageController.isExamStart==1){
-                              //  _showToast("${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}");
-                              saveUserQuizId(quizId: "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}");
-                              Get.to(ExamStartPageScreen(
-                                quizId:"${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}",
-                              ));
-                              // _showToast( "${examPageController.classRoomQuizList[index].quizTimeInfo[0].quizId}" );
-                            }else{
-                              Fluttertoast.cancel();
-                              _showToast("Exam not started yet!");
-                              /// _showToast("Your exam time is not start!");
-                            }
-
-                          },
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(
-                                20, 20, 20, 00),
-                            child: _buildButtonDesign1(
-                              endColor: awsEndColor,
-                              startColor:
-                              awsStartColor,
-
-                              //  _upcomingExamText
-                            ),
-
-
-                          ),
-                        )
                       ],
                     ),
                   );
@@ -762,7 +873,7 @@ class ExamPageScreen extends StatelessWidget {
                       fontWeight:
                       FontWeight.w500,
                       color: unactive_color,
-                      fontSize: 18,
+                      fontSize: 17,
                     ),
                   ),
                   Obx(() =>
@@ -774,8 +885,8 @@ class ExamPageScreen extends StatelessWidget {
                         style: TextStyle(
                           fontWeight:
                           FontWeight.w500,
-                          color: awsMixedColor,
-                          fontSize: 18,
+                          color: unactive_color,
+                          fontSize: 17,
                         ),
                       )),
                 ],
@@ -793,7 +904,7 @@ class ExamPageScreen extends StatelessWidget {
                       fontWeight:
                       FontWeight.w500,
                       color: unactive_color,
-                      fontSize: 18,
+                      fontSize: 17,
                     ),
                   ),
                   Obx(() => Text(
@@ -805,8 +916,8 @@ class ExamPageScreen extends StatelessWidget {
                     style: TextStyle(
                       fontWeight:
                       FontWeight.w500,
-                      color: awsMixedColor,
-                      fontSize: 18,
+                      color: unactive_color,
+                      fontSize: 17,
                     ),
                   )),
                 ],
@@ -824,7 +935,7 @@ class ExamPageScreen extends StatelessWidget {
                       fontWeight:
                       FontWeight.w500,
                       color: unactive_color,
-                      fontSize: 18,
+                      fontSize: 17,
                     ),
                   ),
                   Obx(() =>
@@ -835,8 +946,8 @@ class ExamPageScreen extends StatelessWidget {
                         style: TextStyle(
                           fontWeight:
                           FontWeight.w500,
-                          color: awsMixedColor,
-                          fontSize: 18,
+                          color: unactive_color,
+                          fontSize: 17,
                         ),
                       )),
                 ],
@@ -854,7 +965,7 @@ class ExamPageScreen extends StatelessWidget {
                       fontWeight:
                       FontWeight.w500,
                       color: unactive_color,
-                      fontSize: 18,
+                      fontSize: 17,
                     ),
                   ),
                   Obx(() =>
@@ -867,8 +978,8 @@ class ExamPageScreen extends StatelessWidget {
                         style: TextStyle(
                           fontWeight:
                           FontWeight.w500,
-                          color: awsMixedColor,
-                          fontSize: 18,
+                          color: unactive_color,
+                          fontSize: 17,
                         ),
                       )),
                 ],

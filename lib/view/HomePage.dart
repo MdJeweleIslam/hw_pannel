@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../Colors.dart';
 
 import '../api_service/sharePreferenceDataSaveName.dart';
+import '../controller/exam_page_controller.dart';
 import '../controller/home_page_controller.dart';
 import 'background.dart';
 import 'navigation_drawer_page.dart';
@@ -115,25 +116,39 @@ class HomePageScreen extends StatelessWidget {
                                             _buildCardItem(
                                               fieldName: 'Batch Name',
                                               fieldValue: homePageController.userBatchName.value,
-                                              imageLink: 'assets/images/batch_icon.png',
+                                              imageLink: 'assets/images/batch_icon.png', 
+                                              textColor: Colors.black,
+                                              fieldNameTextColor: Colors.black.withOpacity(.6),
 
                                             ),
 
                                         ),
 
 
-                                        _buildCardItem(
-                                          fieldName: 'Total Pending Assignment',
-                                          fieldValue: '1',
-                                          imageLink: 'assets/images/assignment_pending_icon.png',
+                                        Obx(() =>
+                                            _buildCardItem(
+                                              fieldName: 'Total Pending Assignment',
+                                              fieldValue: homePageController.pendingAssignmentCount.value,
+                                              imageLink: 'assets/images/assignment_pending_icon.png',
+                                              textColor: Colors.red.withOpacity(0.8),
+                                              fieldNameTextColor: Colors.black.withOpacity(.6),
+
+                                            ),
 
                                         ),
 
-                                        _buildCardItem(
-                                          fieldName: 'Number of Assignment Done',
-                                          fieldValue: '2',
-                                          imageLink: 'assets/images/submit_assignment1.png',
+
+                                        Obx(() =>
+                                            _buildCardItem(
+                                              fieldName: 'Number of Assignment Done',
+                                              fieldValue: homePageController.doneAssignmentCount.value,
+                                              imageLink: 'assets/images/submit_assignment1.png',
+                                              textColor: Colors.green.withOpacity(0.8),
+                                              fieldNameTextColor: Colors.black.withOpacity(.6),
+                                            ),
+
                                         ),
+
 
                                         Row(
                                           children: [
@@ -156,8 +171,9 @@ class HomePageScreen extends StatelessWidget {
                                             Expanded(
                                                 child: InkWell(
                                                   onTap: (){
-                                                    Get.to(ExamPageScreen());
-
+                                                   // Get.to(ExamPageScreen());
+                                                   //  Get.to(()=>ExamPageScreen())?.then((value) => Get.delete<HomePageController>());
+                                                    Get.to(()=>ExamPageScreen())?.then((value) => Get.delete<ExamPageController>());
                                                   },
                                                   child: _buildCardItem1(
 
@@ -376,7 +392,13 @@ class HomePageScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCardItem({required String fieldValue,required String fieldName,required String imageLink}) {
+  Widget _buildCardItem({
+    required String fieldValue,
+    required String fieldName,
+    required String imageLink,
+    required Color textColor,
+    required Color fieldNameTextColor,
+  }) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
@@ -413,7 +435,7 @@ class HomePageScreen extends StatelessWidget {
                     style: TextStyle(
                       fontWeight:
                       FontWeight.bold,
-                      color: Colors.black,
+                      color: textColor,
                       fontSize: 25,
                     ),
                   ),
@@ -427,7 +449,7 @@ class HomePageScreen extends StatelessWidget {
                     style: TextStyle(
                       fontWeight:
                       FontWeight.normal,
-                      color: Colors.black.withOpacity(.6),
+                      color:fieldNameTextColor,
                       fontSize: 14,
                     ),
                   ),

@@ -325,6 +325,7 @@ class LogInScreen extends StatelessWidget {
 
           String userNameTxt = logInPageController.userNameController.value.text;
           String passwordTxt = logInPageController.passwordController.value.text;
+
           if (_inputValid(userNameTxt, passwordTxt)== false) {
             // userAutoLogIn();
 

@@ -7,6 +7,8 @@ import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:hw_pannel/api_service/sharePreferenceDataSaveName.dart';
+import 'package:hw_pannel/controller/home_page_controller.dart';
+import 'package:hw_pannel/controller/log_in_page_controller.dart';
 import 'package:hw_pannel/view/HomePage.dart';
 
 import '../Colors.dart';
@@ -39,7 +41,6 @@ class LogInApiService {
            // _showToast("success");
             var data = jsonDecode(response.body);
 
-
             if(data['data']['user_type'].toString()=="student"){
               saveUserInfo(
                 user_id:data['data']['user_id'].toString(),
@@ -49,6 +50,9 @@ class LogInApiService {
                 fullName: data['data']['fullname'].toString(),
                 user_type:data['data']['user_type'].toString(),
                 user_api_key: data['data']['api_key'].toString(),
+                pending_assignment_count: data['data']['pending'].toString(),
+                done_assignment_count: data['data']['done'].toString(),
+                total_assignment_count: data['data']['total'].toString(),
               );
 
 
@@ -183,7 +187,14 @@ class LogInApiService {
 
             saveUserUId(uId: data['uid'].toString(), id: data['id'].toString(),
                 accessToken: data['access_token'].toString(), refreshToken: data['refresh_token'].toString());
-            Get.offAll(HomePageScreen());
+
+
+
+            final logInPageController = Get.put(LogInPageController());
+            logInPageController.userNameController.value.text="";
+            logInPageController.passwordController.value.text="";
+
+            Get.offAll(()=>HomePageScreen())?.then((value) => Get.delete<HomePageController>());
 
           }
           else if (response.statusCode == 403) {
@@ -213,11 +224,18 @@ class LogInApiService {
     }
   }
 
-  void saveUserInfo({required String name,required String fullName,
+  void saveUserInfo({
+    required String name,
+    required String fullName,
     required String batch,
     required String batch_name,
     required String user_type,
-    required String user_id,required String user_api_key}) async {
+    required String user_id,
+    required String user_api_key,
+    required String pending_assignment_count,
+    required String done_assignment_count,
+    required String total_assignment_count,
+  }) async {
     try {
       var storage =GetStorage();
       storage.write(pref_user_name, name);
@@ -227,6 +245,11 @@ class LogInApiService {
       storage.write(pref_user_type, user_type);
       storage.write(pref_user_id, user_id);
       storage.write(pref_user_api_key, user_api_key);
+
+      //
+      storage.write(pref_user_total_pending_assignment_count, pending_assignment_count);
+      storage.write(pref_user_total_done_assignment_count, done_assignment_count);
+      storage.write(pref_user_total_assignment_count, total_assignment_count);
 
     } catch (e) {
 

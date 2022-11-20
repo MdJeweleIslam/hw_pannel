@@ -12,7 +12,12 @@ import '../api_service/sharePreferenceDataSaveName.dart';
 
 class HomePageController extends GetxController {
 
-  var userName="".obs,fullName="".obs,userBatch="".obs,userBatchName="".obs,userType="".obs,userId="".obs,email="".obs;
+  var userName="".obs,fullName="".obs,
+      userBatch="".obs,userBatchName="".obs,
+      pendingAssignmentCount="".obs,
+      doneAssignmentCount="".obs,
+      totalAssignmentCount="".obs,
+      userType="".obs,userId="".obs,email="".obs;
 
   @override
   void onInit() {
@@ -43,6 +48,12 @@ class HomePageController extends GetxController {
       userBatchName(storage.read(pref_user_batch_name)??"");
       userType(storage.read(pref_user_type)??"");
       userId(storage.read(pref_user_id)??"");
+
+
+    pendingAssignmentCount(storage.read(pref_user_total_pending_assignment_count)??"");
+    doneAssignmentCount(storage.read(pref_user_total_done_assignment_count)??"");
+    totalAssignmentCount(storage.read(pref_user_total_assignment_count)??"");
+
 
 
 

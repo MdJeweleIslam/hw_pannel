@@ -15,6 +15,10 @@ import 'package:hw_pannel/view/submit_assignment.dart';
 import '../../../gradiant_icon.dart';
 import '../../Colors.dart';
  import '../../controller/forget_password_page_controller.dart';
+import '../controller/exam_page_controller.dart';
+import '../controller/exam_start_page_controller.dart';
+import '../controller/home_page_controller.dart';
+import '../controller/log_in_page_controller.dart';
 import '../controller/navigation_drawer_page_controller.dart';
 import 'background.dart';
 
@@ -77,6 +81,13 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
               text: 'Log Out',
               textIconColor: awsEndColor,
               onTap: (){
+
+                Get.delete<LogInPageController>();
+                Get.delete<HomePageController>();
+                Get.delete<ExamPageController>();
+                Get.delete<ExamStartPageController>();
+
+
                 Get.offAll(()=> LogInScreen());
 
               },

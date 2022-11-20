@@ -36,6 +36,9 @@ class ExamPageController extends GetxController {
 
   var isCountingStatus = false.obs;
 
+  var instructionMessageText = "This is test instruction!".obs;
+
+
   var upcomingExamText = "Start Exam".obs;
   // var upcomingExamText = "Up Coming".obs;
   var getTime = "".obs;
