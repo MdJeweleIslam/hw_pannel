@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart';
 import 'package:hw_pannel/view/log_in_page.dart';
+import 'package:hw_pannel/view/submit_assignment.dart';
  import 'package:marquee/marquee.dart';
 
 import '../../../gradiant_icon.dart';
@@ -41,7 +42,9 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
             _buildDrawerItem(
                 text: 'Submit Assignment',
                 textIconColor: awsEndColor,
-                onTap: ()=>navigate(0),
+                onTap: () {
+                  Get.to(()=> SubmitAssignmentScreen());
+                },
                 iconLink: 'assets/images/submit_assignment1.png',
                 tileColor: Colors.transparent,
             ),
@@ -75,6 +78,7 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
               textIconColor: awsEndColor,
               onTap: (){
                 Get.offAll(()=> LogInScreen());
+
               },
               iconLink: 'assets/images/log_out_icon.png',
               tileColor: Colors.transparent,

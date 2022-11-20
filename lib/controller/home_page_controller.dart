@@ -12,7 +12,7 @@ import '../api_service/sharePreferenceDataSaveName.dart';
 
 class HomePageController extends GetxController {
 
-  var userName="".obs,fullName="".obs,userBatch="".obs,userType="".obs,userId="".obs,email="".obs;
+  var userName="".obs,fullName="".obs,userBatch="".obs,userBatchName="".obs,userType="".obs,userId="".obs,email="".obs;
 
   @override
   void onInit() {
@@ -24,8 +24,8 @@ class HomePageController extends GetxController {
   loadUserIdFromSharePref() async {
     try {
       var storage =GetStorage();
-      storage.read(hw_pannel_pref_user_uid);
-      storage.read(hw_pannel_pref_user_id);
+      storage.read(exam_pannel_pref_user_uid);
+      storage.read(exam_panel_pref_user_id);
     } catch(e) {
       //code
     }
@@ -40,6 +40,7 @@ class HomePageController extends GetxController {
       email(storage.read(pref_user_email)??"");
       fullName(storage.read(pref_full_name)??"");
       userBatch(storage.read(pref_user_batch)??"");
+      userBatchName(storage.read(pref_user_batch_name)??"");
       userType(storage.read(pref_user_type)??"");
       userId(storage.read(pref_user_id)??"");
 

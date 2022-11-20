@@ -43,7 +43,7 @@ class ExamPageController extends GetxController {
   var hw_panel_id = "0".obs;
   var hw_panel_uid = "0".obs;
 
-  var userName="".obs,fullName="".obs,userBatch="".obs,userType="".obs,userId="".obs,email="".obs;
+  var userName="".obs,fullName="".obs,userBatch="".obs,userBatchName="".obs,userType="".obs,userId="".obs,email="".obs;
 
   var classRoomQuizList=[].obs;
 
@@ -86,21 +86,22 @@ class ExamPageController extends GetxController {
       email(storage.read(pref_user_email)??"");
       fullName(storage.read(pref_full_name)??"");
       userBatch(storage.read(pref_user_batch)??"");
+      userBatchName(storage.read(pref_user_batch_name)??"");
       userType(storage.read(pref_user_type)??"");
       userId(storage.read(pref_user_id)??"");
 
 
        // _showToast( storage.read(hw_pannel_pref_user_uid));
        // _showToast( storage.read(hw_pannel_pref_user_id));
-      storage.read(hw_pannel_pref_user_uid);
-      storage.read(hw_pannel_pref_user_id);
+      storage.read(exam_pannel_pref_user_uid);
+      storage.read(exam_panel_pref_user_id);
 
-      updateHwPanelId(storage.read(hw_pannel_pref_user_id));
-      updateHwPanelUId(storage.read(hw_pannel_pref_user_uid));
+      updateHwPanelId(storage.read(exam_panel_pref_user_id));
+      updateHwPanelUId(storage.read(exam_pannel_pref_user_uid));
      // _showToast( storage.read(hw_pannel_pref_user_uid));
       getStudentAllJoinClassroomList(
-          hwPanelId: storage.read(hw_pannel_pref_user_id).toString(),
-          hwPanelUId: storage.read(hw_pannel_pref_user_uid).toString());
+          hwPanelId: storage.read( exam_panel_pref_user_id).toString(),
+          hwPanelUId: storage.read(exam_pannel_pref_user_uid).toString());
 
     } catch (e) {
 

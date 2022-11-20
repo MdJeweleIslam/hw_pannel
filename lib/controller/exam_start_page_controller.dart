@@ -548,15 +548,15 @@ class ExamStartPageController extends GetxController {
 
       var storage =GetStorage();
 
-      storage.read(hw_pannel_pref_user_uid);
-      storage.read(hw_pannel_pref_user_id);
+      storage.read(exam_pannel_pref_user_uid);
+      storage.read(exam_panel_pref_user_id);
 
-      updateHwPanelId(storage.read(hw_pannel_pref_user_id));
-      updateHwPanelUId(storage.read(hw_pannel_pref_user_uid));
+      updateHwPanelId(storage.read(exam_panel_pref_user_id));
+      updateHwPanelUId(storage.read(exam_pannel_pref_user_uid));
 
       updateHwPaneQuizId(storage.read(hw_panel_pref_quiz_id));
 
-      updateStudentId(storage.read(hw_pannel_pref_user_id));
+      updateStudentId(storage.read(exam_panel_pref_user_id));
 
      // updateExamEndTimeLocal(storage.read(pref_user_exam_end_time).toString());
 
@@ -595,7 +595,7 @@ class ExamStartPageController extends GetxController {
       updateHwPaneQuizId(storage.read(hw_panel_pref_quiz_id));
       Fluttertoast.cancel();
      // _showToast("quiz id= "+ storage.read(hw_panel_pref_quiz_id));
-      getExamQuestion(hwPanelUid: storage.read(hw_pannel_pref_user_uid), hwPaneQuizId: storage.read(hw_panel_pref_quiz_id));
+      getExamQuestion(hwPanelUid: storage.read(exam_pannel_pref_user_uid), hwPaneQuizId: storage.read(hw_panel_pref_quiz_id));
 
     } catch (e) {
 

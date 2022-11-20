@@ -110,12 +110,17 @@ class HomePageScreen extends StatelessWidget {
                                         const SizedBox(
                                           height: 20,
                                         ),
-                                        _buildCardItem(
-                                          fieldName: 'Batch Name',
-                                          fieldValue: 'Test',
-                                          imageLink: 'assets/images/batch_icon.png',
+
+                                        Obx(() =>
+                                            _buildCardItem(
+                                              fieldName: 'Batch Name',
+                                              fieldValue: homePageController.userBatchName.value,
+                                              imageLink: 'assets/images/batch_icon.png',
+
+                                            ),
 
                                         ),
+
 
                                         _buildCardItem(
                                           fieldName: 'Total Pending Assignment',
@@ -128,7 +133,6 @@ class HomePageScreen extends StatelessWidget {
                                           fieldName: 'Number of Assignment Done',
                                           fieldValue: '2',
                                           imageLink: 'assets/images/submit_assignment1.png',
-
                                         ),
 
                                         Row(
@@ -527,8 +531,8 @@ class HomePageScreen extends StatelessWidget {
   loadUserIdFromSharePref() async {
     try {
       var storage =GetStorage();
-      storage.read(hw_pannel_pref_user_uid);
-      storage.read(hw_pannel_pref_user_id);
+      storage.read(exam_pannel_pref_user_uid);
+      storage.read(exam_panel_pref_user_id);
     } catch(e) {
       //code
     }

@@ -4,11 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-import 'package:marquee/marquee.dart';
-
-import '../../../gradiant_icon.dart';
 import '../../Colors.dart';
- import '../../controller/forget_password_page_controller.dart';
 import '../controller/submit_assignment_page_controller.dart';
 import 'background.dart';
 
@@ -101,7 +97,7 @@ class SubmitAssignmentScreen extends StatelessWidget {
               hint:Row(
                 children: const [
                   SizedBox(width: 20,),
-                  Text("Select Your Topic",
+                  Text("Select Your assignment",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 18,

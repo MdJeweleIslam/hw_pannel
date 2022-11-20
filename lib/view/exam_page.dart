@@ -371,7 +371,7 @@ class ExamPageScreen extends StatelessWidget {
                               ),
                             ),
                             Obx(() => Text(
-                              examPageController.userBatch.value,
+                              examPageController.userBatchName.value,
                               style: TextStyle(
                                 fontWeight:
                                 FontWeight.w500,
