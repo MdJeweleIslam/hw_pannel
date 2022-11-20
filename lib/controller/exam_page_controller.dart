@@ -319,7 +319,7 @@ class ExamPageController extends GetxController {
     }
 
     // timer.cancel();
-    timer?.cancel();
+    // timer?.cancel();
     diffSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString()));
 
     return;

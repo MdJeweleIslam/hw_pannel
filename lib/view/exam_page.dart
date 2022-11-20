@@ -55,72 +55,78 @@ class ExamPageScreen extends StatelessWidget {
 
                   children: [
                     Background(),
-                    Expanded(child:
-                        
-                        Column(
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.fromLTRB(00, 15, 00, 10),
+                   Column(
+                     children: [
+                       Expanded(
+                         flex:1,
+                         child:
 
-                              child: Row(
-                                children: [
-                                  const SizedBox(width: 10,),
-                                  InkWell(
-                                    onTap: (){
-                                      _key.currentState!.openDrawer();
-                                    },
-                                    child:  Container(
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(5.0),
-                                            bottomRight: Radius.circular(5.0),
-                                            topLeft: Radius.circular(5.0),
-                                            bottomLeft: Radius.circular(5.0)),
-                                        color: Colors.white,
-                                      ),
-                                      padding: const EdgeInsets.all(7),
+                       Column(
+                         children: [
+                           Container(
+                             margin: const EdgeInsets.fromLTRB(00, 15, 00, 10),
 
-                                      child:const Icon(Icons.menu_rounded,
-                                        size: 22,
-                                        color: awsEndColor,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 20,),
-                                  Expanded(child: Text("Exam List",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                        color: awsEndColor
-                                    ),
-                                  ))
-                                ],
-                              ),
-                            ),
-                            Expanded(child:  ListView.builder( // outer ListView
-                              itemCount: 1,
-                              itemBuilder: (_, index) {
-                                return  Column(
-                                  children: [
-                                    Image.asset(
-                                      "assets/images/aws.png",
-                                      width: 180,
-                                      height: 90,
-                                    ),
-                                    Obx(() => Text("current time: "+examPageController.currentDateTime.value)),
-                                    Obx(() => Text("start time: "+examPageController.startDateTime.value)),
-                                    Obx(() => Text("end time: "+examPageController.endDateTime.value)),
-                                    Obx(() => Text("end time utc: "+examPageController.endDateTimeUtc.value)),
-                                    _buildFinishedExamList()
-                                  ],
-                                );
+                             child: Row(
+                               children: [
+                                 const SizedBox(width: 10,),
+                                 InkWell(
+                                   onTap: (){
+                                     _key.currentState!.openDrawer();
+                                   },
+                                   child:  Container(
+                                     decoration: const BoxDecoration(
+                                       borderRadius: BorderRadius.only(
+                                           topRight: Radius.circular(5.0),
+                                           bottomRight: Radius.circular(5.0),
+                                           topLeft: Radius.circular(5.0),
+                                           bottomLeft: Radius.circular(5.0)),
+                                       color: Colors.white,
+                                     ),
+                                     padding: const EdgeInsets.all(7),
 
-                              },
-                            ),)
-                          ],
-                        ),
-                   
-                    ),
+                                     child:const Icon(Icons.menu_rounded,
+                                       size: 22,
+                                       color: awsEndColor,
+                                     ),
+                                   ),
+                                 ),
+                                 const SizedBox(width: 20,),
+                                 Expanded(child: Text("Exam List",
+                                   style: TextStyle(
+                                       fontSize: 20,
+                                       fontWeight: FontWeight.w500,
+                                       color: awsEndColor
+                                   ),
+                                 ))
+                               ],
+                             ),
+                           ),
+                           Expanded(child:  ListView.builder( // outer ListView
+                             itemCount: 1,
+                             itemBuilder: (_, index) {
+                               return  Column(
+                                 children: [
+                                   Image.asset(
+                                     "assets/images/aws.png",
+                                     width: 180,
+                                     height: 90,
+                                   ),
+                                   Obx(() => Text("current time: "+examPageController.currentDateTime.value)),
+                                   Obx(() => Text("start time: "+examPageController.startDateTime.value)),
+                                   Obx(() => Text("end time: "+examPageController.endDateTime.value)),
+                                   Obx(() => Text("end time utc: "+examPageController.endDateTimeUtc.value)),
+                                   _buildFinishedExamList()
+                                 ],
+                               );
+
+                             },
+                           ),)
+                         ],
+                       ),
+
+                       ),
+                     ],
+                   )
 
 
 
