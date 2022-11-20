@@ -318,72 +318,85 @@ class ExamPageScreen extends StatelessWidget {
                                       return Dialog(
                                         shape: RoundedRectangleBorder(
                                             borderRadius:BorderRadius.circular(10.0)),
-                                        child:Wrap(
-                                          children: [
-                                            Container(
+                                        child:SingleChildScrollView(
+                                          child: Wrap(
+                                            children: [
+                                              Container(
 
-                                              child: Column(
+                                                child: Column(
 
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Expanded(child: Align(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Expanded(child: Align(
                                                           alignment: Alignment.topRight,
                                                           child: IconButton(
-                                                              icon: Icon(
-                                                                Icons.cancel_outlined,
-                                                                color: Colors.deepOrange.withOpacity(.6),
-                                                                size: 25,
-                                                              ),
+                                                            icon: Icon(
+                                                              Icons.cancel_outlined,
+                                                              color: Colors.deepOrange.withOpacity(.5),
+                                                              size: 25,
+                                                            ),
                                                             onPressed: (){
-                                                                Get.back();
+                                                              Get.back();
                                                             },
 
                                                           ),
 
 
 
-                                                      ))
-
-                                                    ],
-                                                  ),
-
-                                                  Container(
-                                                    padding:const EdgeInsets.only(left: 18.0, right: 18.0,top: 0,bottom: 18),
-                                                    child: Column(
-                                                      children: [
-
-
-                                                        Image.asset(
-                                                          "assets/images/information.png",
-                                                          height: 30,
-                                                          width: 30,
-                                                          fit: BoxFit.fill,
-                                                          color: awsEndColor,
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 15,
-                                                        ),
-                                                    Obx(() => Text(
-                                                      examPageController.instructionMessageText.value,
-                                                      textAlign: TextAlign.center,
-                                                      style:  TextStyle(
-                                                          color:Colors.black.withOpacity(0.8),
-                                                          fontSize: 15,
-                                                          fontWeight: FontWeight.normal),
-                                                    ),)
+                                                        ))
 
                                                       ],
                                                     ),
-                                                  )
+
+                                                    Container(
+                                                      padding:const EdgeInsets.only(left: 18.0, right: 18.0,top: 0,bottom: 18),
+                                                      child: Column(
+                                                        children: [
+
+
+                                                          Image.asset(
+                                                            "assets/images/information.png",
+                                                            height: 30,
+                                                            width: 30,
+                                                            fit: BoxFit.fill,
+                                                            color: awsStartColor,
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Text("Attention!",
+                                                            textAlign: TextAlign.center,
+                                                            style: TextStyle(
+                                                                color:Colors.black.withOpacity(0.8),
+                                                                fontSize: 17,
+                                                                fontWeight: FontWeight.w600),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 15,
+                                                          ),
+
+                                                          Obx(() => Text(
+                                                            examPageController.instructionMessageText.value,
+                                                            textAlign: TextAlign.center,
+                                                            style:  TextStyle(
+                                                                color:Colors.black.withOpacity(0.8),
+                                                                fontSize: 15,
+                                                                fontWeight: FontWeight.normal),
+                                                          ),)
+
+                                                        ],
+                                                      ),
+                                                    )
 
 
 
 
-                                                ],
-                                              ),
-                                            )
-                                          ],
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       );
                                     }
