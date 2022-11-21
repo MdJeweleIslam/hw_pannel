@@ -32,11 +32,16 @@ class ExamPageController extends GetxController {
   //if value 1 then exam is start running,
   var isExamStart = 0.obs;
 
+  var userAccessToken = "".obs;
+
   var otpCountDownSecond = 0.obs;
 
   var isCountingStatus = false.obs;
 
   var instructionMessageText = "This is test instruction!".obs;
+
+
+  var instructionMessageHtmlData="<p>There is no condition at yet!</p>".obs;
 
 
   var upcomingExamText = "Start Exam".obs;
@@ -94,6 +99,9 @@ class ExamPageController extends GetxController {
       userId(storage.read(pref_user_id)??"");
 
 
+      userAccessToken(storage.read(exam_panel_user_access_token)??"");
+
+
        // _showToast( storage.read(hw_pannel_pref_user_uid));
        // _showToast( storage.read(hw_pannel_pref_user_id));
       storage.read(exam_pannel_pref_user_uid);
@@ -102,6 +110,7 @@ class ExamPageController extends GetxController {
       updateHwPanelId(storage.read(exam_panel_pref_user_id));
       updateHwPanelUId(storage.read(exam_pannel_pref_user_uid));
      // _showToast( storage.read(hw_pannel_pref_user_uid));
+
       getStudentAllJoinClassroomList(
           hwPanelId: storage.read( exam_panel_pref_user_id).toString(),
           hwPanelUId: storage.read(exam_pannel_pref_user_uid).toString());
@@ -430,6 +439,8 @@ class ExamPageController extends GetxController {
               if(classRoomQuizList[i].isComplete==false){
 
 
+                getTermsAndCondition(quizId: "${classRoomQuizList[0].quizTimeInfo[0].quizId}", accessToken: userAccessToken.value);
+
 
                 updateStartDateTime(utcToLocalDate("${classRoomQuizList[0].quizTimeInfo[0].quizStartDate}"+
                     " ${classRoomQuizList[0].quizTimeInfo[0].quizStartTime}"));
@@ -455,6 +466,47 @@ class ExamPageController extends GetxController {
 
             // _showToast(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo.length.toString());
             // _showToast(classRoomQuizList.length.toString());
+
+          }
+          else {
+            // Fluttertoast.cancel();
+
+            log('data:'+response.body.toString());
+            _showToast("failed try again!");
+
+          }
+        } catch (e) {
+          // Fluttertoast.cancel();
+        }
+      }
+    } on SocketException catch (e) {
+
+      Fluttertoast.cancel();
+      // _showToast("No Internet Connection!");
+    }
+    //updateIsFirstLoadRunning(false);
+  }
+
+ void getTermsAndCondition({required String quizId,required String accessToken}) async{
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          var response = await get(
+
+              // Uri.parse('https://exam.arenaclass.stream/api/individual-quiz-terms-and-condition/$quizId'),
+              Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_TERMS_AND_CONDITION$quizId'),
+              headers: {
+                // 'Authorization':'Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNDg5MTAzMGUtZDMzOC00ODAwLWFhYzEtMDdjYWUwMWRmNGUzIiwiZXhwIjoxNjY5MDkzNzgwLCJpYXQiOjE2NjkwMDczODB9.KGzyxEKPkh9BiedU6EOM9BcobUbCgpnWgWDR4HN8p7k'
+                'Authorization':'Token $accessToken'
+              }
+          );
+           //_showToast("terms = ${response.statusCode}");
+          if (response.statusCode == 200) {
+
+            var data = jsonDecode(response.body);
+
+            instructionMessageHtmlData(data["data"][0]["description"].toString());
 
           }
           else {

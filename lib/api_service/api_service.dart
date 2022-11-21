@@ -24,4 +24,7 @@ String SUB_URL_API_GET_QUIZ_LIST = "api/individual-classroom-quiz-all-list/";
 String SUB_URL_API_GET_ALL_CLASS_ROOM_LIST = "api/student-all-join-classroom-list-mobile/";
 
 
+String SUB_URL_API_GET_TERMS_AND_CONDITION = "api/individual-quiz-terms-and-condition/";
+
+
 
