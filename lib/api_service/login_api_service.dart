@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:hw_pannel/api_service/sharePreferenceDataSaveName.dart';
@@ -12,7 +11,6 @@ import 'package:hw_pannel/controller/log_in_page_controller.dart';
 import 'package:hw_pannel/view/HomePage.dart';
 
 import '../Colors.dart';
-import '../view/exam_page.dart';
  import 'api_service.dart';
 
 class LogInApiService {
@@ -34,7 +32,8 @@ class LogInApiService {
               body: {
             'username': userName,
             'password': password,
-          });
+          }
+          );
 
         //  _showToast(response.statusCode.toString());
           if (response.statusCode == 200) {
@@ -55,7 +54,6 @@ class LogInApiService {
                 total_assignment_count: data['data']['total'].toString(),
               );
 
-
               userCrossLogIn(
                 apiKey: data["data"]["api_key"].toString(),
                 password: password,
@@ -66,7 +64,6 @@ class LogInApiService {
               _showToast("User name or password not match!");
 
             }
-
 
            // Get.offAll(HomePageScreen());
 
@@ -81,7 +78,6 @@ class LogInApiService {
             var data = jsonDecode(response.body);
             _showToast(data['message']);
           }
-
 
         } catch (e) {
           //  Navigator.of(context).pop();

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -479,7 +478,7 @@ class ExamPageController extends GetxController {
           // Fluttertoast.cancel();
         }
       }
-    } on SocketException catch (e) {
+    } on SocketException {
 
       Fluttertoast.cancel();
       // _showToast("No Internet Connection!");
@@ -493,7 +492,6 @@ class ExamPageController extends GetxController {
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         try {
           var response = await get(
-
               // Uri.parse('https://exam.arenaclass.stream/api/individual-quiz-terms-and-condition/$quizId'),
               Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_TERMS_AND_CONDITION$quizId'),
               headers: {
@@ -520,7 +518,7 @@ class ExamPageController extends GetxController {
           // Fluttertoast.cancel();
         }
       }
-    } on SocketException catch (e) {
+    } on SocketException {
 
       Fluttertoast.cancel();
       // _showToast("No Internet Connection!");

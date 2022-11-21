@@ -34,7 +34,7 @@ class ExamStartPageScreen extends StatelessWidget {
             color: Colors.white,
             backgroundColor: Colors.blue,
             triggerMode: RefreshIndicatorTriggerMode.anywhere,
-            onRefresh: () async {
+            onRefresh:() async{
 
               examStartPageController.onInit();
 
@@ -479,7 +479,7 @@ class ExamStartPageScreen extends StatelessWidget {
                                               else if (examStartPageController.questionListResponseStatusCode.value == 404) ...{
                                                   Expanded(
                                                     child: NoDataFound()
-                                                        .noItemFound1("Exam not start in this moment!"),
+                                                        .noItemFound1("Question not found!"),
                                                   ),
                                                 }
                                                 else ...{

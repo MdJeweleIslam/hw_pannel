@@ -49,6 +49,10 @@ class ExamStartPageController extends GetxController {
    var questionMcqOptionsId="".obs;
 
 
+   var serverErrorText="".obs;
+
+
+
    //dynamic
   var studentId = "".obs;
   var hwPaneQuizId="".obs;
@@ -307,6 +311,7 @@ class ExamStartPageController extends GetxController {
 
           updateQuestionListResponseStatusCode(response.statusCode);
 
+
          //  _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
             var data = jsonDecode(response.body);
@@ -363,7 +368,10 @@ class ExamStartPageController extends GetxController {
 
 
           }
-          else if(response.statusCode == 201){
+          else{
+            var data = jsonDecode(response.body);
+            serverErrorText(data["message"]);
+          if(response.statusCode == 201){
             Get.off(() => ExamDoneScreen());
           }
           else if(response.statusCode == 203){
@@ -375,9 +383,11 @@ class ExamStartPageController extends GetxController {
           else {
             updateQuestionType(3);
             var data = jsonDecode(response.body);
-            _showToast(data["message"]);
+            // _showToast(data["message"]);
 
           }
+          }
+
         } catch (e) {
 
           // Log(e.toString());

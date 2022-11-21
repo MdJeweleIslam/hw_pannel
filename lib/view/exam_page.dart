@@ -7,16 +7,13 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
- import 'package:marquee/marquee.dart';
 import 'package:ntp/ntp.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Colors.dart';
 import '../api_service/sharePreferenceDataSaveName.dart';
  import '../controller/exam_page_controller.dart';
  import '../controller/exam_start_page_controller.dart';
 import 'background.dart';
-import 'exam_done.dart';
 import 'exam_start_page.dart';
 import 'navigation_drawer_page.dart';
 
@@ -174,8 +171,6 @@ class ExamPageScreen extends StatelessWidget {
     print('NTP time: $_ntpTime');
     print('Difference: ${_myTime.difference(_ntpTime).inMilliseconds}ms');
 
-    var devicedateUtc = DateTime.now().toUtc();
-    var ntpdateUtc = _ntpTime.toUtc();
 
     ///dfff
     // setState(() {
@@ -271,8 +266,8 @@ class ExamPageScreen extends StatelessWidget {
             if(index==0){
               if(
               diffSecond(
-                examPageController.endDateTime.value??"",
-                examPageController.currentDateTime.value??"",
+                examPageController.endDateTime.value,
+                examPageController.currentDateTime.value,
               )){
                 return Container(
                   decoration: BoxDecoration(
@@ -367,21 +362,14 @@ class ExamPageScreen extends StatelessWidget {
                                                             textAlign: TextAlign.center,
                                                             style: TextStyle(
                                                                 color:Colors.black.withOpacity(0.8),
-                                                                fontSize: 17,
+                                                                fontSize: 20,
                                                                 fontWeight: FontWeight.w600),
                                                           ),
                                                           const SizedBox(
                                                             height: 15,
                                                           ),
 
-                                                          Obx(() => Text(
-                                                            examPageController.instructionMessageText.value,
-                                                            textAlign: TextAlign.center,
-                                                            style:  TextStyle(
-                                                                color:Colors.black.withOpacity(0.8),
-                                                                fontSize: 15,
-                                                                fontWeight: FontWeight.normal),
-                                                          ),),
+
 
                                                           Obx(() =>   Html(
                                                             data: examPageController.instructionMessageHtmlData.value,
@@ -1237,38 +1225,6 @@ class ExamPageScreen extends StatelessWidget {
   }
 
   //create button
-  Widget _buildNextButton() {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.zero,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(7))),
-      child: Ink(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [awsStartColor, awsEndColor],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-            borderRadius: BorderRadius.circular(7.0)),
-        child: Container(
-          height: 50,
-          alignment: Alignment.center,
-          child: Text(
-            "Finished",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'PT-Sans',
-              fontSize: 18,
-              fontWeight: FontWeight.normal,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
   Widget _buildQuizFinishedListItem(int index) {
      if(examPageController.classRoomQuizList[index].quizTimeInfo.length>0){
 
@@ -1473,7 +1429,6 @@ class ExamPageScreen extends StatelessWidget {
 
   ///get data from share pref
   loadUserIdFromSharePref() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
       // setState(() {
       //
