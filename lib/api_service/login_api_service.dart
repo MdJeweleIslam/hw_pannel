@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:hw_pannel/api_service/sharePreferenceDataSaveName.dart';
+import 'package:hw_pannel/controller/home_page_controller.dart';
+import 'package:hw_pannel/controller/log_in_page_controller.dart';
 import 'package:hw_pannel/view/HomePage.dart';
 
 import '../Colors.dart';
-import '../view/exam_page.dart';
  import 'api_service.dart';
 
 class LogInApiService {
@@ -32,27 +32,38 @@ class LogInApiService {
               body: {
             'username': userName,
             'password': password,
-          });
+          }
+          );
 
         //  _showToast(response.statusCode.toString());
           if (response.statusCode == 200) {
            // _showToast("success");
             var data = jsonDecode(response.body);
-             saveUserInfo(
-               user_id:data['data']['user_id'].toString(),
-               name: data['data']['username'].toString(),
-               batch: data['data']['batch'].toString(),
-               fullName: data['data']['fullname'].toString(),
-               user_type:data['data']['user_type'].toString(),
-               user_api_key: data['data']['api_key'].toString(),
-             );
 
+            if(data['data']['user_type'].toString()=="student"){
+              saveUserInfo(
+                user_id:data['data']['user_id'].toString(),
+                name: data['data']['username'].toString(),
+                batch: data['data']['batch'].toString(),
+                batch_name: data['data']['batch_name'].toString(),
+                fullName: data['data']['fullname'].toString(),
+                user_type:data['data']['user_type'].toString(),
+                user_api_key: data['data']['api_key'].toString(),
+                pending_assignment_count: data['data']['pending'].toString(),
+                done_assignment_count: data['data']['done'].toString(),
+                total_assignment_count: data['data']['total'].toString(),
+              );
 
-           userCrossLogIn(
-             apiKey: data["data"]["api_key"].toString(),
-             password: password,
+              userCrossLogIn(
+                apiKey: data["data"]["api_key"].toString(),
+                password: password,
 
-           );
+              );
+            }else{
+              Get.back();
+              _showToast("User name or password not match!");
+
+            }
 
            // Get.offAll(HomePageScreen());
 
@@ -60,14 +71,13 @@ class LogInApiService {
           else if (response.statusCode == 403) {
             Get.back();
             var data = jsonDecode(response.body);
-            _showToast(data['msg']);
+            _showToast("User name or password not match!");
           }
           else {
             Get.back();
             var data = jsonDecode(response.body);
             _showToast(data['message']);
           }
-
 
         } catch (e) {
           //  Navigator.of(context).pop();
@@ -114,11 +124,7 @@ class LogInApiService {
            );
 
           }
-          else if (response.statusCode == 403) {
-            Get.back();
-            var data = jsonDecode(response.body);
-            _showToast(data['msg']);
-          }
+
           else {
             Get.back();
             var data = jsonDecode(response.body);
@@ -175,14 +181,22 @@ class LogInApiService {
             Get.back();
             var data = jsonDecode(response.body);
 
-            saveUserUId(uId: data['uid'].toString(), id: data['id'].toString());
-            Get.offAll(HomePageScreen());
+            saveUserUId(uId: data['uid'].toString(), id: data['id'].toString(),
+                accessToken: data['access_token'].toString(), refreshToken: data['refresh_token'].toString());
+
+
+
+            final logInPageController = Get.put(LogInPageController());
+            logInPageController.userNameController.value.text="";
+            logInPageController.passwordController.value.text="";
+
+            Get.offAll(()=>HomePageScreen())?.then((value) => Get.delete<HomePageController>());
 
           }
           else if (response.statusCode == 403) {
             Get.back();
             var data = jsonDecode(response.body);
-            _showToast(data['msg']);
+            _showToast(data['message']);
           }
           else {
             Get.back();
@@ -206,17 +220,32 @@ class LogInApiService {
     }
   }
 
-  void saveUserInfo({required String name,required String fullName,
-    required String batch,required String user_type,
-    required String user_id,required String user_api_key}) async {
+  void saveUserInfo({
+    required String name,
+    required String fullName,
+    required String batch,
+    required String batch_name,
+    required String user_type,
+    required String user_id,
+    required String user_api_key,
+    required String pending_assignment_count,
+    required String done_assignment_count,
+    required String total_assignment_count,
+  }) async {
     try {
       var storage =GetStorage();
       storage.write(pref_user_name, name);
       storage.write(pref_full_name, fullName);
       storage.write(pref_user_batch, batch);
+      storage.write(pref_user_batch_name, batch_name);
       storage.write(pref_user_type, user_type);
       storage.write(pref_user_id, user_id);
       storage.write(pref_user_api_key, user_api_key);
+
+      //
+      storage.write(pref_user_total_pending_assignment_count, pending_assignment_count);
+      storage.write(pref_user_total_done_assignment_count, done_assignment_count);
+      storage.write(pref_user_total_assignment_count, total_assignment_count);
 
     } catch (e) {
 
@@ -238,11 +267,16 @@ class LogInApiService {
 
   }
 
-  void saveUserUId({required String uId,required String id,}) async {
+  void saveUserUId({required String uId,required String id,required String accessToken,required String refreshToken,}) async {
     try {
       var storage =GetStorage();
-      storage.write(hw_pannel_pref_user_uid, uId);
-      storage.write(hw_pannel_pref_user_id, id);
+      storage.write(exam_pannel_pref_user_uid, uId);
+      storage.write(exam_panel_pref_user_id, id);
+
+
+      storage.write(exam_panel_user_access_token, accessToken);
+      storage.write(exam_panel_user_refresh_token, refreshToken);
+
     } catch (e) {
 
       //code

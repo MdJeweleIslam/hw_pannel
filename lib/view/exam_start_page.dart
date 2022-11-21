@@ -34,16 +34,14 @@ class ExamStartPageScreen extends StatelessWidget {
             color: Colors.white,
             backgroundColor: Colors.blue,
             triggerMode: RefreshIndicatorTriggerMode.anywhere,
-            onRefresh: () async {
+            onRefresh:() async{
 
               examStartPageController.onInit();
 
               await Future.delayed(const Duration(seconds: 1));
               //updateDataAfterRefresh();
             },
-            child:
-
-            CustomScrollView(
+            child: CustomScrollView(
               slivers: [
                 SliverFillRemaining(
                   hasScrollBody: true,
@@ -56,63 +54,63 @@ class ExamStartPageScreen extends StatelessWidget {
                           Obx(() => Column(
                             children: [
 
+                              // Container(
+                              //   margin: EdgeInsets.fromLTRB(00, 20, 00, 10),
+                              //   height: 30,
+                              //   child: Column(
+                              //     children: [
+                              //       Expanded(
+                              //           child: Marquee(
+                              //             text: examStartPageController.message.value,
+                              //             style: TextStyle(
+                              //                 fontWeight: FontWeight.w500,
+                              //                 fontSize: 18,
+                              //                 color: awsEndColor),
+                              //             scrollAxis: Axis.horizontal,
+                              //             //scroll direction
+                              //             crossAxisAlignment: CrossAxisAlignment.start,
+                              //             blankSpace: MediaQuery.of(context).size.width,
+                              //             velocity: 50.0,
+                              //             //speed
+                              //             pauseAfterRound: Duration(seconds: 1),
+                              //             startPadding: 10.0,
+                              //             accelerationDuration: Duration(seconds: 1),
+                              //             accelerationCurve: Curves.linear,
+                              //             decelerationDuration:
+                              //             Duration(milliseconds: 1000),
+                              //             decelerationCurve: Curves.easeOut,
+                              //           ))
+                              //     ],
+                              //   ),
+                              // ),
+                              ///current time
+                              // Obx(() =>
+                              //     Text(
+                              //       "current time: " +
+                              //           examStartPageController.currentTimeUtc
+                              //               .value
+                              //       ,
+                              //       textAlign: TextAlign.center,
+                              //       style: const TextStyle(
+                              //           color: awsEndColor,
+                              //           fontSize: 16,
+                              //           fontWeight: FontWeight.w500),
+                              //     )),
+                              // Obx(() =>
+                              //     Text(
+                              //       "Exam End time: " +
+                              //           examStartPageController.examEndTimeUtc
+                              //               .value
+                              //          // examStartPageController.utcToLocalDate(examStartPageController.examEndTimeLocal.value)
+                              //       ,
+                              //       textAlign: TextAlign.center,
+                              //       style: const TextStyle(
+                              //           color: awsEndColor,
+                              //           fontSize: 16,
+                              //           fontWeight: FontWeight.w500),
+                              //     )),
 
 
-                              Container(
-                                margin: EdgeInsets.fromLTRB(00, 20, 00, 10),
-                                height: 30,
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                        child: Marquee(
-                                          text: examStartPageController.message.value,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 18,
-                                              color: awsEndColor),
-                                          scrollAxis: Axis.horizontal,
-                                          //scroll direction
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          blankSpace: MediaQuery.of(context).size.width,
-                                          velocity: 50.0,
-                                          //speed
-                                          pauseAfterRound: Duration(seconds: 1),
-                                          startPadding: 10.0,
-                                          accelerationDuration: Duration(seconds: 1),
-                                          accelerationCurve: Curves.linear,
-                                          decelerationDuration:
-                                          Duration(milliseconds: 1000),
-                                          decelerationCurve: Curves.easeOut,
-                                        ))
-                                  ],
-                                ),
-                              ),
-
-                              Obx(() =>
-                                  Text(
-                                    "current time: " +
-                                        examStartPageController.currentTimeUtc
-                                            .value
-                                    ,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        color: awsEndColor,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500),
-                                  )),
-                              Obx(() =>
-                                  Text(
-                                    "Exam End time: " +
-                                        examStartPageController.examEndTimeUtc
-                                            .value
-                                       // examStartPageController.utcToLocalDate(examStartPageController.examEndTimeLocal.value)
-                                    ,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        color: awsEndColor,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500),
-                                  )),
                               Container(
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
@@ -126,7 +124,7 @@ class ExamStartPageScreen extends StatelessWidget {
                                 padding: EdgeInsets.only(
                                     left: 40, right: 40, top: 15, bottom: 15),
                                 margin: EdgeInsets.only(
-                                    left: 20, right: 20, top: 00, bottom: 00),
+                                    left: 20, right: 20, top: 25, bottom: 00),
                                 child: Column(
                                   children: [
                                     Row(
@@ -194,6 +192,8 @@ class ExamStartPageScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
+
+
                               Expanded(child: Column(
 
                                 children: [
@@ -267,35 +267,62 @@ class ExamStartPageScreen extends StatelessWidget {
                                               child: Column(
                                                 children: [
                                                   Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 10,
-                                                        right: 10,
-                                                        top: 20,
-                                                        bottom: 00),
-                                                    child: Flex(
-                                                      direction: Axis.horizontal,
-                                                      children: [
-                                                        // .
-                                                        Obx(() =>
+                                                      padding: EdgeInsets.only(
+                                                          left: 10,
+                                                          right: 10,
+                                                          top: 20,
+                                                          bottom: 00),
+                                                      child: Align(
+                                                        alignment: Alignment.centerLeft,
+                                                        child: Obx(() =>
                                                             Text(
-                                                                "Q: " +
-                                                                    "${examStartPageController
-                                                                        .mcqQuestionDataModel
-                                                                        .value
-                                                                        .data![0]
-                                                                        .questionName}"
+                                                                "Q: " +"${examStartPageController
+                                                                    .mcqQuestionDataModel
+                                                                    .value
+                                                                    .data![0]
+                                                                    .questionName}"
                                                                 ,
                                                                 style: TextStyle(
-                                                                    color: Colors
-                                                                        .black87,
+                                                                    color: Colors.black87,
                                                                     fontSize: 18,
                                                                     fontWeight:
-                                                                    FontWeight
-                                                                        .w500)),),
+                                                                    FontWeight.w500)),
+                                                        ),
+                                                      )
 
-                                                      ],
-                                                    ),
+
                                                   ),
+                                                  // Padding(
+                                                  //   padding: EdgeInsets.only(
+                                                  //       left: 10,
+                                                  //       right: 10,
+                                                  //       top: 20,
+                                                  //       bottom: 00),
+                                                  //   child: Flex(
+                                                  //     direction: Axis.horizontal,
+                                                  //     children: [
+                                                  //       // .l
+                                                  //       k
+                                                  //       Obx(() =>
+                                                  //           Text(
+                                                  //               "Q: " +
+                                                  //                   "${examStartPageController
+                                                  //                       .mcqQuestionDataModel
+                                                  //                       .value
+                                                  //                       .data![0]
+                                                  //                       .questionName}"
+                                                  //               ,
+                                                  //               style: TextStyle(
+                                                  //                   color: Colors
+                                                  //                       .black87,
+                                                  //                   fontSize: 18,
+                                                  //                   fontWeight:
+                                                  //                   FontWeight
+                                                  //                       .w500)),),
+                                                  //
+                                                  //     ],
+                                                  //   ),
+                                                  // ),
                                                   Expanded(
                                                       child: Container(
                                                         color: transparent,
@@ -405,7 +432,7 @@ class ExamStartPageScreen extends StatelessWidget {
                                     //no question found
                                     else...{
                                         Expanded(
-                                          child: NoDataFound().noItemFound(
+                                          child: NoDataFound().noItemFound1(
                                               "Question Not Found! try again! "),
                                         ),
                                       }
@@ -414,65 +441,71 @@ class ExamStartPageScreen extends StatelessWidget {
                                   else if (examStartPageController.questionListResponseStatusCode.value == 201) ...{
                                     Expanded(
 
-                                      child: NoDataFound()
-                                          .noItemFound("Your response already submitted!"),
+                                      child: NoDataFound().noItemFound1("Your response already submitted!"),
+
                                     ),
                                   }
                                   else if (examStartPageController.questionListResponseStatusCode.value == 203) ...{
                                       Expanded(
-                                        child: NoDataFound().noItemFound("Quiz time over!"),
+
+                                      // child:Obx(() => NoDataFound().noItemFound1(examStartPageController.serverErrorText.value)),
+
+                                        child:Obx(() => NoDataFound().noItemFound1("Quiz time over!")),
                                       ),
                                     }
-                                    else if (examStartPageController.questionListResponseStatusCode.value == 204) ...{
+                                  else if (examStartPageController.questionListResponseStatusCode.value == 204) ...{
+                                      Expanded(
+                                        child: NoDataFound().noItemFound1("Quiz not Start!"),
+                                      ),
+                                    }
+                                  else if (examStartPageController.questionListResponseStatusCode.value == 400) ...{
                                         Expanded(
-                                          child: NoDataFound().noItemFound("Quiz not Start!"),
+                                          child: NoDataFound().noItemFound1("Quiz not Created!"),
                                         ),
                                       }
-                                      else if (examStartPageController.questionListResponseStatusCode.value == 400) ...{
+                                  else if (examStartPageController.questionListResponseStatusCode.value == 401) ...{
                                           Expanded(
-                                            child: NoDataFound().noItemFound("Quiz not Created!"),
+                                            child: NoDataFound().noItemFound1("Quiz not Start!"),
                                           ),
                                         }
-                                        else if (examStartPageController.questionListResponseStatusCode.value == 401) ...{
+                                  else if (examStartPageController.questionListResponseStatusCode.value == 402) ...{
                                             Expanded(
-                                              child: NoDataFound().noItemFound("Quiz not Start!"),
+                                              child: NoDataFound().noItemFound1("Quiz time over!"),
                                             ),
                                           }
-                                          else if (examStartPageController.questionListResponseStatusCode.value == 402) ...{
+                                  else if (examStartPageController.questionListResponseStatusCode.value == 403) ...{
                                               Expanded(
-                                                child: NoDataFound().noItemFound("Quiz time over!"),
+                                                child: NoDataFound()
+                                                    .noItemFound1("Your teacher did not create quiz time!"),
                                               ),
                                             }
-                                            else if (examStartPageController.questionListResponseStatusCode.value == 403) ...{
+                                  else if (examStartPageController.questionListResponseStatusCode.value == 404) ...{
                                                 Expanded(
                                                   child: NoDataFound()
-                                                      .noItemFound("Your teacher did not create quiz time!"),
+                                                      .noItemFound1("Question not found!"),
                                                 ),
+                                                // Expanded(
+                                                //   child:Obx(() => NoDataFound().noItemFound1(examStartPageController.serverErrorText.value)),
+                                                // ),
                                               }
-                                              else if (examStartPageController.questionListResponseStatusCode.value == 404) ...{
-                                                  Expanded(
-                                                    child: NoDataFound()
-                                                        .noItemFound("Exam not start in this moment!"),
-                                                  ),
-                                                }
-                                                else ...{
-                                                    Expanded(
-                                                      child: Center(
-                                                        child: SizedBox(
-                                                          height: 80,
-                                                          width: 80,
-                                                          child: CircularProgressIndicator(
-                                                            backgroundColor: awsStartColor,
-                                                            color: awsEndColor,
-                                                            strokeWidth: 5,
-                                                          ),
+                                  else ...{
+                                            Expanded(
+                                                    child: Center(
+                                                      child: SizedBox(
+                                                        height: 80,
+                                                        width: 80,
+                                                        child: CircularProgressIndicator(
+                                                          backgroundColor: awsStartColor,
+                                                          color: awsEndColor,
+                                                          strokeWidth: 5,
                                                         ),
-
-
                                                       ),
-                                                    ),
 
-                                                  }
+
+                                                    ),
+                                                  ),
+
+                                           }
                                 ],
                               ))
 
@@ -994,7 +1027,9 @@ class ExamStartPageScreen extends StatelessWidget {
           Fluttertoast.cancel();
           _showToast("Please select answer! ");
           return;
-        } else {
+        }
+
+        else {
 
           examStartPageController.submitMcqQuestionAnswer(
               questionMcqOptionsId:examStartPageController.questionMcqOptionsId.value,
@@ -1002,10 +1037,14 @@ class ExamStartPageScreen extends StatelessWidget {
               quizId: examStartPageController.mcqQuestionDataModel.value.data![0].quizId.toString(),
               studentId: examStartPageController.studentId.value,
               uid: examStartPageController.hw_panel_uid.value);
+
           // _showToast(question_mcq_options_id);
           // selected_question_mcq_options_id=optionList[selectedValue]["question_mcq_options_id"].toString();
           // _submitMCQQuestion(selected_question_mcq_options_id,questionId);
           // _showToast(selected_question_mcq_options_id);
+
+
+
         }
       },
       style: ElevatedButton.styleFrom(

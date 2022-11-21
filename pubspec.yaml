@@ -58,6 +58,7 @@ dependencies:
   get_storage: ^2.0.3
   loading_indicator: ^3.1.0
   dropdown_button2: ^1.8.9
+  flutter_html: ^2.2.1
 
 dev_dependencies:
 #  flutter_launcher_icons: "^0.9.2"

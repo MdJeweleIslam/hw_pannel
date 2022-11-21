@@ -9,11 +9,16 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart';
 import 'package:hw_pannel/view/log_in_page.dart';
+import 'package:hw_pannel/view/submit_assignment.dart';
  import 'package:marquee/marquee.dart';
 
 import '../../../gradiant_icon.dart';
 import '../../Colors.dart';
  import '../../controller/forget_password_page_controller.dart';
+import '../controller/exam_page_controller.dart';
+import '../controller/exam_start_page_controller.dart';
+import '../controller/home_page_controller.dart';
+import '../controller/log_in_page_controller.dart';
 import '../controller/navigation_drawer_page_controller.dart';
 import 'background.dart';
 
@@ -41,7 +46,9 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
             _buildDrawerItem(
                 text: 'Submit Assignment',
                 textIconColor: awsEndColor,
-                onTap: ()=>navigate(0),
+                onTap: () {
+                  Get.to(()=> SubmitAssignmentScreen());
+                },
                 iconLink: 'assets/images/submit_assignment1.png',
                 tileColor: Colors.transparent,
             ),
@@ -74,7 +81,15 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
               text: 'Log Out',
               textIconColor: awsEndColor,
               onTap: (){
+
+                Get.delete<LogInPageController>();
+                Get.delete<HomePageController>();
+                Get.delete<ExamPageController>();
+                Get.delete<ExamStartPageController>();
+
+
                 Get.offAll(()=> LogInScreen());
+
               },
               iconLink: 'assets/images/log_out_icon.png',
               tileColor: Colors.transparent,

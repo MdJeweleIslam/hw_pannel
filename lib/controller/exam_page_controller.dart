@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -16,6 +15,7 @@ import '../Colors.dart';
 import '../api_service/api_service.dart';
 import '../api_service/sharePreferenceDataSaveName.dart';
 import '../model/individual_classroom_quiz_all_list_model.dart';
+import '../view/HomePage.dart';
 
 class ExamPageController extends GetxController {
 
@@ -24,16 +24,24 @@ class ExamPageController extends GetxController {
   var answerOption="".obs;
   var optionList = [].obs;
 
-  late Timer timer;
+  Timer? timer;
   var startTxt = "00:00:00:00".obs;
 
   //if value 0 then exam finished or not start ,
   //if value 1 then exam is start running,
   var isExamStart = 0.obs;
 
+  var userAccessToken = "".obs;
+
   var otpCountDownSecond = 0.obs;
 
   var isCountingStatus = false.obs;
+
+  var instructionMessageText = "This is test instruction!".obs;
+
+
+  var instructionMessageHtmlData="<p>There is no condition at yet!</p>".obs;
+
 
   var upcomingExamText = "Start Exam".obs;
   // var upcomingExamText = "Up Coming".obs;
@@ -42,7 +50,7 @@ class ExamPageController extends GetxController {
   var hw_panel_id = "0".obs;
   var hw_panel_uid = "0".obs;
 
-  var userName="".obs,fullName="".obs,userBatch="".obs,userType="".obs,userId="".obs,email="".obs;
+  var userName="".obs,fullName="".obs,userBatch="".obs,userBatchName="".obs,userType="".obs,userId="".obs,email="".obs;
 
   var classRoomQuizList=[].obs;
 
@@ -51,8 +59,8 @@ class ExamPageController extends GetxController {
   //if question type 2 then mcq question show
   var questionType = 0.obs;
 
-  DateTime dt1 = DateTime.parse("2021-12-23 11:50:50") ;
-  DateTime dt2 = DateTime.parse("2021-12-23 11:40:10") ;
+  // DateTime dt1 = DateTime.parse("2021-12-23 11:50:50") ;
+  // DateTime dt2 = DateTime.parse("2021-12-23 11:40:10") ;
 
   var startDateTime= "".obs;
   var endDateTime = "".obs;
@@ -71,6 +79,12 @@ class ExamPageController extends GetxController {
     updateIsCountingStatus(false);
   }
 
+
+  void goToHomePage() {
+    onInit();
+    Get.offAll(HomePageScreen());
+  }
+
   void RetriveUserInfo() async {
     try {
 
@@ -79,21 +93,26 @@ class ExamPageController extends GetxController {
       email(storage.read(pref_user_email)??"");
       fullName(storage.read(pref_full_name)??"");
       userBatch(storage.read(pref_user_batch)??"");
+      userBatchName(storage.read(pref_user_batch_name)??"");
       userType(storage.read(pref_user_type)??"");
       userId(storage.read(pref_user_id)??"");
 
 
+      userAccessToken(storage.read(exam_panel_user_access_token)??"");
+
+
        // _showToast( storage.read(hw_pannel_pref_user_uid));
        // _showToast( storage.read(hw_pannel_pref_user_id));
-      storage.read(hw_pannel_pref_user_uid);
-      storage.read(hw_pannel_pref_user_id);
+      storage.read(exam_pannel_pref_user_uid);
+      storage.read(exam_panel_pref_user_id);
 
-      updateHwPanelId(storage.read(hw_pannel_pref_user_id));
-      updateHwPanelUId(storage.read(hw_pannel_pref_user_uid));
+      updateHwPanelId(storage.read(exam_panel_pref_user_id));
+      updateHwPanelUId(storage.read(exam_pannel_pref_user_uid));
      // _showToast( storage.read(hw_pannel_pref_user_uid));
+
       getStudentAllJoinClassroomList(
-          hwPanelId: storage.read(hw_pannel_pref_user_id).toString(),
-          hwPanelUId: storage.read(hw_pannel_pref_user_uid).toString());
+          hwPanelId: storage.read( exam_panel_pref_user_id).toString(),
+          hwPanelUId: storage.read(exam_pannel_pref_user_uid).toString());
 
     } catch (e) {
 
@@ -220,9 +239,12 @@ class ExamPageController extends GetxController {
   void startTimer(var second) {
 
     const oneSec = Duration(seconds: 1);
+
+
     timer = Timer.periodic(
       oneSec,
           (Timer timer) {
+
         if (second <= 0) {
           // _upcomingExamText = "Start Exam";
           updateUpcomingExamText("Start Exam");
@@ -237,13 +259,15 @@ class ExamPageController extends GetxController {
           updateStartTxt(_printDuration(Duration(seconds: second)));
          // _startTxt = _printDuration(Duration(seconds: second));
         }
+
       },
     );
+
   }
 
   ///timer cancel
   void cancelTimer(){
-    timer.cancel();
+    timer?.cancel();
     updateStartTxt("00:00:00");
 
   }
@@ -306,6 +330,8 @@ class ExamPageController extends GetxController {
       }
     }
 
+    // timer.cancel();
+    // timer?.cancel();
     diffSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString()));
 
     return;
@@ -405,9 +431,14 @@ class ExamPageController extends GetxController {
             classRoomQuizList(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo);
 
 
+
+
+
             for(int i=0;i<classRoomQuizList.length;i++){
               if(classRoomQuizList[i].isComplete==false){
 
+
+                getTermsAndCondition(quizId: "${classRoomQuizList[0].quizTimeInfo[0].quizId}", accessToken: userAccessToken.value);
 
 
                 updateStartDateTime(utcToLocalDate("${classRoomQuizList[0].quizTimeInfo[0].quizStartDate}"+
@@ -447,7 +478,47 @@ class ExamPageController extends GetxController {
           // Fluttertoast.cancel();
         }
       }
-    } on SocketException catch (e) {
+    } on SocketException {
+
+      Fluttertoast.cancel();
+      // _showToast("No Internet Connection!");
+    }
+    //updateIsFirstLoadRunning(false);
+  }
+
+ void getTermsAndCondition({required String quizId,required String accessToken}) async{
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try {
+          var response = await get(
+              // Uri.parse('https://exam.arenaclass.stream/api/individual-quiz-terms-and-condition/$quizId'),
+              Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_TERMS_AND_CONDITION$quizId'),
+              headers: {
+                // 'Authorization':'Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNDg5MTAzMGUtZDMzOC00ODAwLWFhYzEtMDdjYWUwMWRmNGUzIiwiZXhwIjoxNjY5MDkzNzgwLCJpYXQiOjE2NjkwMDczODB9.KGzyxEKPkh9BiedU6EOM9BcobUbCgpnWgWDR4HN8p7k'
+                'Authorization':'Token $accessToken'
+              }
+          );
+           //_showToast("terms = ${response.statusCode}");
+          if (response.statusCode == 200) {
+
+            var data = jsonDecode(response.body);
+
+            instructionMessageHtmlData(data["data"][0]["description"].toString());
+
+          }
+          else {
+            // Fluttertoast.cancel();
+
+            log('data:'+response.body.toString());
+            _showToast("failed try again!");
+
+          }
+        } catch (e) {
+          // Fluttertoast.cancel();
+        }
+      }
+    } on SocketException {
 
       Fluttertoast.cancel();
       // _showToast("No Internet Connection!");

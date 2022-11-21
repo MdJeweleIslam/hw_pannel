@@ -49,6 +49,10 @@ class ExamStartPageController extends GetxController {
    var questionMcqOptionsId="".obs;
 
 
+   var serverErrorText="".obs;
+
+
+
    //dynamic
   var studentId = "".obs;
   var hwPaneQuizId="".obs;
@@ -307,6 +311,7 @@ class ExamStartPageController extends GetxController {
 
           updateQuestionListResponseStatusCode(response.statusCode);
 
+
          //  _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
             var data = jsonDecode(response.body);
@@ -355,6 +360,7 @@ class ExamStartPageController extends GetxController {
             //
             // DateTime dt1 = DateTime.parse("2021-12-23 11:50:50");
             // DateTime dt2 = DateTime.parse("2021-12-23 11:40:10");
+            timer?.cancel();
             diffSecond(DateTime.parse(examEndTimeUtc.value),DateTime.parse(currentTimeUtc.value),);
 
 
@@ -362,7 +368,10 @@ class ExamStartPageController extends GetxController {
 
 
           }
-          else if(response.statusCode == 201){
+          else{
+            var data = jsonDecode(response.body);
+            serverErrorText(data["message"]);
+          if(response.statusCode == 201){
             Get.off(() => ExamDoneScreen());
           }
           else if(response.statusCode == 203){
@@ -371,12 +380,26 @@ class ExamStartPageController extends GetxController {
           else if(response.statusCode == 402){
             Get.off(() => TimeOverScreen());
           }
-          else {
-            updateQuestionType(3);
+          else if(response.statusCode == 404){
             var data = jsonDecode(response.body);
-            _showToast(data["message"]);
+            updateCurrentTimeUtc(utcToLocalDate(data["current_timess"].toString()));
+            updateExamEndTimeUtc(utcToLocalDate(data["e_new_date"].toString()));
+            timer?.cancel();
+            diffSecond(DateTime.parse(examEndTimeUtc.value),DateTime.parse(currentTimeUtc.value),);
+
+            updateQuestionType(3);
+          }
+          else {
+            var data = jsonDecode(response.body);
+            // updateCurrentTimeUtc(utcToLocalDate(data["current_timess"].toString()));
+            // updateExamEndTimeUtc(utcToLocalDate(data["e_new_date"].toString()));
+            updateQuestionType(3);
+          //  var data = jsonDecode(response.body);
+            // _showToast(data["message"]);
 
           }
+          }
+
         } catch (e) {
 
           // Log(e.toString());
@@ -547,15 +570,15 @@ class ExamStartPageController extends GetxController {
 
       var storage =GetStorage();
 
-      storage.read(hw_pannel_pref_user_uid);
-      storage.read(hw_pannel_pref_user_id);
+      storage.read(exam_pannel_pref_user_uid);
+      storage.read(exam_panel_pref_user_id);
 
-      updateHwPanelId(storage.read(hw_pannel_pref_user_id));
-      updateHwPanelUId(storage.read(hw_pannel_pref_user_uid));
+      updateHwPanelId(storage.read(exam_panel_pref_user_id));
+      updateHwPanelUId(storage.read(exam_pannel_pref_user_uid));
 
       updateHwPaneQuizId(storage.read(hw_panel_pref_quiz_id));
 
-      updateStudentId(storage.read(hw_pannel_pref_user_id));
+      updateStudentId(storage.read(exam_panel_pref_user_id));
 
      // updateExamEndTimeLocal(storage.read(pref_user_exam_end_time).toString());
 
@@ -594,7 +617,7 @@ class ExamStartPageController extends GetxController {
       updateHwPaneQuizId(storage.read(hw_panel_pref_quiz_id));
       Fluttertoast.cancel();
      // _showToast("quiz id= "+ storage.read(hw_panel_pref_quiz_id));
-      getExamQuestion(hwPanelUid: storage.read(hw_pannel_pref_user_uid), hwPaneQuizId: storage.read(hw_panel_pref_quiz_id));
+      getExamQuestion(hwPanelUid: storage.read(exam_pannel_pref_user_uid), hwPaneQuizId: storage.read(hw_panel_pref_quiz_id));
 
     } catch (e) {
 
