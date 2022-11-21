@@ -441,65 +441,71 @@ class ExamStartPageScreen extends StatelessWidget {
                                   else if (examStartPageController.questionListResponseStatusCode.value == 201) ...{
                                     Expanded(
 
-                                      child: NoDataFound()
-                                          .noItemFound1("Your response already submitted!"),
+                                      child: NoDataFound().noItemFound1("Your response already submitted!"),
+
                                     ),
                                   }
                                   else if (examStartPageController.questionListResponseStatusCode.value == 203) ...{
                                       Expanded(
-                                        child: NoDataFound().noItemFound1("Quiz time over!"),
+
+                                      // child:Obx(() => NoDataFound().noItemFound1(examStartPageController.serverErrorText.value)),
+
+                                        child:Obx(() => NoDataFound().noItemFound1("Quiz time over!")),
                                       ),
                                     }
-                                    else if (examStartPageController.questionListResponseStatusCode.value == 204) ...{
+                                  else if (examStartPageController.questionListResponseStatusCode.value == 204) ...{
+                                      Expanded(
+                                        child: NoDataFound().noItemFound1("Quiz not Start!"),
+                                      ),
+                                    }
+                                  else if (examStartPageController.questionListResponseStatusCode.value == 400) ...{
                                         Expanded(
-                                          child: NoDataFound().noItemFound1("Quiz not Start!"),
+                                          child: NoDataFound().noItemFound1("Quiz not Created!"),
                                         ),
                                       }
-                                      else if (examStartPageController.questionListResponseStatusCode.value == 400) ...{
+                                  else if (examStartPageController.questionListResponseStatusCode.value == 401) ...{
                                           Expanded(
-                                            child: NoDataFound().noItemFound1("Quiz not Created!"),
+                                            child: NoDataFound().noItemFound1("Quiz not Start!"),
                                           ),
                                         }
-                                        else if (examStartPageController.questionListResponseStatusCode.value == 401) ...{
+                                  else if (examStartPageController.questionListResponseStatusCode.value == 402) ...{
                                             Expanded(
-                                              child: NoDataFound().noItemFound1("Quiz not Start!"),
+                                              child: NoDataFound().noItemFound1("Quiz time over!"),
                                             ),
                                           }
-                                          else if (examStartPageController.questionListResponseStatusCode.value == 402) ...{
+                                  else if (examStartPageController.questionListResponseStatusCode.value == 403) ...{
                                               Expanded(
-                                                child: NoDataFound().noItemFound1("Quiz time over!"),
+                                                child: NoDataFound()
+                                                    .noItemFound1("Your teacher did not create quiz time!"),
                                               ),
                                             }
-                                            else if (examStartPageController.questionListResponseStatusCode.value == 403) ...{
+                                  else if (examStartPageController.questionListResponseStatusCode.value == 404) ...{
                                                 Expanded(
                                                   child: NoDataFound()
-                                                      .noItemFound1("Your teacher did not create quiz time!"),
+                                                      .noItemFound1("Question not found!"),
                                                 ),
+                                                // Expanded(
+                                                //   child:Obx(() => NoDataFound().noItemFound1(examStartPageController.serverErrorText.value)),
+                                                // ),
                                               }
-                                              else if (examStartPageController.questionListResponseStatusCode.value == 404) ...{
-                                                  Expanded(
-                                                    child: NoDataFound()
-                                                        .noItemFound1("Question not found!"),
-                                                  ),
-                                                }
-                                                else ...{
-                                                    Expanded(
-                                                      child: Center(
-                                                        child: SizedBox(
-                                                          height: 80,
-                                                          width: 80,
-                                                          child: CircularProgressIndicator(
-                                                            backgroundColor: awsStartColor,
-                                                            color: awsEndColor,
-                                                            strokeWidth: 5,
-                                                          ),
+                                  else ...{
+                                            Expanded(
+                                                    child: Center(
+                                                      child: SizedBox(
+                                                        height: 80,
+                                                        width: 80,
+                                                        child: CircularProgressIndicator(
+                                                          backgroundColor: awsStartColor,
+                                                          color: awsEndColor,
+                                                          strokeWidth: 5,
                                                         ),
-
-
                                                       ),
-                                                    ),
 
-                                                  }
+
+                                                    ),
+                                                  ),
+
+                                           }
                                 ],
                               ))
 

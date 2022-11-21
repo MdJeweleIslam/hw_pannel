@@ -341,44 +341,85 @@ class ExamPageScreen extends StatelessWidget {
 
                                                       ],
                                                     ),
-
-                                                    Container(
-                                                      padding:const EdgeInsets.only(left: 18.0, right: 18.0,top: 0,bottom: 18),
-                                                      child: Column(
+                                                    SingleChildScrollView(
+                                                      child: Wrap(
                                                         children: [
+                                                          Container(
+                                                            padding:const EdgeInsets.only(left: 15.0, right: 15.0,top: 0,bottom: 10),
+                                                            child: Column(
+                                                              children: [
 
 
-                                                          Image.asset(
-                                                            "assets/images/information.png",
-                                                            height: 30,
-                                                            width: 30,
-                                                            fit: BoxFit.fill,
-                                                            color: awsStartColor,
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Text("Attention!",
-                                                            textAlign: TextAlign.center,
-                                                            style: TextStyle(
-                                                                color:Colors.black.withOpacity(0.8),
-                                                                fontSize: 20,
-                                                                fontWeight: FontWeight.w600),
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 15,
-                                                          ),
+                                                                Image.asset(
+                                                                  "assets/images/information.png",
+                                                                  height: 30,
+                                                                  width: 30,
+                                                                  fit: BoxFit.fill,
+                                                                  color: awsStartColor,
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                Text("Attention!",
+                                                                  textAlign: TextAlign.center,
+                                                                  style: TextStyle(
+                                                                      color:Colors.black.withOpacity(0.8),
+                                                                      fontSize: 20,
+                                                                      fontWeight: FontWeight.w600),
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 15,
+                                                                ),
+
+
+                                                                //
+                                                                Obx(() =>   Html(
+                                                                  data: examPageController.instructionMessageHtmlData.value,
+                                                                ),),
 
 
 
-                                                          Obx(() =>   Html(
-                                                            data: examPageController.instructionMessageHtmlData.value,
-                                                          ),),
+                                                                // Row(children: [
+                                                                //   Expanded(child: Container(
+                                                                //     decoration: BoxDecoration(
+                                                                //       gradient: LinearGradient(
+                                                                //         colors: [awsStartColor, awsEndColor],
+                                                                //         begin: Alignment.centerLeft,
+                                                                //         end: Alignment.centerRight,
+                                                                //       ),
+                                                                //       borderRadius: BorderRadius.only(
+                                                                //           topRight: Radius.circular(5.0),
+                                                                //           bottomRight: Radius.circular(5.0),
+                                                                //           topLeft: Radius.circular(5),
+                                                                //           bottomLeft: Radius.circular(5)),
+                                                                //     ),
+                                                                //     child: Container(
+                                                                //       height: 45,
+                                                                //       alignment: Alignment.center,
+                                                                //       child: Text(
+                                                                //         "Ok",
+                                                                //         textAlign: TextAlign.center,
+                                                                //         style: TextStyle(
+                                                                //           fontFamily: 'PT-Sans',
+                                                                //           fontSize: 16,
+                                                                //           fontWeight: FontWeight.normal,
+                                                                //           color: Colors.white,
+                                                                //         ),
+                                                                //       ),
+                                                                //     ),
+                                                                //   ))
+                                                                // ],),
 
 
+
+
+                                                              ],
+                                                            ),
+                                                          )
                                                         ],
                                                       ),
                                                     )
+
 
 
 

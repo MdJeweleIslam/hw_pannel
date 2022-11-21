@@ -380,9 +380,21 @@ class ExamStartPageController extends GetxController {
           else if(response.statusCode == 402){
             Get.off(() => TimeOverScreen());
           }
-          else {
-            updateQuestionType(3);
+          else if(response.statusCode == 404){
             var data = jsonDecode(response.body);
+            updateCurrentTimeUtc(utcToLocalDate(data["current_timess"].toString()));
+            updateExamEndTimeUtc(utcToLocalDate(data["e_new_date"].toString()));
+            timer?.cancel();
+            diffSecond(DateTime.parse(examEndTimeUtc.value),DateTime.parse(currentTimeUtc.value),);
+
+            updateQuestionType(3);
+          }
+          else {
+            var data = jsonDecode(response.body);
+            // updateCurrentTimeUtc(utcToLocalDate(data["current_timess"].toString()));
+            // updateExamEndTimeUtc(utcToLocalDate(data["e_new_date"].toString()));
+            updateQuestionType(3);
+          //  var data = jsonDecode(response.body);
             // _showToast(data["message"]);
 
           }
