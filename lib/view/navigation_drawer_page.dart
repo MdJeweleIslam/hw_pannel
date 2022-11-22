@@ -11,6 +11,7 @@ import 'package:http/http.dart';
 import 'package:hw_pannel/view/log_in_page.dart';
 import 'package:hw_pannel/view/submit_assignment.dart';
  import 'package:marquee/marquee.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../../../gradiant_icon.dart';
 import '../../Colors.dart';
@@ -36,7 +37,7 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        child: ListView(
+        child: Column(
           children: [
             _buildUserDrawerHeader(),
             Divider(
@@ -94,6 +95,42 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
               iconLink: 'assets/images/log_out_icon.png',
               tileColor: Colors.transparent,
             ),
+
+            Expanded(child: Container(
+              alignment: Alignment.bottomCenter,
+              child:Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(child: Container()),
+                  Text("Developed by",
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 10,),
+
+
+                  GradientText(
+                    "Arena Web Technology",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500
+                    ),
+                    textAlign: TextAlign.center,
+                    colors: [
+                      awsStartColor,
+                     // Colors.black.withOpacity(0.1),
+                      awsEndColor,
+                    ],
+                  ),
+
+                  SizedBox(height: 20,)
+                ],
+
+              ),
+            ))
 
         ],
         ),
