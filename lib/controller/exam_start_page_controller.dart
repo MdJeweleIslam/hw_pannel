@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Colors.dart';
 import '../api_service/api_service.dart';
@@ -18,12 +15,9 @@ import '../api_service/sharePreferenceDataSaveName.dart';
 import '../model/McqQuestionModel.dart';
 import '../model/ShortQuestionModel.dart';
 import '../view/exam_done.dart';
-import '../view/exam_start_page.dart';
 import '../view/time_over.dart';
 
 class ExamStartPageController extends GetxController {
-
-  // ExamStartPageController(this.quizId);
 
   ///timer variable
   var startTxt = "00:00:00".obs;
@@ -73,14 +67,9 @@ class ExamStartPageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-   // diffSecond1();
-   //  loadUserIdFromSharePref();
+
     loadUserIdFromSharePref();
     loadUidAndQuizIdFromSharePrefThenGetExamQuestion();
-    //getExamQuestion();
-
-
-    // diffSecond1();
 
   }
 
@@ -116,6 +105,7 @@ class ExamStartPageController extends GetxController {
     }
   }
 
+  ///input two time and difference between time and pass second with timer
   diffSecond(DateTime dt1,DateTime dt2,) {
     Duration diff = dt1.difference(dt2);
     if (diff.inSeconds > 0) {
@@ -134,6 +124,8 @@ class ExamStartPageController extends GetxController {
     return diff.inSeconds;
   }
 
+
+  ///timer start if difference >0
   void startTimer(var second) {
 
     const oneSec = Duration(seconds: 1);
@@ -158,6 +150,7 @@ class ExamStartPageController extends GetxController {
     );
   }
 
+  ///timer cancel
   ifTimerMounted(){
     final itimer = timer == null ? false : timer!.isActive;
     if(itimer){
@@ -168,37 +161,6 @@ class ExamStartPageController extends GetxController {
     }
   }
 
-
-  void startTimer1(var second) {
-
-    const oneSec = Duration(seconds: 1);
-    timer = Timer.periodic(oneSec, (timer) {
-      print('timer is running');
-      //DO SOMETHING
-    });
-
-
-
-    timer = Timer.periodic(
-      oneSec, ( timer) {
-        if (second <= 0) {
-          loadUidAndQuizIdFromSharePrefThenGetExamQuestion();
-          if(allQuestionSubmit==false){
-            Get.off(TimeOverScreen());
-          }
-          _showToast("Time over!");
-          timer.cancel();
-        }
-        else {
-          if(timer.isActive){
-            second--;
-            updateStartTxt(_printDuration(Duration(seconds: second)));
-
-          }
-        }
-      },
-    );
-  }
 
   ///timer cancel
   void cancelTimer(){
@@ -229,11 +191,12 @@ class ExamStartPageController extends GetxController {
   //   examEndTimeLocal(value);
   // }
 
-
+  ///update current Time Utc
   updateCurrentTimeUtc(String value) {
     currentTimeUtc(value);
   }
 
+  ///update end Time Utc
   updateExamEndTimeUtc(String value) {
     examEndTimeUtc(value);
   }
@@ -253,12 +216,12 @@ class ExamStartPageController extends GetxController {
     totalQuestionNo(value);
   }
 
-
-  //
+  ///update Question List Response Status Code
   updateQuestionListResponseStatusCode(int value) {
     questionListResponseStatusCode(value);
   }
 
+  ///update Question Mcq Options Id
   updateQuestionMcqOptionsId(String value) {
     questionMcqOptionsId(value);
   }
@@ -294,7 +257,7 @@ class ExamStartPageController extends GetxController {
      shortQuestionModel(newData) ;
    }
 
-  //get exam quiz list
+  ///get exam quiz list
   void getExamQuestion({required String hwPanelUid, required String hwPaneQuizId}) async{
     try {
       final result = await InternetAddress.lookup('example.com');
@@ -415,7 +378,7 @@ class ExamStartPageController extends GetxController {
     //updateIsFirstLoadRunning(false);
   }
 
-  //submit Mcq Question Answer
+  ///submit Mcq Question Answer
    void submitMcqQuestionAnswer({
      required String questionMcqOptionsId, required String studentId,
      required String quizId, required String questionId, required String uid
@@ -475,7 +438,7 @@ class ExamStartPageController extends GetxController {
     //updateIsFirstLoadRunning(false);
   }
 
-  //submit short Question Answer
+  ///submit short Question Answer
   void submitShortQuestionAnswer({
     required String answerText, required String studentId,
     required String quizId, required String questionId, required String uid
@@ -544,7 +507,9 @@ class ExamStartPageController extends GetxController {
         textColor: Colors.white,
         fontSize: 16.0);
   }
-  //utc to local convert and date return
+
+
+  ///utc to local convert and date return
   String utcToLocalDate(String value){
     try{
 
@@ -565,6 +530,7 @@ class ExamStartPageController extends GetxController {
   }
 
 
+  ///get data from share pref
   void loadUserIdFromSharePref() async {
     try {
 
@@ -580,33 +546,9 @@ class ExamStartPageController extends GetxController {
 
       updateStudentId(storage.read(exam_panel_pref_user_id));
 
-     // updateExamEndTimeLocal(storage.read(pref_user_exam_end_time).toString());
-
-      // Fluttertoast.cancel();
-
-      // _showToast("time end = "+ storage.read(pref_user_exam_end_time));
-      // _showToast( storage.read(hw_pannel_pref_user_id));
-
-    //  getExamQuestion(hwPanelUid: storage.read(hw_pannel_pref_user_uid), hwPaneQuizId: storage.read(hw_panel_pref_quiz_id));
-
-
     } catch (e) {
 
-      //code
-
-
     }
-
-
-    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
-
 
   }
 
@@ -615,41 +557,12 @@ class ExamStartPageController extends GetxController {
 
       var storage =GetStorage();
       updateHwPaneQuizId(storage.read(hw_panel_pref_quiz_id));
-      Fluttertoast.cancel();
-     // _showToast("quiz id= "+ storage.read(hw_panel_pref_quiz_id));
       getExamQuestion(hwPanelUid: storage.read(exam_pannel_pref_user_uid), hwPaneQuizId: storage.read(hw_panel_pref_quiz_id));
 
     } catch (e) {
 
-      //code
-
-
     }
 
-
-    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
-
-
   }
-
-  // loadUserIdFromSharePref() async {
-  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  //   try {
-  //     updateExamEndTimeLocal(utcToLocalDate(sharedPreferences.getString(pref_user_exam_end_time).toString()));
-  //    // updateExamEndTimeLocal(sharedPreferences.getString(pref_user_exam_end_time).toString());
-  //   //  _showToast(sharedPreferences.getString(pref_user_exam_end_time).toString());
-  //
-  //   } catch(e) {
-  //     //code
-  //   }
-  //
-  // }
 
 }

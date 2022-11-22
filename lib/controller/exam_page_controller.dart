@@ -80,59 +80,7 @@ class ExamPageController extends GetxController {
   }
 
 
-  void goToHomePage() {
-    onInit();
-    Get.offAll(HomePageScreen());
-  }
 
-  void RetriveUserInfo() async {
-    try {
-
-      var storage =GetStorage();
-      userName(storage.read(pref_user_name)??"");
-      email(storage.read(pref_user_email)??"");
-      fullName(storage.read(pref_full_name)??"");
-      userBatch(storage.read(pref_user_batch)??"");
-      userBatchName(storage.read(pref_user_batch_name)??"");
-      userType(storage.read(pref_user_type)??"");
-      userId(storage.read(pref_user_id)??"");
-
-
-      userAccessToken(storage.read(exam_panel_user_access_token)??"");
-
-
-       // _showToast( storage.read(hw_pannel_pref_user_uid));
-       // _showToast( storage.read(hw_pannel_pref_user_id));
-      storage.read(exam_pannel_pref_user_uid);
-      storage.read(exam_panel_pref_user_id);
-
-      updateHwPanelId(storage.read(exam_panel_pref_user_id));
-      updateHwPanelUId(storage.read(exam_pannel_pref_user_uid));
-     // _showToast( storage.read(hw_pannel_pref_user_uid));
-
-      getStudentAllJoinClassroomList(
-          hwPanelId: storage.read( exam_panel_pref_user_id).toString(),
-          hwPanelUId: storage.read(exam_pannel_pref_user_uid).toString());
-
-    } catch (e) {
-
-      //code
-
-
-    }
-
-
-    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
-
-
-  }
 
 
   @override
@@ -184,45 +132,13 @@ class ExamPageController extends GetxController {
 
   }
 
-  void RetriveUserInfo1() async {
-    try {
-
-      var storage =GetStorage();
-      userName(storage.read(pref_user_name)??"");
-      fullName(storage.read(pref_full_name)??"");
-      userBatch(storage.read(pref_user_batch)??"");
-      userType(storage.read(pref_user_type)??"");
-      userId(storage.read(pref_user_id)??"");
-
-
-    } catch (e) {
-
-      //code
-
-
-    }
-
-
-    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
-
-
-  }
-
-
+  ///input two time and difference between time and pass second with timer
   diffSecond(DateTime dt1,DateTime dt2,) {
-    // DateTime dt1 = DateTime.parse("2021-12-23 11:50:50");
-    // DateTime dt2 = DateTime.parse("2021-12-23 11:40:10");
+
     Duration diff = dt1.difference(dt2);
 
     if (diff.inSeconds > 0) {
-      // _showToast('> 0');
+
       updateOtpCountDownSecond(diff.inSeconds);
       startTimer(diff.inSeconds);
     }else{
@@ -230,12 +146,15 @@ class ExamPageController extends GetxController {
     }
   }
 
+
+  ///time difference calculation(dt1-dt2)
  int timeDifferenceSecond(DateTime dt1,DateTime dt2,) {
 
     Duration diff = dt1.difference(dt2);
     return diff.inSeconds;
   }
 
+  ///timer start if difference >0
   void startTimer(var second) {
 
     const oneSec = Duration(seconds: 1);
@@ -272,6 +191,7 @@ class ExamPageController extends GetxController {
 
   }
 
+  ///date format for user visible
   String _printDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitDay = twoDigits(duration.inDays.remainder(30));
@@ -315,6 +235,7 @@ class ExamPageController extends GetxController {
   }
 
 
+  ///time check startDateTime > currentDateTime
   _checkTime(){
     //startDateTime > currentDateTime
     if(timeDifferenceSecond(DateTime.parse(startDateTime.toString()),DateTime.parse(currentDateTime.toString()))>0){
@@ -486,6 +407,8 @@ class ExamPageController extends GetxController {
     //updateIsFirstLoadRunning(false);
   }
 
+
+  ///terms or instruction api call
  void getTermsAndCondition({required String quizId,required String accessToken}) async{
     try {
       final result = await InternetAddress.lookup('example.com');
@@ -526,78 +449,7 @@ class ExamPageController extends GetxController {
     //updateIsFirstLoadRunning(false);
   }
 
-  //get exam quiz list
-  // void getExamList() async{
-  //   try {
-  //     final result = await InternetAddress.lookup('example.com');
-  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-  //       try {
-  //         var response = await put(
-  //           // Uri.parse('http://192.168.1.4:8000/api/individual-classroom-quiz-all-list/$classRoomId/'),
-  //           Uri.parse('$BASE_URL_EXAM_PANNEL$SUB_URL_API_GET_QUIZ_LIST$classRoomId/'),
-  //           body: {
-  //             'uid':"$uid"
-  //           }
-  //         );
-  //        _showToast("${response.statusCode}");
-  //         if (response.statusCode == 200) {
-  //
-  //          // _showToast("success");
-  //           var data = response.body;
-  //           IndividualClassroomQuizAllListModel individualClassroomQuizAllListModel= individualClassroomQuizAllListModelFromJson(data);
-  //
-  //           classRoomQuizList(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo);
-  //
-  //
-  //           for(int i=0;i<classRoomQuizList.length;i++){
-  //             if(classRoomQuizList[i].isComplete==false){
-  //
-  //
-  //
-  //               updateStartDateTime(utcToLocalDate("${classRoomQuizList[0].quizTimeInfo[0].quizStartDate}"+
-  //                   " ${classRoomQuizList[0].quizTimeInfo[0].quizStartTime}"));
-  //               updateEndDateTime(utcToLocalDate("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
-  //                   " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}"));
-  //               updateEndDateTimeUtc("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
-  //                   " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");
-  //               saveExamEndDate("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
-  //                   " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");
-  //               updateCurrentDateTime(utcToLocalDate(individualClassroomQuizAllListModel.currentTimes.toString()));
-  //
-  //               _checkTime();
-  //
-  //               // updateCurrentDateTime("${classRoomQuizList[0].quizTimeInfo[0].quizEndDate}"+
-  //               //     " ${classRoomQuizList[0].quizTimeInfo[0].quizEndTime}");
-  //
-  //              // diffSecond(DateTime.parse(endDateTime.toString()),DateTime.parse(startDateTime.toString()));
-  //               return;
-  //             }
-  //           }
-  //
-  //
-  //
-  //            _showToast(individualClassroomQuizAllListModel.data[0].classroomInfo.quizInfo.length.toString());
-  //           _showToast(classRoomQuizList.length.toString());
-  //
-  //         }
-  //         else {
-  //          // Fluttertoast.cancel();
-  //
-  //           log('data:'+response.body.toString());
-  //           _showToast("failed try again!");
-  //
-  //         }
-  //       } catch (e) {
-  //         // Fluttertoast.cancel();
-  //       }
-  //     }
-  //   } on SocketException catch (e) {
-  //
-  //     Fluttertoast.cancel();
-  //     // _showToast("No Internet Connection!");
-  //   }
-  //   //updateIsFirstLoadRunning(false);
-  // }
+
 
   updateStartDateTime(String value) {
     startDateTime(value);
@@ -629,40 +481,57 @@ class ExamPageController extends GetxController {
         fontSize: 16.0);
   }
 
+  ///save dat with share pref
   void saveExamEndDate(String examEndDate) async {
     try {
       var storage =GetStorage();
       storage.write(pref_user_exam_end_time, examEndDate);
 
-      // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      // sharedPreferences.setString(pref_user_exam_end_time, examEndDate);
-    //  _showToast("end date"+storage.read(pref_user_exam_end_time));
 
     } catch (e) {
 
     }
 
 
-    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
-
-
   }
 
-  void saveExamEndDate1(String examEndDate) async {
+  void goToHomePage() {
+    onInit();
+    Get.offAll(HomePageScreen());
+  }
+
+
+  ///get data from share pref
+  void RetriveUserInfo() async {
     try {
 
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      sharedPreferences.setString(pref_user_exam_end_time, examEndDate);
-      _showToast("end date"+examEndDate);
+      var storage =GetStorage();
+      userName(storage.read(pref_user_name)??"");
+      email(storage.read(pref_user_email)??"");
+      fullName(storage.read(pref_full_name)??"");
+      userBatch(storage.read(pref_user_batch)??"");
+      userBatchName(storage.read(pref_user_batch_name)??"");
+      userType(storage.read(pref_user_type)??"");
+      userId(storage.read(pref_user_id)??"");
+
+
+      userAccessToken(storage.read(exam_panel_user_access_token)??"");
+
+      storage.read(exam_pannel_pref_user_uid);
+      storage.read(exam_panel_pref_user_id);
+
+      updateHwPanelId(storage.read(exam_panel_pref_user_id));
+      updateHwPanelUId(storage.read(exam_pannel_pref_user_uid));
+
+      ///call all join class room list
+      getStudentAllJoinClassroomList(
+          hwPanelId: storage.read( exam_panel_pref_user_id).toString(),
+          hwPanelUId: storage.read(exam_pannel_pref_user_uid).toString());
 
     } catch (e) {
+
+      //code
+
 
     }
 

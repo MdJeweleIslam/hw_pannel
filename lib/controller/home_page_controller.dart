@@ -12,6 +12,8 @@ import '../api_service/sharePreferenceDataSaveName.dart';
 
 class HomePageController extends GetxController {
 
+
+  ///user info variable
   var userName="".obs,fullName="".obs,
       userBatch="".obs,userBatchName="".obs,
       pendingAssignmentCount="".obs,
@@ -25,22 +27,11 @@ class HomePageController extends GetxController {
     RetriveUserInfo();
   }
 
-  ///get data from share pref
-  loadUserIdFromSharePref() async {
-    try {
-      var storage =GetStorage();
-      storage.read(exam_pannel_pref_user_uid);
-      storage.read(exam_panel_pref_user_id);
-    } catch(e) {
-      //code
-    }
-
-  }
+  ///get user data from share pref
   void RetriveUserInfo() async {
     try {
 
       var storage =GetStorage();
-     // _showToast( "name "+storage.read(pref_full_name).toString());
       userName(storage.read(pref_user_name)??"");
       email(storage.read(pref_user_email)??"");
       fullName(storage.read(pref_full_name)??"");
@@ -50,37 +41,20 @@ class HomePageController extends GetxController {
       userId(storage.read(pref_user_id)??"");
 
 
-    pendingAssignmentCount(storage.read(pref_user_total_pending_assignment_count)??"");
-    doneAssignmentCount(storage.read(pref_user_total_done_assignment_count)??"");
-    totalAssignmentCount(storage.read(pref_user_total_assignment_count)??"");
-
-
-
+      pendingAssignmentCount(storage.read(pref_user_total_pending_assignment_count)??"");
+      doneAssignmentCount(storage.read(pref_user_total_done_assignment_count)??"");
+      totalAssignmentCount(storage.read(pref_user_total_assignment_count)??"");
 
     } catch (e) {
 
-      //code
-
-
     }
-
-
-    // sharedPreferences.setString(pref_user_UUID, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setBool(pref_login_firstTime, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_cartID, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_county, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_city, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_state, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
-    // sharedPreferences.setString(pref_user_nid, userInfo['data']["user_name"].toString());
-
 
   }
 
 
 
 
-  //toast create
+  ///toast create
   _showToast(String message) {
     Fluttertoast.showToast(
         msg: message,
