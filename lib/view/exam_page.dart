@@ -4,31 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:ntp/ntp.dart';
 
 import '../Colors.dart';
 import '../api_service/sharePreferenceDataSaveName.dart';
- import '../controller/exam_page_controller.dart';
- import '../controller/exam_start_page_controller.dart';
+import '../controller/exam_page_controller.dart';
+import '../controller/exam_start_page_controller.dart';
 import 'background.dart';
 import 'exam_start_page.dart';
 import 'navigation_drawer_page.dart';
 
 class ExamPageScreen extends StatelessWidget {
 
-  final examPageController = Get.put(ExamPageController());
-
-  // final examPageController = Get.put(ExamPageController());
-
+ final examPageController = Get.put(ExamPageController());
+ // final examPageController = Get.put(ExamPageController());
  // String _userName="",_fullName="",_userBatch="",_userType="",_userId="";
+ final GlobalKey<ScaffoldState> _key = GlobalKey();
 
-  final GlobalKey<ScaffoldState> _key = GlobalKey();
-
-  @override
-  Widget build(BuildContext context) {
+ @override
+ Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
           backgroundColor: backGroundColor,
@@ -51,16 +47,13 @@ class ExamPageScreen extends StatelessWidget {
               children: [
 
                 Expanded(child: Stack(
-
                   children: [
                     Background(),
-                   Column(
+                     Column(
                      children: [
                        Expanded(
                          flex:1,
-                         child:
-
-                       Column(
+                         child:Column(
                          children: [
                            Container(
                              margin: const EdgeInsets.fromLTRB(00, 15, 00, 10),
@@ -100,27 +93,80 @@ class ExamPageScreen extends StatelessWidget {
                                ],
                              ),
                            ),
-                           Expanded(child:  ListView.builder( // outer ListView
-                             itemCount: 1,
-                             itemBuilder: (_, index) {
-                               return  Column(
-                                 children: [
-                                   Image.asset(
-                                     "assets/images/aws.png",
-                                     width: 180,
-                                     height: 90,
-                                   ),
-                                   Obx(() => Text("current time: "+examPageController.currentDateTime.value)),
-                                   Obx(() => Text("start time: "+examPageController.startDateTime.value)),
-                                   Obx(() => Text("end time: "+examPageController.endDateTime.value)),
-                                   Obx(() => Text("end time utc: "+examPageController.endDateTimeUtc.value)),
 
-                                   _buildFinishedExamList()
-                                 ],
-                               );
+                           if(examPageController.classRoomQuizList.length>0)...{
+                             Expanded(child:  ListView.builder( // outer ListView
+                               itemCount: 1,
+                               itemBuilder: (_, index) {
+                                 return  Column(
+                                   children: [
+                                     Image.asset(
+                                       "assets/images/aws.png",
+                                       width: 180,
+                                       height: 90,
+                                     ),
 
-                             },
-                           ),)
+                                     Obx(() => Text("current time: "+examPageController.currentDateTime.value)),
+                                     Obx(() => Text("start time: "+examPageController.startDateTime.value)),
+                                     Obx(() => Text("end time: "+examPageController.endDateTime.value)),
+                                     Obx(() => Text("end time utc: "+examPageController.endDateTimeUtc.value)),
+
+                                     _buildFinishedExamList()
+                                   ],
+                                 );
+
+                               },
+                             ),)
+                           }else...{
+                             Expanded(child:  ListView.builder( // outer ListView
+                               itemCount: 1,
+                               itemBuilder: (_, index) {
+                                 return  Column(
+                                   children: [
+                                     Image.asset(
+                                       "assets/images/aws.png",
+                                       width: 180,
+                                       height: 90,
+                                     ),
+                                     Container(
+                                     height:MediaQuery.of(context).size.height/2,
+                                       child: Center(
+                                         child: Column(
+                                           mainAxisAlignment: MainAxisAlignment.end,
+                                           children: [
+                                             //no_item_found.png
+                                             Image.asset(
+                                               "assets/images/search.png",
+                                               width: 80,
+                                               height: 80,
+                                             ),
+                                             SizedBox(
+                                               height: 15,
+                                             ),
+                                             Text(
+                                               "Quiz not found",
+                                               style: TextStyle(
+                                                 fontSize: 18,
+                                                 color: awsMixedColor,
+                                               ),
+                                             ),
+                                             SizedBox(
+                                               height: 100,
+                                             ),
+                                           ],
+                                         ),
+                                       ),
+
+                                     )
+                                   ],
+                                 );
+
+                               },
+                             ),)
+
+
+                           },
+
                          ],
                        ),
 
@@ -133,8 +179,6 @@ class ExamPageScreen extends StatelessWidget {
                   ],
                 )),
 
-
-
               ],
             ),
 
@@ -144,7 +188,7 @@ class ExamPageScreen extends StatelessWidget {
     );
   }
 
-  Future<void> main() async {
+ Future<void> main() async {
     [
       'time.google.com',
       'time.facebook.com',
@@ -153,7 +197,7 @@ class ExamPageScreen extends StatelessWidget {
     ].forEach(_checkTime);
   }
 
-  Future<void> _checkTime(String lookupAddress) async {
+ Future<void> _checkTime(String lookupAddress) async {
     DateTime _myTime;
     DateTime _ntpTime;
 
@@ -184,7 +228,7 @@ class ExamPageScreen extends StatelessWidget {
     return;
   }
 
-  Widget _buildButtonDesign1(
+ Widget _buildButtonDesign1(
       {required Color startColor,
       required Color endColor}) {
     return Container(
@@ -217,7 +261,7 @@ class ExamPageScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildButtonDesign(
+ Widget _buildButtonDesign(
       {required String textValue,
       required Color startColor,
       required Color endColor}) {
@@ -251,9 +295,8 @@ class ExamPageScreen extends StatelessWidget {
     );
   }
 
-
   //finished exam list
-  Widget _buildFinishedExamList() {
+ Widget _buildFinishedExamList() {
     return Obx(() =>
         ListView.builder(
           itemCount:examPageController.classRoomQuizList.length,
@@ -1174,7 +1217,7 @@ class ExamPageScreen extends StatelessWidget {
 
   }
 
-  bool  diffSecond1(DateTime dt1,DateTime dt2,) {
+ bool  diffSecond1(DateTime dt1,DateTime dt2,) {
 
     try{
       Duration diff = dt1.difference(dt2);
@@ -1197,7 +1240,7 @@ class ExamPageScreen extends StatelessWidget {
     /// dt1-dt2
 
   }
-  void saveUserQuizId({required String quizId}) async {
+ void saveUserQuizId({required String quizId}) async {
     try {
 
       var storage =GetStorage();
@@ -1224,7 +1267,7 @@ class ExamPageScreen extends StatelessWidget {
   }
 
   //utc to local convert and time return
-  String utcToLocalTime(String value){
+ String utcToLocalTime(String value){
     try{
       var dateFormat = DateFormat("dd-MM-yyyy hh:mm aa"); // you can change the format here
       var utcDate = dateFormat.format(DateTime.parse(value)); // pass the UTC time here
@@ -1245,7 +1288,7 @@ class ExamPageScreen extends StatelessWidget {
   }
 
   //utc to local convert and date return
-  String utcToLocalDate(String value){
+ String utcToLocalDate(String value){
     try{
       var dateFormat = DateFormat("dd-MM-yyyy hh:mm aa"); // you can change the format here
       var utcDate = dateFormat.format(DateTime.parse(value)); // pass the UTC time here
@@ -1466,7 +1509,6 @@ class ExamPageScreen extends StatelessWidget {
         textColor: Colors.white,
         fontSize: 16.0);
   }
-
 
   ///get data from share pref
   loadUserIdFromSharePref() async {

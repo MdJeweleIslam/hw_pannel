@@ -149,6 +149,7 @@ class LogInApiService {
 
 
 
+  //auto login with exam panel
   userAutoLogIn({
     required String username,
     required String email,
@@ -220,6 +221,7 @@ class LogInApiService {
     }
   }
 
+  ///hw panel user data save with share pref
   void saveUserInfo({
     required String name,
     required String fullName,
@@ -267,6 +269,7 @@ class LogInApiService {
 
   }
 
+  ///exam panel user data save with share pref
   void saveUserUId({required String uId,required String id,required String accessToken,required String refreshToken,}) async {
     try {
       var storage =GetStorage();
@@ -296,6 +299,8 @@ class LogInApiService {
 
 
   }
+
+  ///user email save with share pref
   void saveUserEmail({required String email}) async {
     try {
 
