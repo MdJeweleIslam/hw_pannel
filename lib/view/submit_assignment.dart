@@ -12,10 +12,9 @@ class SubmitAssignmentScreen extends StatelessWidget {
 
   final submitAssignmentPageController = Get.put(SubmitAssignmentPageController());
 
-  String _selectName="";
-  List _data = [];
 
-  late String userId;
+
+  // late String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -29,38 +28,43 @@ class SubmitAssignmentScreen extends StatelessWidget {
             child:Stack(
               children: [
                 Background(),
-                Expanded(child: Container(
-                  padding: EdgeInsets.only(left: 20,right: 20,bottom: 20),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 30,),
-                        Image.asset(
-                          "assets/images/aws.png",
-                          width: 180,
-                          height: 90,
+                Column(
+                  children: [
+                    Expanded(child: Container(
+                      padding: EdgeInsets.only(left: 20,right: 20,bottom: 20),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 30,),
+                            Image.asset(
+                              "assets/images/aws.png",
+                              width: 180,
+                              height: 90,
+                            ),
+
+                            userInputSelectTopic(),
+                            _buildSubmitAssignmentUrlTextField(),
+
+                            const SizedBox(
+                              height: 50,
+                            ),
+
+                            Container(
+                              margin: EdgeInsets.only(left: 10,right: 10),
+                              child:  _buildSubmitAssignmentButton(),),
+
+                            const SizedBox(
+                              height: 20,
+                            ),
+
+
+                          ],
                         ),
+                      ),
+                    )),
+                  ],
+                )
 
-                        userInputSelectTopic(),
-                        _buildSubmitAssignmentUrlTextField(),
-
-                        const SizedBox(
-                          height: 50,
-                        ),
-
-                       Container(
-                         margin: EdgeInsets.only(left: 10,right: 10),
-                         child:  _buildSubmitAssignmentButton(),),
-
-                        const SizedBox(
-                          height: 20,
-                        ),
-
-
-                      ],
-                    ),
-                  ),
-                )),
 
 
               ],
@@ -75,32 +79,34 @@ class SubmitAssignmentScreen extends StatelessWidget {
 
   }
 
-
   Widget userInputSelectTopic() {
     return Container(
         height: 55,
 
         alignment: Alignment.center,
-        margin: const EdgeInsets.only(left: 00,right: 00,top: 50,bottom: 20,),
+        margin: const EdgeInsets.only(left: 00,right: 00,top: 40,bottom: 20,),
 
         decoration: BoxDecoration(
-            color:Colors.black.withOpacity(0.05),
+            color:Colors.black.withOpacity(0.08),
             borderRadius: BorderRadius.circular(10)),
         child: Row(
           children: [
-            Expanded(child: DropdownButton2(
+            Expanded(child: Obx(() =>
+            DropdownButton2(
 
 
               //   menuMaxHeight:55,
-              value: _selectName != null && _selectName.isNotEmpty ? _selectName : null,
+              value: submitAssignmentPageController.selectName.value != null &&
+                  submitAssignmentPageController.selectName.value.isNotEmpty ?
+              submitAssignmentPageController.selectName.value : null,
               underline:const SizedBox.shrink(),
               hint:Row(
                 children: const [
                   SizedBox(width: 20,),
                   Text("Select Your assignment",
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
+                          color: text_color,
+                          fontSize: 16,
                           fontWeight: FontWeight.normal)),
                 ],
               ),
@@ -109,8 +115,7 @@ class SubmitAssignmentScreen extends StatelessWidget {
               /// icon: SizedBox.shrink(),
               buttonPadding: const EdgeInsets.only(left: 0, right: 14),
 
-              items:
-              _data.map((list) {
+              items: submitAssignmentPageController.data.map((list) {
                 return DropdownMenuItem(
 
 
@@ -121,11 +126,13 @@ class SubmitAssignmentScreen extends StatelessWidget {
 
                       const SizedBox(width: 20,),
                       Expanded(child: Text(
-                          list["topic_name"].toString(),
-                          style: const TextStyle(
-                              color: Colors.black,
+                          list["assignment_url"].toString(),
+                          textAlign: TextAlign.left,
+                          style:  TextStyle(
+                              color: text_color,
+
                               //color: intello_text_color,
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.normal)),),
 
 
@@ -135,36 +142,111 @@ class SubmitAssignmentScreen extends StatelessWidget {
                   ),
 
                   // Text(list["country_name"].toString()),
-                  value: list["topic_id"].toString(),
+                  value: list["assignment_id"].toString(),
                 );
 
               },
               ).toList(),
               onChanged: (String? value) {
-                //_getCountryDataList1();
-                // setState((){
-                //   _selectName=value.toString();
-                //   // _showToast(_selectName);
-                // });
 
+               String data= submitAssignmentPageController.selectName(value.toString());
+                _showToast(submitAssignmentPageController.selectName.value);
               },
 
             ),)
+            )
           ],
         )
     );
   }
 
 
+  Widget userInputSelectTopic1() {
+    return Container(
+        height: 55,
+        alignment: Alignment.center,
+        margin: const EdgeInsets.only(left: 00,right: 00,top: 50,bottom: 20,),
+        decoration: BoxDecoration(
+            color:Colors.black.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(10)),
+        child: Row(
+          children: [
+            // Expanded(child: DropdownButton2(
+            //
+            //
+            //   //   menuMaxHeight:55,
+            //   value: _selectName != null && _selectName.isNotEmpty ? _selectName : null,
+            //   underline:const SizedBox.shrink(),
+            //   hint:Row(
+            //     children: const [
+            //       SizedBox(width: 20,),
+            //       Text("Select Your assignment",
+            //           style: TextStyle(
+            //               color: Colors.black,
+            //               fontSize: 18,
+            //               fontWeight: FontWeight.normal)),
+            //     ],
+            //   ),
+            //   isExpanded: true,
+            //
+            //   /// icon: SizedBox.shrink(),
+            //   buttonPadding: const EdgeInsets.only(left: 0, right: 14),
+            //
+            //   items:
+            //   _data.map((list) {
+            //     return DropdownMenuItem(
+            //
+            //
+            //
+            //       child: Row(
+            //         mainAxisSize: MainAxisSize.max,
+            //         children: [
+            //
+            //           const SizedBox(width: 20,),
+            //           Expanded(child: Text(
+            //               list["topic_name"].toString(),
+            //               style: const TextStyle(
+            //                   color: Colors.black,
+            //                   //color: intello_text_color,
+            //                   fontSize: 18,
+            //                   fontWeight: FontWeight.normal)),),
+            //
+            //
+            //           const SizedBox(width: 20,),
+            //
+            //         ],
+            //       ),
+            //
+            //       // Text(list["country_name"].toString()),
+            //       value: list["topic_id"].toString(),
+            //     );
+            //
+            //   },
+            //   ).toList(),
+            //   onChanged: (String? value) {
+            //     //_getCountryDataList1();
+            //     // setState((){
+            //     //   _selectName=value.toString();
+            //     //   // _showToast(_selectName);
+            //     // });
+            //
+            //   },
+            //
+            // ),)
+          ],
+        )
+    );
+  }
+
   Widget _buildSubmitAssignmentButton() {
     return ElevatedButton(
       onPressed: () {
         String submitAssignmentLinkTxt = submitAssignmentPageController.assignmentLinkController.value.text;
-        if (_inputValid(submitAssignmentLinkTxt) == false) {
+        if (_inputValid(assignmentUrlText: submitAssignmentLinkTxt,
+            selectedValueId: submitAssignmentPageController.selectName.value) == false) {
 
 
-        } else {}
-
+        }
 
       },
       style: ElevatedButton.styleFrom(
@@ -216,12 +298,19 @@ class SubmitAssignmentScreen extends StatelessWidget {
           )),
     );
   }
-  _inputValid(String email) {
-    if (email.isEmpty) {
+  _inputValid({required String assignmentUrlText,required String selectedValueId}) {
+    if (selectedValueId.isEmpty) {
+      Fluttertoast.cancel();
+      _showToast("Please select assignment topic!");
+      return;
+    }
+    if (assignmentUrlText.isEmpty) {
       Fluttertoast.cancel();
       _showToast("Assignment link can't empty!");
       return;
     }
+
+
 
     return false;
   }

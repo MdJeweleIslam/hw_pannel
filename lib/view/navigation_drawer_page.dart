@@ -1,27 +1,17 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:http/http.dart';
 import 'package:hw_pannel/view/log_in_page.dart';
 import 'package:hw_pannel/view/submit_assignment.dart';
- import 'package:marquee/marquee.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
-import '../../../gradiant_icon.dart';
 import '../../Colors.dart';
- import '../../controller/forget_password_page_controller.dart';
 import '../controller/exam_page_controller.dart';
 import '../controller/exam_start_page_controller.dart';
 import '../controller/home_page_controller.dart';
 import '../controller/log_in_page_controller.dart';
 import '../controller/navigation_drawer_page_controller.dart';
-import 'background.dart';
 
 class NavigationDrawerPasswordScreen extends StatelessWidget {
   String name,email;
@@ -29,8 +19,6 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
   NavigationDrawerPasswordScreen(this.name,this.email);
 
   final navigationDrawerPageController = Get.put(NavigationDrawerPageController());
-
-
   late String userId;
 
   @override
@@ -141,7 +129,6 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
 
   }
 
-
   Widget _buildUserDrawerHeader() {
     return UserAccountsDrawerHeader(
         accountName:Text(
@@ -183,9 +170,7 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
     );
   }
 
-
   Widget _buildDrawerItem({
-
     required String text,
     required String iconLink,
     required Color textIconColor,
@@ -212,10 +197,6 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
     );
   }
 
-
-
-
-
   _showToast(String message) {
     Fluttertoast.showToast(
         msg: message,
@@ -230,7 +211,5 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
   navigate(int index){
 
   }
-
-
-
+  
 }
