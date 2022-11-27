@@ -28,6 +28,7 @@ String SUB_URL_API_GET_TERMS_AND_CONDITION = "api/individual-quiz-terms-and-cond
 
 String SUB_URL_API_GET_ASSIGNMENT_LIST = "apk/apk-assignment/?batch_id=";
 String SUB_URL_API_SUBMIT_ASSIGNMENT = "apk/apk-assignment/";
+String SUB_URL_API_SUBMIT_ASSIGNMENT_COUNT_DATA = "apk/login/";
 
 
 

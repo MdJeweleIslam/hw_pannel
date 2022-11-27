@@ -109,7 +109,7 @@ class SubmitAssignmentPageController extends GetxController {
           );
            // _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
-            assignmentLinkController.value.text="";
+           // assignmentLinkController.value.text="";
             var data = jsonDecode(response.body);
             _showToast(data["message"].toString());
 
