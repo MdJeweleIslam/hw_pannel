@@ -30,7 +30,6 @@ class HomePageController extends GetxController {
   ///get user data from share pref
   void RetriveUserInfo() async {
     try {
-
       var storage =GetStorage();
       userName(storage.read(pref_user_name)??"");
       email(storage.read(pref_user_email)??"");
@@ -40,12 +39,11 @@ class HomePageController extends GetxController {
       userType(storage.read(pref_user_type)??"");
       userId(storage.read(pref_user_id)??"");
 
-
       pendingAssignmentCount(storage.read(pref_user_total_pending_assignment_count)??"");
       doneAssignmentCount(storage.read(pref_user_total_done_assignment_count)??"");
       totalAssignmentCount(storage.read(pref_user_total_assignment_count)??"");
 
-    } catch (e) {
+    }catch(e){
 
     }
 

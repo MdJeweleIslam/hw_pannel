@@ -26,5 +26,8 @@ String SUB_URL_API_GET_ALL_CLASS_ROOM_LIST = "api/student-all-join-classroom-lis
 
 String SUB_URL_API_GET_TERMS_AND_CONDITION = "api/individual-quiz-terms-and-condition/";
 
+String SUB_URL_API_GET_ASSIGNMENT_LIST = "apk/apk-assignment/?batch_id=";
+String SUB_URL_API_SUBMIT_ASSIGNMENT = "apk/apk-assignment/";
+
 
 

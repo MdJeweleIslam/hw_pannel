@@ -67,6 +67,12 @@ android {
 
     signingConfigs {
         release {
+            storeFile file('your_key_store_path')
+            storePassword 'your_store_password'
+            keyAlias = 'your_key_alias'
+            keyPassword 'your_key_password'
+
+
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
@@ -76,8 +82,10 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
+
         }
     }
+    namespace 'com.arena_web_security.arena_class'
 
 
 //    buildTypes {
@@ -95,6 +103,7 @@ flutter {
 
 dependencies {
 //    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.0"
-    
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
 }
