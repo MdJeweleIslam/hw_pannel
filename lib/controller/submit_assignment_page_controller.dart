@@ -80,7 +80,7 @@ class SubmitAssignmentPageController extends GetxController {
           // Fluttertoast.cancel();
         }
       }
-    } on SocketException catch (e) {
+    } on SocketException {
 
       Fluttertoast.cancel();
       _showToast("No Internet Connection!");
@@ -109,9 +109,12 @@ class SubmitAssignmentPageController extends GetxController {
           );
            // _showToast("${response.statusCode}");
           if (response.statusCode == 200) {
-           // assignmentLinkController.value.text="";
+
             var data = jsonDecode(response.body);
             _showToast(data["message"].toString());
+            if(data['error']==false){
+              assignmentLinkController.value.text="";
+            }
 
           }
           else {
@@ -126,7 +129,7 @@ class SubmitAssignmentPageController extends GetxController {
           // Fluttertoast.cancel();
         }
       }
-    } on SocketException catch (e) {
+    } on SocketException {
 
       Fluttertoast.cancel();
       // _showToast("No Internet Connection!");
