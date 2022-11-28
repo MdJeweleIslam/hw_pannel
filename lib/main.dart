@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         body: Stack(
           children: [
             LogInScreen(),
-            LogInScreen(),
+         //   LogInScreen(),
            /// ExamDoneScreen(),
           ],
         ),
