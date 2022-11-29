@@ -18,13 +18,11 @@ class ProfileViewPageController extends GetxController {
   var userPhoneNumber="0199421564".obs;
   var userFacebookLink="http://facebook.com/test".obs;
 
-
   @override
   void onInit() {
     super.onInit();
     loadUserIdFromSharePref();
   }
-
 
   ///get data from share pref
   void loadUserIdFromSharePref() async {
@@ -42,8 +40,6 @@ class ProfileViewPageController extends GetxController {
     }
 
   }
-
-
 
 //toast create
   _showToast(String message) {

@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:ntp/ntp.dart';
-
 import '../Colors.dart';
 import '../api_service/sharePreferenceDataSaveName.dart';
 import '../controller/exam_page_controller.dart';
@@ -1241,6 +1240,7 @@ class ExamPageScreen extends StatelessWidget {
     /// dt1-dt2
 
   }
+
  void saveUserQuizId({required String quizId}) async {
     try {
 

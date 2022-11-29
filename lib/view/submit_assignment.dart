@@ -10,7 +10,7 @@ import 'background.dart';
 
 class SubmitAssignmentScreen extends StatelessWidget {
 
-  final submitAssignmentPageController = Get.put(SubmitAssignmentPageController());
+final submitAssignmentPageController = Get.put(SubmitAssignmentPageController());
 
 
 
@@ -269,9 +269,6 @@ class SubmitAssignmentScreen extends StatelessWidget {
       _showToast("Assignment link can't empty!");
       return;
     }
-
-
-
     return false;
   }
 
