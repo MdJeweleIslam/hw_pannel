@@ -51,6 +51,15 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
             ),
 
             _buildDrawerItem(
+              text: 'My Profile',
+              textIconColor: awsEndColor,
+              onTap: ()=>navigate(2),
+              iconLink: 'assets/images/support_icon.png',
+              tileColor: Colors.transparent,
+            ),
+
+
+            _buildDrawerItem(
               text: 'Support Topic',
               textIconColor: awsEndColor,
               onTap: ()=>navigate(2),
