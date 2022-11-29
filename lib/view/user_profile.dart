@@ -5,11 +5,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../Colors.dart';
+import '../controller/profile_view_page_controller.dart';
 import '../controller/submit_assignment_page_controller.dart';
 import 'background.dart';
 
 class ProfileScreen extends StatelessWidget {
-
+  final profileViewPageController = Get.put(ProfileViewPageController());
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -176,45 +177,49 @@ class ProfileScreen extends StatelessWidget {
         children: [
 
 
-
-          _buildCardItem(
+          Obx(() => _buildCardItem(
             fieldName: 'Full Name',
-            fieldValue: "Abdullah",
+            fieldValue: profileViewPageController.userFullName.value,
             textColor: Colors.black,
             fieldNameTextColor: Colors.black.withOpacity(.6),
-          ),
+          ),),
+
+
           Container(
             height: 1,
             color: Colors.white,
           ),
 
-          _buildCardItem(
+          Obx(() => _buildCardItem(
             fieldName: 'Gender',
-            fieldValue: "Male",
+            fieldValue: profileViewPageController.userGender.value,
             textColor: Colors.black,
             fieldNameTextColor: Colors.black.withOpacity(.6),
-          ),
-          Container(
-            height: 1,
-            color: Colors.white,
-          ),
+          ))
 
-          _buildCardItem(
-            fieldName: 'Phone Number',
-            fieldValue: "01994215664",
-            textColor: Colors.black,
-            fieldNameTextColor: Colors.black.withOpacity(.6),
-          ),
+          ,
           Container(
             height: 1,
             color: Colors.white,
           ),
-          _buildCardItem(
-            fieldName: 'FB Profile URL',
-            fieldValue: "http://facebook.com/test",
+          Obx(() => _buildCardItem(
+            fieldName: 'Phone Number',
+            fieldValue: profileViewPageController.userPhoneNumber.value,
             textColor: Colors.black,
             fieldNameTextColor: Colors.black.withOpacity(.6),
+          ))
+          ,
+          Container(
+            height: 1,
+            color: Colors.white,
           ),
+          Obx(() =>  _buildCardItem(
+            fieldName: 'FB Profile URL',
+            fieldValue: profileViewPageController.userFacebookLink.value,
+            textColor: Colors.black,
+            fieldNameTextColor: Colors.black.withOpacity(.6),
+          ),)
+
 
 
 
