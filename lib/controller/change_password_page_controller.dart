@@ -34,8 +34,8 @@ class ChangePasswordPageController extends GetxController {
 
    // _showToast(argumentData[0]['first']);
    //  _showToast(Get.currentRoute.toString());
-    _showToast(Get.previousRoute);
-    _showToast(Get.previousRoute);
+   //  _showToast(Get.previousRoute);
+   //  _showToast(Get.previousRoute);
     // print(argumentData[0]['first']);
     // print(argumentData[1]['second']);
 
