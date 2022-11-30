@@ -5,8 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../Colors.dart';
-import '../controller/profile_view_page_controller.dart';
-import '../controller/submit_assignment_page_controller.dart';
 import '../controller/user_profile_Edit_page_cintroller.dart';
 import '../gradiant_icon.dart';
 import 'background.dart';
