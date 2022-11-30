@@ -12,6 +12,10 @@ class ChangePasswordPageController extends GetxController {
   final newPasswordController = TextEditingController().obs;
   final newConfirmPasswordController = TextEditingController().obs;
 
+  final  oldPasswordControllerFocusNode = FocusNode().obs;
+  final  newPasswordControllerFocusNode = FocusNode().obs;
+  final  newConfirmPasswordControllerFocusNode = FocusNode().obs;
+
 
   ///input box color and operation
   var userNameLevelTextColor = hint_color.obs;

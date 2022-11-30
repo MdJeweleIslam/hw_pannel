@@ -176,7 +176,12 @@ class ChangePasswordScreen extends StatelessWidget {
                 controller: controller,
                 cursorColor:awsCursorColor,
                 cursorWidth: 1.5,
-
+                textInputAction: TextInputAction.next,
+                focusNode:changePasswordPageController.oldPasswordControllerFocusNode.value,
+                onSubmitted:(_){
+                  changePasswordPageController.newPasswordControllerFocusNode.value.requestFocus();
+                    // context.nextEditableTextFocus()
+                },
                 obscureText: changePasswordPageController.isObscure.value,
                 // obscuringCharacter: "*",
                 style: const TextStyle(color: Colors.black, fontSize: 17),
@@ -208,6 +213,7 @@ class ChangePasswordScreen extends StatelessWidget {
 
                   filled: true,
                   fillColor: Colors.white,
+
                   prefixIcon: prefixedIcon,
                   hintText: hintText,
                   hintStyle: const TextStyle(
@@ -258,6 +264,10 @@ class ChangePasswordScreen extends StatelessWidget {
 
                 obscureText: changePasswordPageController.isObscureNewPassword.value,
                 // obscuringCharacter: "*",
+                focusNode:changePasswordPageController.newPasswordControllerFocusNode.value,
+                onSubmitted:(_){
+                  changePasswordPageController.newConfirmPasswordControllerFocusNode.value.requestFocus();
+                },
                 style: const TextStyle(color: Colors.black, fontSize: 18),
                 decoration: InputDecoration(
                   // border: InputBorder.none,
@@ -337,6 +347,10 @@ class ChangePasswordScreen extends StatelessWidget {
 
                 obscureText: changePasswordPageController.isObscureConfirmNewPassword.value,
                 // obscuringCharacter: "*",
+                focusNode:changePasswordPageController.newConfirmPasswordControllerFocusNode.value,
+                onSubmitted:(_){
+                 // changePasswordPageController.newPasswordControllerFocusNode.value.requestFocus();
+                },
                 style: const TextStyle(color: Colors.black, fontSize: 18),
                 decoration: InputDecoration(
                   // border: InputBorder.none,
@@ -397,6 +411,14 @@ class ChangePasswordScreen extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {
 
+        String oldPasswordTxt = changePasswordPageController.oldPasswordController.value.text;
+        String newPasswordTxt = changePasswordPageController.newPasswordController.value.text;
+        String confirmPasswordTxt = changePasswordPageController.newConfirmPasswordController.value.text;
+
+        _inputValid(
+            oldPassword: oldPasswordTxt,
+            newPassword: newPasswordTxt,
+            newConfirmPassword: confirmPasswordTxt);
       },
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,
@@ -438,6 +460,43 @@ class ChangePasswordScreen extends StatelessWidget {
         backgroundColor: awsMixedColor,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+
+  //input text validation check
+  _inputValid({
+    required String oldPassword,
+    required String newPassword,
+    required String newConfirmPassword}) {
+
+    if (oldPassword.isEmpty) {
+      Fluttertoast.cancel();
+      _showToast("Old password can't empty!");
+      return false;
+    }
+
+    if (newPassword.isEmpty) {
+      Fluttertoast.cancel();
+      _showToast("New password can't empty!");
+      return false;
+    }
+    if (newPassword.length < 8) {
+      Fluttertoast.cancel();
+      _showToast("New password must be 8 digit!");
+      return false;
+    }
+
+    if (newConfirmPassword.isEmpty) {
+      Fluttertoast.cancel();
+      _showToast("Confirm password can't empty!");
+      return false;
+    }
+    if (newConfirmPassword.length < 8) {
+      Fluttertoast.cancel();
+      _showToast("Confirm password must be 8 digit!");
+      return false;
+    }
+
+    return true;
   }
 
 
