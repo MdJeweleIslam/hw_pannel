@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hw_pannel/view/change_password.dart';
+import 'package:hw_pannel/view/fotget_password_page.dart';
 import 'package:hw_pannel/view/log_in_page.dart';
 import 'package:hw_pannel/view/user_profile.dart';
 import 'package:hw_pannel/view/user_profile_update.dart';
@@ -30,7 +32,8 @@ class MyApp extends StatelessWidget {
         body: Stack(
           children: [
             // LogInScreen(),
-            ProfileUpdateScreen(),
+            // LogInScreen(),
+            ChangePasswordScreen(),
            //Arena@1324
            //  Is CN=Arena Web Security, OU=Arena, O=Arena, L=Dhaka, ST=Dhaka, C=BD correct?
 

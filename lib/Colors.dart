@@ -10,6 +10,7 @@ const Color awsMixedColor = Color(0xFF6999B0);
 const Color awsCursorColor = Color(0xFF6999B0);
 const Color awsColor = Color(0xFF6999B0);
 const Color hint_color = Color(0xFFa8a8a8);
+const Color hint_color1 = Color(0xff858585);
 const Color unactive_color = Color(0xff696868);
 const Color backGroundColor = Color(0xfff6f6f6);
 const Color box_bg_color = Color(0xFFF9F9FC);
