@@ -10,6 +10,8 @@ class LogInPageController extends GetxController {
   final userNameController = TextEditingController().obs;
   final passwordController = TextEditingController().obs;
 
+  final  userNameControllerFocusNode = FocusNode().obs;
+  final  passwordControllerFocusNode = FocusNode().obs;
 
   ///input box color and operation
   var userNameLevelTextColor = hint_color.obs;

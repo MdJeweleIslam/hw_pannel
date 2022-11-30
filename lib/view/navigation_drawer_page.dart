@@ -1,26 +1,17 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:http/http.dart';
 import 'package:hw_pannel/view/log_in_page.dart';
 import 'package:hw_pannel/view/submit_assignment.dart';
- import 'package:marquee/marquee.dart';
-
-import '../../../gradiant_icon.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../../Colors.dart';
- import '../../controller/forget_password_page_controller.dart';
 import '../controller/exam_page_controller.dart';
 import '../controller/exam_start_page_controller.dart';
 import '../controller/home_page_controller.dart';
 import '../controller/log_in_page_controller.dart';
 import '../controller/navigation_drawer_page_controller.dart';
-import 'background.dart';
+import 'change_password.dart';
 
 class NavigationDrawerPasswordScreen extends StatelessWidget {
   String name,email;
@@ -28,15 +19,13 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
   NavigationDrawerPasswordScreen(this.name,this.email);
 
   final navigationDrawerPageController = Get.put(NavigationDrawerPageController());
-
-
   late String userId;
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        child: ListView(
+        child: Column(
           children: [
             _buildUserDrawerHeader(),
             Divider(
@@ -62,6 +51,15 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
             ),
 
             _buildDrawerItem(
+              text: 'My Profile',
+              textIconColor: awsEndColor,
+              onTap: ()=>navigate(2),
+              iconLink: 'assets/images/support_icon.png',
+              tileColor: Colors.transparent,
+            ),
+
+
+            _buildDrawerItem(
               text: 'Support Topic',
               textIconColor: awsEndColor,
               onTap: ()=>navigate(2),
@@ -72,7 +70,12 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
             _buildDrawerItem(
               text: 'Change Password',
               textIconColor: awsEndColor,
-              onTap: ()=>navigate(3),
+              onTap: () {
+                Get.to(()=> ChangePasswordScreen(), arguments: [
+                  {"first": 'First data'},
+                  {"second": 'Second data'}
+                ]);
+              },
               iconLink: 'assets/images/change_password_icon.png',
               tileColor: Colors.transparent,
             ),
@@ -95,6 +98,42 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
               tileColor: Colors.transparent,
             ),
 
+            Expanded(child: Container(
+              alignment: Alignment.bottomCenter,
+              child:Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(child: Container()),
+                  Text("Developed by",
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 10,),
+
+
+                  GradientText(
+                    "Arena Web Technology",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500
+                    ),
+                    textAlign: TextAlign.center,
+                    colors: [
+                      awsStartColor,
+                     // Colors.black.withOpacity(0.1),
+                      awsEndColor,
+                    ],
+                  ),
+
+                  SizedBox(height: 20,)
+                ],
+
+              ),
+            ))
+
         ],
         ),
       )
@@ -103,7 +142,6 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
 
 
   }
-
 
   Widget _buildUserDrawerHeader() {
     return UserAccountsDrawerHeader(
@@ -146,15 +184,12 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
     );
   }
 
-
   Widget _buildDrawerItem({
-
     required String text,
     required String iconLink,
     required Color textIconColor,
     required Color tileColor,
     required VoidCallback onTap,
-
   }) {
     return ListTile(
       leading: Image.asset(
@@ -175,10 +210,6 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
     );
   }
 
-
-
-
-
   _showToast(String message) {
     Fluttertoast.showToast(
         msg: message,
@@ -193,7 +224,5 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
   navigate(int index){
 
   }
-
-
-
+  
 }

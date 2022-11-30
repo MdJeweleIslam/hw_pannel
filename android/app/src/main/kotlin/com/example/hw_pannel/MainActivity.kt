@@ -1,4 +1,4 @@
-package com.example.hw_pannel
+package com.arena_web_security.arena_class
 
 import io.flutter.embedding.android.FlutterActivity
 
