@@ -1,12 +1,10 @@
 
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../Colors.dart';
 import '../controller/change_password_page_controller.dart';
-import '../controller/user_profile_Edit_page_cintroller.dart';
 import '../gradiant_icon.dart';
 import 'background.dart';
 
@@ -60,6 +58,7 @@ class ChangePasswordScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+
                     Container(height: 0.3,
                       color: Colors.white,
                     ),
@@ -77,6 +76,7 @@ class ChangePasswordScreen extends StatelessWidget {
                                   child: Column(
                                     children: [
                                       SizedBox(height: 10,),
+
 
                                       Image.asset(
                                         'assets/images/privacy.png',
@@ -105,6 +105,7 @@ class ChangePasswordScreen extends StatelessWidget {
                               ],
                             ),),
                         )),
+
                   ],
                 )
               ],
@@ -149,9 +150,6 @@ class ChangePasswordScreen extends StatelessWidget {
       ),
     );
   }
-
-
-
 
   //password input field create
   Widget _buildTextFieldPassword({
@@ -405,8 +403,6 @@ class ChangePasswordScreen extends StatelessWidget {
     );
   }
 
-
-
   Widget _buildChangePasswordButton() {
     return ElevatedButton(
       onPressed: () {
@@ -495,7 +491,6 @@ class ChangePasswordScreen extends StatelessWidget {
       _showToast("Confirm password must be 8 digit!");
       return false;
     }
-
 
     if (newPassword!=newConfirmPassword) {
       Fluttertoast.cancel();

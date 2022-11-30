@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:hw_pannel/view/log_in_page.dart';
 import 'package:hw_pannel/view/submit_assignment.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-
 import '../../Colors.dart';
 import '../controller/exam_page_controller.dart';
 import '../controller/exam_start_page_controller.dart';
@@ -72,7 +71,10 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
               text: 'Change Password',
               textIconColor: awsEndColor,
               onTap: () {
-                Get.to(()=> ChangePasswordScreen());
+                Get.to(()=> ChangePasswordScreen(), arguments: [
+                  {"first": 'First data'},
+                  {"second": 'Second data'}
+                ]);
               },
               iconLink: 'assets/images/change_password_icon.png',
               tileColor: Colors.transparent,
@@ -188,7 +190,6 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
     required Color textIconColor,
     required Color tileColor,
     required VoidCallback onTap,
-
   }) {
     return ListTile(
       leading: Image.asset(
