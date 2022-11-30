@@ -12,6 +12,7 @@ import '../controller/exam_start_page_controller.dart';
 import '../controller/home_page_controller.dart';
 import '../controller/log_in_page_controller.dart';
 import '../controller/navigation_drawer_page_controller.dart';
+import 'change_password.dart';
 
 class NavigationDrawerPasswordScreen extends StatelessWidget {
   String name,email;
@@ -70,7 +71,9 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
             _buildDrawerItem(
               text: 'Change Password',
               textIconColor: awsEndColor,
-              onTap: ()=>navigate(3),
+              onTap: () {
+                Get.to(()=> ChangePasswordScreen());
+              },
               iconLink: 'assets/images/change_password_icon.png',
               tileColor: Colors.transparent,
             ),

@@ -496,6 +496,13 @@ class ChangePasswordScreen extends StatelessWidget {
       return false;
     }
 
+
+    if (newPassword!=newConfirmPassword) {
+      Fluttertoast.cancel();
+      _showToast("Confirm password do not match!");
+      return false;
+    }
+
     return true;
   }
 
