@@ -186,13 +186,16 @@ class LogInScreen extends StatelessWidget {
         onFocusChange: (hasFocus) {
           logInPageController.userNameLevelTextColor.value = hasFocus ? hint_color : hint_color;
         },
-        child: TextFormField(
+        child: TextField(
           cursorColor: awsCursorColor,
           cursorWidth: 1.5,
          // maxLength: 13,
           // autofocus: false,
 
-          //focusNode: phoneFocusNode,
+          focusNode:logInPageController.userNameControllerFocusNode.value,
+          onSubmitted:(_){
+           logInPageController.passwordControllerFocusNode.value.requestFocus();
+          },
           controller: logInPageController.userNameController.value,
           textInputAction: TextInputAction.next,
           style: const TextStyle(color: Colors.black, fontSize: 18),
@@ -201,7 +204,7 @@ class LogInScreen extends StatelessWidget {
             labelText: labelText,
             filled: true,
             fillColor: Colors.white,
-            contentPadding: const EdgeInsets.all(15),
+            contentPadding: const EdgeInsets.all(17),
             prefixIcon: prefixedIcon,
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color:awsEndColor, width: 1),
@@ -257,12 +260,13 @@ class LogInScreen extends StatelessWidget {
 
           obscureText: logInPageController.isObscure.value,
           // obscuringCharacter: "*",
+          focusNode:logInPageController.passwordControllerFocusNode.value,
           style: const TextStyle(color: Colors.black, fontSize: 18),
           decoration: InputDecoration(
             // border: InputBorder.none,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             // labelText: 'Password',
-            contentPadding: const EdgeInsets.all(15),
+            contentPadding: const EdgeInsets.all(17),
             suffixIcon: IconButton(
                 color: awsColor,
                 icon: GradientIcon(
@@ -435,68 +439,7 @@ class LogInScreen extends StatelessWidget {
   }
 
 
-  // //login api call
-  // _userLogIn({
-  //   required String userName,
-  //   required String password,
-  // }) async {
-  //   try {
-  //     final result = await InternetAddress.lookup('example.com');
-  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-  //       showLoadingDialog(context, "Checking...");
-  //       try {
-  //         Response response =
-  //         await post(Uri.parse('$BASE_URL_API$SUB_URL_API_LOG_IN'), body: {
-  //           'username': userName,
-  //           'password': password,
-  //         });
-  //         Navigator.of(context).pop();
-  //         // _showToast(response.statusCode.toString());
-  //
-  //         if (response.statusCode == 200) {
-  //           _showToast("success");
-  //            var data = jsonDecode(response.body);
-  //           //
-  //           saveUserInfo(data);
-  //
-  //          // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const ExamPageScreen()));
-  //
-  //           Navigator.pushAndRemoveUntil(
-  //             context,
-  //             MaterialPageRoute(
-  //               builder: (BuildContext context) =>
-  //                  ExamPageScreen(),
-  //             ),
-  //                 (route) => false,
-  //           );
-  //
-  //
-  //         }
-  //
-  //         else if (response.statusCode == 403) {
-  //           setState(() {
-  //             //_showToast("success");
-  //             var data = jsonDecode(response.body);
-  //             _showToast(data['msg']);
-  //
-  //           });
-  //         }
-  //         else {
-  //           var data = jsonDecode(response.body);
-  //           _showToast(data['message']);
-  //         }
-  //       } catch (e) {
-  //         Navigator.of(context).pop();
-  //         //print(e.toString());
-  //       }
-  //     }
-  //   } on SocketException catch (_) {
-  //     Fluttertoast.cancel();
-  //     _showToast("No Internet Connection!");
-  //   }
-  // }
 
-  //save data with share pref
   void saveUserInfo(var userInfo) async {
     try {
       SharedPreferences sharedPreferences =
