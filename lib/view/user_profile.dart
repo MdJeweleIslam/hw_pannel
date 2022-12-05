@@ -3,6 +3,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:hw_pannel/view/user_profile_update.dart';
 
 import '../../Colors.dart';
 import '../controller/profile_view_page_controller.dart';
@@ -126,7 +127,7 @@ class ProfileScreen extends StatelessWidget {
   Widget _buildEditButton() {
     return ElevatedButton(
       onPressed: () {
-
+        Get.to(()=> ProfileUpdateScreen());
       },
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,

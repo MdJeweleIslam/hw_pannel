@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hw_pannel/view/log_in_page.dart';
 import 'package:hw_pannel/view/submit_assignment.dart';
+import 'package:hw_pannel/view/user_profile.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../../Colors.dart';
 import '../controller/exam_page_controller.dart';
@@ -53,8 +54,10 @@ class NavigationDrawerPasswordScreen extends StatelessWidget {
             _buildDrawerItem(
               text: 'My Profile',
               textIconColor: awsEndColor,
-              onTap: ()=>navigate(2),
-              iconLink: 'assets/images/support_icon.png',
+              onTap: () {
+                Get.to(()=> ProfileScreen());
+              },
+              iconLink: 'assets/images/user_profile.png',
               tileColor: Colors.transparent,
             ),
 
